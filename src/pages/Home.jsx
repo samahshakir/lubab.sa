@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Contact from './Contact';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,27 +54,42 @@ function Home() {
 
     // --- Second Section Animations ---
     const ctx2 = gsap.context(() => {
-      const tl2 = gsap.timeline({
-        scrollTrigger: {
-          trigger: section2Ref.current,
-          start: "top bottom", // Start when the top of section2 hits the bottom of the viewport
-          end: "bottom top",  // End when the bottom of section2 hits the top of viewport.
-          scrub: true,       // Smoothly animate as we scroll
-          // markers: true,     // Uncomment for debugging ScrollTrigger positions
+      // Set initial state
+      gsap.set([section2TitleRef.current, section2DescriptionRef.current], { 
+        autoAlpha: 0, 
+        scale: 0.7
+      });
+
+      // Create a ScrollTrigger that controls the animation throughout the entire section
+      ScrollTrigger.create({
+        trigger: section2Ref.current,
+        start: "top bottom", // Start when the top of section2 hits the bottom of viewport
+        end: "bottom top",   // End when the bottom of section2 hits the top of viewport
+        scrub: 1,            // Smooth scrubbing with slight delay
+        // markers: true,    // Uncomment for debugging
+        onUpdate: (self) => {
+          // Calculate progress values
+          const progress = self.progress;
+          
+          // First half of scroll - fade in and scale up
+          if (progress <= 0.5) {
+            const fadeInProgress = progress * 2; // Normalize to 0-1 range for first half
+            gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
+              autoAlpha: fadeInProgress,
+              scale: 0.7 + (fadeInProgress * 0.5) // Scale from 0.7 to 1.2
+            });
+          } 
+          // Second half of scroll - fade out and continue scaling
+          else {
+            const fadeOutProgress = (progress - 0.5) * 2; // Normalize to 0-1 range for second half
+            gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
+              autoAlpha: 1 - fadeOutProgress,
+              scale: 1.2 - (fadeOutProgress * 0.5) // Scale down from 1.2 to 0.7
+            });
+          }
         }
       });
-
-      gsap.set([section2TitleRef.current, section2DescriptionRef.current], { autoAlpha: 0, x: 50 }); // Start off-screen to the right
-
-      tl2.to([section2TitleRef.current, section2DescriptionRef.current], {
-        autoAlpha: 1,
-        x: 0,
-        duration: 1, // Slower animation
-        stagger: 0.2,  // Stagger the title and description
-        ease: "power3.out"
-      });
-
-    }, section2Ref); // Use section2Ref as the scope for this context
+    }, section2Ref);
 
     const ctx3 = gsap.context(() => {
       const tl3 = gsap.timeline({
@@ -99,11 +115,11 @@ function Home() {
       }
     
       // Set initial states
-      gsap.set(section3TitleRef.current, { 
-        autoAlpha: 0, 
-        y: 100,
-        rotationX: 45
-      });
+      // gsap.set(section3TitleRef.current, { 
+      //   autoAlpha: 0, 
+      //   y: 100,
+      //   rotationX: 45
+      // });
       
       gsap.set(section3DescriptionRef.current, { 
         autoAlpha: 0, 
@@ -232,23 +248,24 @@ function Home() {
       </main>
 
       {/* --- Second Section --- */}
-      <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
-        <div className="container mx-auto px-6 text-right">
-          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-4">
-            Smaller Heading
+        <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
+        <div className="container mx-auto px-6 text-right will-change-transform">
+          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+            Scroll-Driven Experience
           </h2>
-          <p ref={section2DescriptionRef} className="text-lg md:text-xl text-gray-300 max-w-xl ml-auto">
-            This is a description for the second section.  It's designed to be smaller and to the right.  The animation will slide it in from the right as you scroll.
+          <p ref={section2DescriptionRef} className="text-lg md:text-xl text-gray-300 max-w-3xl ml-auto">
+            This text gradually fades in as you scroll, grows in size through the middle of the section, and then fades away as you continue scrolling. The animation is directly tied to your scroll position for a seamless, interactive experience.
           </p>
         </div>
-      </section>
+       </section>
+
 
       <section ref={section3Ref} className="bg-gray-900 text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
       <div className="container mx-auto px-6 text-center relative z-10">
         <h2 ref={section3TitleRef} className="text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
           Experience the Magic
         </h2>
-        <p ref={section3DescriptionRef} className="text-lg md:text-4xl text-gray-300 max-w-8xl mx-auto">
+        <p ref={section3DescriptionRef} className="text-lg md:text-4xl text-white max-w-8xl mx-auto">
           {/* Split text into words for individual animation */}
           {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
             <span key={i} className="section3-word inline-block mx-1 my-2">{word}</span>
@@ -260,19 +277,11 @@ function Home() {
         <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-1/4 right-1/3 w-60 h-60 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
-  </section>
+    </section>
 
-  <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-4">
-            Smaller Heading
-          </h2>
-          <p ref={section2DescriptionRef} className="text-lg md:text-xl text-gray-300">
-            This is a description for the second section.  It's designed to be smaller and to the right.  The animation will slide it in from the right as you scroll.
-          </p>
-        </div>
-      </section>
-    </div>
+    <Contact/>
+    
+  </div>
   );
 }
 
