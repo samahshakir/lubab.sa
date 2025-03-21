@@ -1,206 +1,203 @@
-import { useEffect } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-function Team() {
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+const teamMembers = [
+  {
+    id: 1,
+    name: 'Alex Morgan',
+    role: 'Creative Director',
+    bio: 'With over 10 years of experience in design leadership, Alex brings a unique perspective to every project, blending aesthetics with functionality.',
+    image: 'https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  },
+  {
+    id: 2,
+    name: 'Jamie Chen',
+    role: 'Lead Developer',
+    bio: 'Jamie is a full-stack developer with a passion for clean code and innovative solutions. Their work has shaped our technical direction since 2019.',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  },
+  {
+    id: 3,
+    name: 'Taylor Reed',
+    role: 'Strategy Consultant',
+    bio: 'Taylor combines business acumen with creative thinking to develop strategies that exceed client expectations and drive measurable results.',
+    image: 'https://images.unsplash.com/photo-1587397845856-e6cf49176c70?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  }
+];
+
+const Team = () => {
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
+  const activeIndexRef = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
-    // Hero animation
-    gsap.from('.team-heading span', {
-      y: 100,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: 'power4.out'
+    const section = sectionRef.current;
+    const cards = cardsRef.current;
+    
+    // Initial setup
+    // Current card (center, fully visible)
+    gsap.set(cards[0], { 
+      autoAlpha: 1, 
+      x: 0, 
+      scale: 1,
+      filter: "blur(0px)",
+      zIndex: 10 
     });
     
-    // Team member animations
-    gsap.from('.team-member', {
-      y: 60,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.team-grid',
-        start: 'top 80%'
+    // Next card (right, blurred)
+    if (cards[1]) {
+      gsap.set(cards[1], { 
+        autoAlpha: 0.6, 
+        x: '60%', 
+        scale: 0.9,
+        filter: "blur(4px)",
+        zIndex: 5 
+      });
+    }
+    
+    // Set all other cards invisible
+    gsap.set(cards.slice(2), { 
+      autoAlpha: 0, 
+      x: '100%', 
+      scale: 0.9,
+      filter: "blur(4px)",
+      zIndex: 1 
+    });
+    
+    ScrollTrigger.create({
+      trigger: section,
+      pin: true,
+      start: "top top",
+      end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
+      scrub: 1,
+      onUpdate: (self) => {
+        // Calculate which team member should be active based on scroll progress
+        const newIndex = Math.min(
+          Math.floor(self.progress * teamMembers.length),
+          teamMembers.length - 1
+        );
+        
+        if (newIndex !== activeIndexRef.current) {
+          // Previous active card moves to left (blurred)
+          gsap.to(cards[activeIndexRef.current], {
+            autoAlpha: 0.6,
+            x: '-60%',
+            scale: 0.9,
+            filter: "blur(4px)",
+            zIndex: 5,
+            duration: 0.7,
+          });
+          
+          // New active card comes to center
+          gsap.to(cards[newIndex], {
+            autoAlpha: 1,
+            x: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            zIndex: 10,
+            duration: 0.7,
+          });
+          
+          // Setup next card if available
+          if (cards[newIndex + 1]) {
+            gsap.to(cards[newIndex + 1], {
+              autoAlpha: 0.6,
+              x: '60%',
+              scale: 0.9,
+              filter: "blur(4px)",
+              zIndex: 5,
+              duration: 0.7,
+            });
+          }
+          
+          // Hide previous cards that are not adjacent
+          if (activeIndexRef.current < newIndex - 1) {
+            gsap.to(cards[activeIndexRef.current], {
+              autoAlpha: 0,
+              x: '-100%',
+              duration: 0.5,
+            });
+          }
+          
+          // Hide next cards that are not adjacent
+          if (newIndex + 2 < cards.length) {
+            gsap.to(cards.slice(newIndex + 2), {
+              autoAlpha: 0,
+              x: '100%',
+              duration: 0.5,
+            });
+          }
+          
+          activeIndexRef.current = newIndex;
+          setActiveIndex(newIndex);
+        }
       }
     });
-    
-    // Text reveal animations
-    gsap.utils.toArray('.reveal-text').forEach(section => {
-      gsap.from(section, {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 85%'
-        }
-      });
-    });
-    
+
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-black">
-        <div className="container mx-auto px-6">
-          <h1 className="team-heading text-5xl md:text-7xl font-bold mb-16 overflow-hidden">
-            <span className="block">Meet Our</span>
-            <span className="block">Creative Team</span>
-          </h1>
-          
-          <div className="max-w-3xl">
-            <p className="text-xl text-gray-300 reveal-text">
-              Our team of strategists, designers, and developers brings diverse perspectives and expertise to every project. United by a passion for great design and a commitment to excellence, we work collaboratively to create impactful digital experiences.
-            </p>
-          </div>
+    <div 
+      ref={sectionRef} 
+      className="team-section h-screen w-full bg-black flex items-center justify-center overflow-hidden"
+    >
+      <div className="container mx-auto px-8 relative">
+        <h2 className="text-4xl md:text-6xl font-bold text-white mb-16 text-center">Our Team</h2>
+        
+        <div className="relative h-[600px] w-full">
+          {teamMembers.map((member, index) => (
+            <div 
+              key={member.id}
+              ref={el => (cardsRef.current[index] = el)}
+              className="absolute inset-0 transition-all duration-700 ease-out"
+              style={{ perspective: '1000px' }}
+            >
+              <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+              <div className="w-full md:w-5/12">
+                <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                </div>
+            </div>
+                            
+                <div className="w-full md:w-1/2 text-white">
+                  <h3 className="text-3xl md:text-5xl font-bold mb-3">{member.name}</h3>
+                  <h4 className="text-xl md:text-2xl font-light text-gray-400 mb-6">{member.role}</h4>
+                  <p className="text-lg leading-relaxed">{member.bio}</p>
+                  <div className="mt-8">
+                    <button className="border border-white hover:bg-white hover:text-black rounded-md py-2 px-6 text-white transition-all duration-300">
+                      Learn more
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </section>
-      
-      {/* Team Grid */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="team-grid grid grid-cols-1 md:grid-cols-3 gap-12">
-            {/* Team Member 1 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-800 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Alex Morgan</h3>
-              <p className="text-gray-400 mb-4">Founder & Creative Director</p>
-              <p className="text-gray-500">With over 15 years in the industry, Alex leads our creative vision and ensures every project meets our high standards.</p>
-            </div>
-            
-            {/* Team Member 2 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-700 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Maya Chen</h3>
-              <p className="text-gray-400 mb-4">UX Director</p>
-              <p className="text-gray-500">Maya combines strategic thinking with user-centered design to create intuitive and engaging digital experiences.</p>
-            </div>
-            
-            {/* Team Member 3 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-600 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Ethan Williams</h3>
-              <p className="text-gray-400 mb-4">Technical Director</p>
-              <p className="text-gray-500">Ethan leads our development team, turning creative concepts into functional, high-performing digital products.</p>
-            </div>
-            
-            {/* Team Member 4 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-500 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Olivia Johnson</h3>
-              <p className="text-gray-400 mb-4">Strategy Lead</p>
-              <p className="text-gray-500">Olivia helps our clients define their digital strategy and ensures our work delivers measurable business results.</p>
-            </div>
-            
-            {/* Team Member 5 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-900 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">David Kim</h3>
-              <p className="text-gray-400 mb-4">Design Lead</p>
-              <p className="text-gray-500">David brings brands to life through distinctive visual identities and thoughtful design systems.</p>
-            </div>
-            
-            {/* Team Member 6 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-700 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Sophie Martinez</h3>
-              <p className="text-gray-400 mb-4">Motion Designer</p>
-              <p className="text-gray-500">Sophie specializes in creating engaging animations and interactive experiences that captivate users.</p>
-            </div>
-            
-            {/* Team Member 7 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-800 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">James Lee</h3>
-              <p className="text-gray-400 mb-4">Frontend Developer</p>
-              <p className="text-gray-500">James crafts pixel-perfect interfaces with clean, efficient code and a focus on performance and accessibility.</p>
-            </div>
-            
-            {/* Team Member 8 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-600 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Emma Rodriguez</h3>
-              <p className="text-gray-400 mb-4">Project Manager</p>
-              <p className="text-gray-500">Emma ensures our projects run smoothly, keeping everything on track and facilitating clear communication.</p>
-            </div>
-            
-            {/* Team Member 9 */}
-            <div className="team-member group">
-              <div className="aspect-w-3 aspect-h-4 mb-6 overflow-hidden bg-gray-800">
-                <div className="w-full h-full bg-gray-500 group-hover:scale-105 transition-transform duration-700 ease-in-out"></div>
-              </div>
-              <h3 className="text-2xl font-semibold mb-1">Michael Thompson</h3>
-              <p className="text-gray-400 mb-4">Backend Developer</p>
-              <p className="text-gray-500">Michael builds robust backend systems that power our digital products, with a focus on security and scalability.</p>
-            </div>
-          </div>
+        
+        <div className="flex justify-center mt-12">
+          {teamMembers.map((_, index) => (
+            <div 
+              key={index} 
+              className={`w-3 h-3 mx-2 rounded-full ${index === activeIndex ? 'bg-white' : 'bg-gray-600'}`} 
+            />
+          ))}
         </div>
-      </section>
-      
-      {/* Culture Section */}
-      <section className="py-24 bg-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold mb-16 reveal-text">Our Culture</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="reveal-text">
-              <p className="text-xl text-gray-300 mb-8">
-                At DALA, we foster a culture of creativity, collaboration, and continuous learning. We believe that great work happens when talented people are given the freedom to explore, experiment, and grow.
-              </p>
-              <p className="text-gray-400">
-                Our studio is a place where ideas flow freely, where diverse perspectives are valued, and where we challenge each other to push beyond the expected. We work hard, but we also make time for fun, celebrating our successes and learning from our challenges.
-              </p>
-            </div>
-            
-            <div className="reveal-text">
-              <p className="text-gray-400 mb-8">
-                We invest in our team's professional development, encouraging everyone to stay curious, keep learning, and share their knowledge with others. Regular workshops, design reviews, and team outings help us stay inspired and connected.
-              </p>
-              <p className="text-gray-400">
-                Most importantly, we care about creating an inclusive environment where everyone feels welcome, respected, and empowered to do their best work. We believe that diverse teams create better solutions, and we're committed to building a team that reflects the diversity of the communities we serve.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Join Us Section */}
-      <section className="py-24 bg-black">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 reveal-text">Join Our Team</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-12 reveal-text">
-            We're always looking for talented and passionate people to join our team. Check out our current openings or send us your portfolio.
-          </p>
-          <a href="#" className="inline-block px-10 py-4 border border-white hover:bg-white hover:text-black transition-colors duration-300 reveal-text">
-            View Open Positions
-          </a>
-        </div>
-      </section>
+      </div>
     </div>
   );
-}
+};
 
 export default Team;

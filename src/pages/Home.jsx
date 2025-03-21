@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Contact from './Contact';
+import Team from './Team';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -260,7 +261,7 @@ function Home() {
        </section>
 
 
-      <section ref={section3Ref} className="bg-gray-900 text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
+      <section ref={section3Ref} className="bg-black text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
       <div className="container mx-auto px-6 text-center relative z-10">
         <h2 ref={section3TitleRef} className="text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
           Experience the Magic
@@ -279,6 +280,7 @@ function Home() {
       </div>
     </section>
 
+    <Team/>
     <Contact/>
     
   </div>
