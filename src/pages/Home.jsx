@@ -4,6 +4,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Contact from './Contact';
 import Team from './Team';
+import Spline from '@splinetool/react-spline';
+import Services from './Services';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -200,53 +202,51 @@ function Home() {
 
       {/* --- First Section (Hero) --- */}
       <main className="container mx-auto px-6 pt-36 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="max-w-2xl">
-            <h1
-              ref={titleRef}
-              className="text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight text-left"
-            >
-              Creative <span className="text-purple-500">Digital</span> Experiences
-            </h1>
-            <p className="text-2xl md:text-xl mb-3 font-bold text-sky-500 uppercase">
-              Stop managing knowledge. Start using it.
-            </p>
-            <p
-              ref={descriptionRef}
-              className="text-lg md:text-xl text-gray-200 mb-5 leading-relaxed text-left"
-            >
-              We craft meaningful digital experiences that connect brands with their audience through innovative design and technology.
-            </p>
-            <button
-              ref={buttonRef}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
-            >
-              Explore Work
-            </button>
-          </div>
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
+    {/* Text content with higher z-index to appear above Spline */}
+    <div className="max-w-2xl relative z-20">
+      <h1
+        ref={titleRef}
+        className="text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight text-left"
+      >
+        Creative <span className="text-blue-500">Digital</span> Experiences
+      </h1>
+      <p className="text-2xl md:text-xl mb-3 font-bold text-sky-500 uppercase">
+        Stop managing knowledge. Start using it.
+      </p>
+      <p
+        ref={descriptionRef}
+        className="text-lg md:text-xl text-gray-200 mb-5 leading-relaxed text-left"
+      >
+        We craft meaningful digital experiences that connect brands with their audience through innovative design and technology.
+      </p>
+      <button
+        ref={buttonRef}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
+      >
+        Explore Work
+      </button>
+    </div>
 
-          <div className="relative h-full flex justify-center items-center">
-            {/* Gradient backgrounds */}
-            <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-purple-600 rounded-full opacity-20 blur-3xl"></div>
-            <div className="absolute -top-10 -left-10 w-72 h-72 bg-blue-500 rounded-full opacity-15 blur-3xl"></div>
+    {/* Spline container moved to the right and made bigger */}
+    <div className="relative h-full flex justify-center items-center lg:ml-20"> {/* Increased margin to push right */}
+      {/* Gradient backgrounds */}
+      <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-green-600 rounded-full opacity-20 blur-3xl"></div>
+      <div className="absolute -top-10 -left-10 w-72 h-72 bg-blue-500 rounded-full opacity-15 blur-3xl"></div>
 
-            {/* Main image */}
-            <div
-              ref={imageRef}
-              className="relative z-10 w-full max-w-2xl rounded-lg overflow-hidden shadow-2xl will-change-transform"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format"
-                alt="Abstract Design"
-                className="w-full h-auto object-cover"
-                style={{ aspectRatio: "16/9" }}
-                loading="eager"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
-      </main>
+      {/* Spline scene container with lower z-index, positioned behind the text */}
+      <div
+        ref={imageRef}
+        className="absolute z-0 w-[150%] h-full min-h-[600px] will-change-transform" 
+      >
+        <Spline 
+          scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
+    </div>
+  </div>
+</main>
 
       {/* --- Second Section --- */}
         <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
@@ -280,6 +280,7 @@ function Home() {
       </div>
     </section>
 
+    <Services/>
     <Team/>
     <Contact/>
     

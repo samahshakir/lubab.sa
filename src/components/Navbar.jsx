@@ -99,7 +99,9 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full top-0 z-50 px-6 py-6">
       <div className="flex justify-between items-center">
-        <div className="text-white text-2xl font-bold">LUBAB</div>
+      <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 text-2xl font-bold">
+  LUBAB
+</div>
         
         <button 
           ref={menuButtonRef} 

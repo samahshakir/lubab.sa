@@ -1,104 +1,226 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Spline from '@splinetool/react-spline';
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
+  const sectionRef = useRef(null);
   const formRef = useRef(null);
   const headingRef = useRef(null);
   const textRef = useRef(null);
+  const inputRefs = useRef([]);
+  const buttonRef = useRef(null);
+  const containerRef = useRef(null);
+  const formAnimationRef = useRef(null);
 
+  // Set up ScrollTrigger for fade in/out animations
   useEffect(() => {
-    // Set initial opacity to 0 for all animated elements
-    gsap.set([headingRef.current, textRef.current, formRef.current], { 
-      opacity: 0,
-      y: 50 
+    // Initial setup - hide all elements
+    gsap.set([headingRef.current, textRef.current, formRef.current, ...inputRefs.current, buttonRef.current], { 
+      opacity: 0 
     });
     
-    // Create animation timeline
-    const tl = gsap.timeline({
-      delay: 0.2 // Small delay to ensure everything is ready
+    // Create ScrollTrigger for controlling animations
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 25%", // Start when the top of the section hits 25% from the top (3/4 down the screen)
+      end: "bottom 25%", // End when bottom of the section hits 25% from the top
+      onEnter: () => playFormAnimation(),
+      onLeave: () => reverseFormAnimation(),
+      onEnterBack: () => playFormAnimation(),
+      onLeaveBack: () => reverseFormAnimation(),
+      markers: false // Set to true for debugging
     });
+    
+    return () => {
+      // Clean up
+      if (scrollTrigger) scrollTrigger.kill();
+      if (formAnimationRef.current) formAnimationRef.current.kill();
+    };
+  }, []);
+  
+  // Create the animation timeline
+  const createFormAnimation = () => {
+    const tl = gsap.timeline({ paused: true });
     
     tl.to(headingRef.current, {
       y: 0,
       opacity: 1,
-      duration: 0.8,
-      ease: "power3.out"
+      duration: 1.2,
+      ease: "power2.out"
     })
     .to(textRef.current, {
       y: 0,
       opacity: 1,
-      duration: 0.8,
-      ease: "power3.out"
-    }, "-=0.4")
+      duration: 1.2,
+      ease: "power2.out"
+    }, "-=0.9")
     .to(formRef.current, {
-      y: 0,
+      x: 0,
       opacity: 1,
-      duration: 1,
-      ease: "power3.out"
-    }, "-=0.6");
+      duration: 1.5,
+      ease: "power2.out"
+    }, "-=0.9")
+    .to(inputRefs.current, {
+      opacity: 1,
+      x: 0,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "power1.out"
+    }, "-=0.8")
+    .to(buttonRef.current, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      ease: "back.out(1.7)"
+    }, "-=0.4");
     
+    formAnimationRef.current = tl;
+    return tl;
+  };
+  
+  // Play the animation
+  const playFormAnimation = () => {
+    // Reset positions for new animation
+    gsap.set(headingRef.current, { opacity: 0, y: 30 });
+    gsap.set(textRef.current, { opacity: 0, y: 30 });
+    gsap.set(formRef.current, { opacity: 0, x: -50 });
+    gsap.set(inputRefs.current, { opacity: 0, x: -20 });
+    gsap.set(buttonRef.current, { opacity: 0, scale: 0.8 });
+    
+    if (!formAnimationRef.current) {
+      formAnimationRef.current = createFormAnimation();
+    }
+    formAnimationRef.current.play();
+  };
+  
+  // Reverse the animation
+  const reverseFormAnimation = () => {
+    if (formAnimationRef.current) {
+      formAnimationRef.current.reverse();
+    }
+  };
+
+  // Set up button hover effects
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.addEventListener('mouseenter', () => {
+        gsap.to(buttonRef.current, {
+          scale: 1.05,
+          duration: 0.3
+        });
+      });
+      
+      buttonRef.current.addEventListener('mouseleave', () => {
+        gsap.to(buttonRef.current, {
+          scale: 1,
+          duration: 0.3
+        });
+      });
+    }
+    
+    return () => {
+      if (buttonRef.current) {
+        buttonRef.current.removeEventListener('mouseenter', () => {});
+        buttonRef.current.removeEventListener('mouseleave', () => {});
+      }
+    };
   }, []);
 
+  // Function to add input elements to refs array
+  const addToInputRefs = (el) => {
+    if (el && !inputRefs.current.includes(el)) {
+      inputRefs.current.push(el);
+    }
+  };
+
   return (
-    <div>
-      <section className="bg-black text-white min-h-screen flex items-center justify-center py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-4">
+    <div ref={sectionRef} className="relative min-h-screen">
+      {/* Spline background - positioned absolute to fill the entire space */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Spline scene="https://prod.spline.design/MHN8reumPGKWJGsY/scene.splinecode" />
+      </div>
+      
+      {/* Content positioned above the Spline background */}
+      <section className="relative z-10 min-h-screen flex items-start justify-start pt-32 pb-20">
+        <div ref={containerRef} className="container mx-auto px-6">
+          <div className="text-left mb-16 ml-8">
+            <h2 
+              ref={headingRef} 
+              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+              style={{ opacity: 0, transform: 'translateY(30px)' }}
+            >
               Get in Touch
             </h2>
-            <p ref={textRef} className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            <p 
+              ref={textRef} 
+              className="text-lg md:text-xl text-white max-w-3xl"
+              style={{ opacity: 0, transform: 'translateY(30px)' }}
+            >
               Ready to transform your digital presence? Contact us today to start your journey.
             </p>
           </div>
           
-          <div ref={formRef} className="max-w-2xl mx-auto bg-gray-900 p-8 rounded-lg shadow-xl">
+          <div 
+            ref={formRef} 
+            className="max-w-2xl ml-8 backdrop-filter backdrop-blur-lg bg-white/10 p-8 rounded-2xl shadow-2xl border border-white/20"
+            style={{ opacity: 0, transform: 'translateX(-50px)' }}
+          >
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-left text-sm font-medium text-gray-300 mb-1">Name</label>
+                <div className="group">
+                  <label htmlFor="name" className="block text-left text-sm font-medium text-gray-200 mb-1">Name</label>
                   <input 
+                    ref={addToInputRefs}
                     type="text" 
                     id="name" 
-                    className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
                     placeholder="Your name"
                   />
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-left text-sm font-medium text-gray-300 mb-1">Email</label>
+                <div className="group">
+                  <label htmlFor="email" className="block text-left text-sm font-medium text-gray-200 mb-1">Email</label>
                   <input 
+                    ref={addToInputRefs}
                     type="email" 
                     id="email" 
-                    className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
                     placeholder="your@email.com"
                   />
                 </div>
               </div>
               
-              <div>
-                <label htmlFor="subject" className="block text-left text-sm font-medium text-gray-300 mb-1">Subject</label>
+              <div className="group">
+                <label htmlFor="subject" className="block text-left text-sm font-medium text-gray-200 mb-1">Subject</label>
                 <input 
+                  ref={addToInputRefs}
                   type="text" 
                   id="subject" 
-                  className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
                   placeholder="What's this about?"
                 />
               </div>
               
-              <div>
-                <label htmlFor="message" className="block text-left text-sm font-medium text-gray-300 mb-1">Message</label>
+              <div className="group">
+                <label htmlFor="message" className="block text-left text-sm font-medium text-gray-200 mb-1">Message</label>
                 <textarea 
+                  ref={addToInputRefs}
                   id="message" 
                   rows="5" 
-                  className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
                   placeholder="Tell us about your project..."
                 ></textarea>
               </div>
               
               <div>
                 <button 
+                  ref={buttonRef}
                   type="submit" 
-                  className="w-full bg-purple-600 hover:bg-purple-700 transition-colors duration-300 text-white font-medium py-3 px-6 rounded-md"
+                  className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+                  style={{ opacity: 0, transform: 'scale(0.8)' }}
                 >
                   Send Message
                 </button>
