@@ -1,222 +1,334 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import gsap from 'gsap';
+import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-function Career() {
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+const Career = () => {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const jobsContainerRef = useRef(null);
+  const jobRefs = useRef([]);
+  const ctaButtonRef = useRef(null);
+  
+  // Job listings data
+  const [jobs, setJobs] = useState([
+    {
+      id: 1,
+      title: "Senior Frontend Developer",
+      location: "Remote / New York",
+      type: "Full-time",
+      description: "Join our team to build cutting-edge web applications using React, TypeScript, and modern frontend tools.",
+      requirements: ["5+ years of frontend development", "React expertise", "UI/UX sensibility"]
+    },
+    {
+      id: 2,
+      title: "UX/UI Designer",
+      location: "San Francisco / Remote",
+      type: "Full-time",
+      description: "Create beautiful, intuitive interfaces that elevate our digital products to the next level.",
+      requirements: ["3+ years in product design", "Strong portfolio", "Figma proficiency"]
+    },
+    {
+      id: 3,
+      title: "Backend Engineer",
+      location: "Austin / Remote",
+      type: "Full-time",
+      description: "Develop robust, scalable backend systems that power our applications and services.",
+      requirements: ["Node.js expertise", "Database design", "API development"]
+    },
+    {
+      id: 4,
+      title: "DevOps Specialist",
+      location: "Remote",
+      type: "Full-time",
+      description: "Streamline our deployment processes and ensure reliability across our infrastructure.",
+      requirements: ["CI/CD pipeline experience", "AWS/Azure expertise", "Kubernetes"]
+    }
+  ]);
+
+  // Initialize animations
   useEffect(() => {
-    // Hero animation
-    gsap.from('.career-heading span', {
-      y: 100,
+    // Set initial states
+    gsap.set([headingRef.current, descriptionRef.current, ctaButtonRef.current], { 
       opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: 'power4.out'
+      y: 50 
     });
     
-    // Job listing animations
-    gsap.from('.job-listing', {
-      y: 40,
+    gsap.set(jobRefs.current, { 
       opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power3.out',
+      x: -50 
+    });
+    
+    // Create main section animation
+    const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '.job-listings',
-        start: 'top 80%'
+        trigger: sectionRef.current,
+        start: "top 60%",
+        end: "center center",
+        toggleActions: "play none none reverse",
+        markers: false
       }
     });
     
-    // Text reveal animations
-    gsap.utils.toArray('.reveal-text').forEach(section => {
-      gsap.from(section, {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 85%'
-        }
+    tl.to(headingRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out"
+    })
+    .to(descriptionRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out"
+    }, "-=0.6")
+    .to(jobRefs.current, {
+      opacity: 1,
+      x: 0,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "-=0.4")
+    .to(ctaButtonRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out"
+    }, "-=0.2");
+    
+    // Job card hover animations
+    jobRefs.current.forEach(card => {
+      gsap.set(card.querySelector('.job-hover-bg'), { opacity: 0, scale: 0.8 });
+      
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          y: -10,
+          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
+          duration: 0.3
+        });
+        gsap.to(card.querySelector('.job-hover-bg'), {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4
+        });
+        gsap.to(card.querySelector('.job-content'), {
+          color: "#fff",
+          duration: 0.3
+        });
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          y: 0,
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+          duration: 0.3
+        });
+        gsap.to(card.querySelector('.job-hover-bg'), {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.3
+        });
+        gsap.to(card.querySelector('.job-content'), {
+          color: "#1a202c",
+          duration: 0.3
+        });
       });
     });
     
+    // Button hover animation
+    if (ctaButtonRef.current) {
+      ctaButtonRef.current.addEventListener('mouseenter', () => {
+        gsap.to(ctaButtonRef.current, {
+          scale: 1.05,
+          duration: 0.3
+        });
+      });
+      
+      ctaButtonRef.current.addEventListener('mouseleave', () => {
+        gsap.to(ctaButtonRef.current, {
+          scale: 1,
+          duration: 0.3
+        });
+      });
+    }
+    
+    // Cleanup
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (ScrollTrigger.getAll().length) {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      }
+      
+      jobRefs.current.forEach(card => {
+        card.removeEventListener('mouseenter', () => {});
+        card.removeEventListener('mouseleave', () => {});
+      });
+      
+      if (ctaButtonRef.current) {
+        ctaButtonRef.current.removeEventListener('mouseenter', () => {});
+        ctaButtonRef.current.removeEventListener('mouseleave', () => {});
+      }
     };
   }, []);
+  
+  // Add job card to refs
+  const addToJobRefs = (el) => {
+    if (el && !jobRefs.current.includes(el)) {
+      jobRefs.current.push(el);
+    }
+  };
+  
+  // Toggle job details
+  const toggleJobDetails = (id) => {
+    setJobs(prev => 
+      prev.map(job => 
+        job.id === id 
+          ? { ...job, expanded: !job.expanded } 
+          : job
+      )
+    );
+  };
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="pt-40 pb-20 bg-black">
-        <div className="container mx-auto px-6">
-          <h1 className="career-heading text-5xl md:text-7xl font-bold mb-16 overflow-hidden">
-            <span className="block">Join Our</span>
-            <span className="block">Creative Team</span>
-          </h1>
-          
-          <div className="max-w-3xl">
-            <p className="text-xl text-gray-300 reveal-text">
-              At DALA, we're building a team of passionate, talented individuals who are excited about creating exceptional digital experiences. If you're creative, collaborative, and constantly curious, we'd love to hear from you.
-            </p>
-          </div>
-        </div>
-      </section>
+    <section ref={sectionRef} className="py-20 bg-gray-50 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full opacity-30 transform translate-x-1/3 -translate-y-1/3"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-100 rounded-full opacity-40 transform -translate-x-1/3 translate-y-1/3"></div>
       
-      {/* Benefits Section */}
-      <section className="py-20 bg-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-16 reveal-text">Why Work With Us</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Meaningful Work</h3>
-              <p className="text-gray-400">Work on challenging projects for innovative brands that make a real impact in the digital landscape.</p>
-            </div>
-            
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Growth Opportunities</h3>
-              <p className="text-gray-400">Develop your skills through ongoing training, mentorship, and opportunities to work across disciplines.</p>
-            </div>
-            
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Collaborative Culture</h3>
-              <p className="text-gray-400">Join a supportive team where ideas are valued, feedback is constructive, and everyone contributes to our success.</p>
-            </div>
-            
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Work-Life Balance</h3>
-              <p className="text-gray-400">Flexible work arrangements, generous PTO, and a focus on wellbeing help you bring your best self to work.</p>
-            </div>
-            
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Competitive Benefits</h3>
-              <p className="text-gray-400">Comprehensive healthcare, retirement plans, and other benefits to support you and your family.</p>
-            </div>
-            
-            <div className="reveal-text">
-              <h3 className="text-2xl font-semibold mb-4">Creative Environment</h3>
-              <p className="text-gray-400">A modern studio space designed to inspire creativity and foster collaboration.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Current Openings */}
-      <section className="py-24 bg-black">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-16 reveal-text">Current Openings</h2>
-          
-          <div className="job-listings space-y-8">
-            {/* Job 1 */}
-            <div className="job-listing bg-gray-900 p-8 border-l-4 border-white hover:bg-gray-800 transition-colors duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Senior UX Designer</h3>
-                  <p className="text-gray-400 mb-4">Full-time • Remote or Los Angeles</p>
-                  <p className="text-gray-500 mb-6 md:mb-0">We're looking for an experienced UX designer to join our team and lead user experience strategy across a variety of digital products.</p>
-                </div>
-                <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 whitespace-nowrap">
-                  Apply Now
-                </a>
-              </div>
-            </div>
-            
-            {/* Job 2 */}
-            <div className="job-listing bg-gray-900 p-8 border-l-4 border-white hover:bg-gray-800 transition-colors duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Frontend Developer</h3>
-                  <p className="text-gray-400 mb-4">Full-time • Los Angeles</p>
-                  <p className="text-gray-500 mb-6 md:mb-0">Join our development team to build responsive, performant, and accessible websites and web applications.</p>
-                </div>
-                <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 whitespace-nowrap">
-                  Apply Now
-                </a>
-              </div>
-            </div>
-            
-            {/* Job 3 */}
-            <div className="job-listing bg-gray-900 p-8 border-l-4 border-white hover:bg-gray-800 transition-colors duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Motion Designer</h3>
-                  <p className="text-gray-400 mb-4">Full-time • Los Angeles</p>
-                  <p className="text-gray-500 mb-6 md:mb-0">Create engaging animations and motion graphics for websites, digital products, and brand experiences.</p>
-                </div>
-                <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 whitespace-nowrap">
-                  Apply Now
-                </a>
-              </div>
-            </div>
-            
-            {/* Job 4 */}
-            <div className="job-listing bg-gray-900 p-8 border-l-4 border-white hover:bg-gray-800 transition-colors duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Project Manager</h3>
-                  <p className="text-gray-400 mb-4">Full-time • Remote or Los Angeles</p>
-                  <p className="text-gray-500 mb-6 md:mb-0">Lead project planning, execution, and delivery, ensuring our clients' needs are met and projects run smoothly.</p>
-                </div>
-                <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 whitespace-nowrap">
-                  Apply Now
-                </a>
-              </div>
-            </div>
-            
-            {/* Job 5 */}
-            <div className="job-listing bg-gray-900 p-8 border-l-4 border-white hover:bg-gray-800 transition-colors duration-300">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">Brand Strategist</h3>
-                  <p className="text-gray-400 mb-4">Full-time • Los Angeles</p>
-                  <p className="text-gray-500 mb-6 md:mb-0">Develop compelling brand strategies that help our clients stand out in their markets and connect with their audiences.</p>
-                </div>
-                <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 whitespace-nowrap">
-                  Apply Now
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Internship Section */}
-      <section className="py-24 bg-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-8 reveal-text">Internship Program</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="reveal-text">
-              <p className="text-xl text-gray-300 mb-6">
-                Our internship program offers students and recent graduates the opportunity to gain hands-on experience in a professional creative agency environment.
-              </p>
-              <p className="text-gray-400 mb-8">
-                Interns work alongside our team on real client projects, receiving mentorship and guidance from experienced professionals. Many of our full-time team members started as interns, and we're committed to providing a valuable learning experience that can launch your career.
-              </p>
-              <a href="#" className="inline-block px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300">
-                Learn More
-              </a>
-            </div>
-            <div className="h-64 bg-gray-800 reveal-text"></div>
-          </div>
-        </div>
-      </section>
-      
-      {/* No Openings Section */}
-      <section className="py-24 bg-black">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8 reveal-text">Don't See a Match?</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-12 reveal-text">
-            We're always interested in connecting with talented individuals. Send us your portfolio or resume, and we'll keep you in mind for future opportunities.
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-16">
+          <h2 
+            ref={headingRef}
+            className="text-4xl md:text-5xl font-bold mb-6 text-gray-900"
+          >
+            Join Our Team
+          </h2>
+          <p 
+            ref={descriptionRef}
+            className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            We're looking for passionate individuals who want to make an impact and grow with us. 
+            Explore our open positions and find where you fit in.
           </p>
-          <Link to="/contact" className="inline-block px-10 py-4 border border-white hover:bg-white hover:text-black transition-colors duration-300 reveal-text">
-            Get in Touch
-          </Link>
         </div>
-      </section>
-    </div>
+        
+        <div ref={jobsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {jobs.map((job) => (
+            <div 
+              key={job.id} 
+              ref={addToJobRefs}
+              className="relative bg-white rounded-xl p-8 shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+              onClick={() => toggleJobDetails(job.id)}
+            >
+              {/* Hover background */}
+              <div className="job-hover-bg absolute inset-0 bg-gradient-to-r from-blue-600 to-green-600 rounded-xl z-0"></div>
+              
+              {/* Added text-gray-900 class to ensure text is visible by default */}
+              <div className="job-content relative z-10 transition-colors duration-300 text-gray-900">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-xl font-bold">{job.title}</h3>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    {job.type}
+                  </span>
+                </div>
+                
+                {/* Explicitly set text color for location */}
+                <p className="text-gray-600 mb-4">{job.location}</p>
+                
+                {/* Explicitly set text color for description */}
+                <p className="mb-6 text-gray-800">{job.description}</p>
+                
+                {job.expanded && (
+                  <div className="mt-4 animate-fadeIn">
+                    <h4 className="font-semibold mb-2">Requirements:</h4>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {job.requirements.map((req, index) => (
+                        <li key={index} className="text-gray-800">{req}</li>
+                      ))}
+                    </ul>
+                    
+                    <button className="mt-6 px-6 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium hover:bg-blue-200 transition-colors duration-300">
+                      Apply Now
+                    </button>
+                  </div>
+                )}
+                
+                <div className="flex items-center mt-4">
+                  <span className="text-sm font-medium">
+                    {job.expanded ? 'Show less' : 'Learn more'}
+                  </span>
+                  <svg 
+                    className={`w-5 h-5 ml-1 transition-transform duration-300 ${job.expanded ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="text-center">
+          <p className="text-gray-600 mb-6">Don't see a position that fits your skills?</p>
+          <button 
+            ref={ctaButtonRef}
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-green-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Send Us Your Resume
+          </button>
+        </div>
+      </div>
+      
+      {/* Animated particles for visual interest */}
+      <div className="absolute inset-0 pointer-events-none">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div 
+            key={i}
+            className="absolute w-2 h-2 rounded-full bg-blue-400 opacity-20"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `float ${5 + Math.random() * 10}s linear infinite`
+            }}
+          ></div>
+        ))}
+      </div>
+      
+      {/* Animation keyframes */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.2;
+          }
+          90% {
+            opacity: 0.2;
+          }
+          100% {
+            transform: translateY(-100px) translateX(${Math.random() > 0.5 ? '50px' : '-50px'});
+            opacity: 0;
+          }
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+      `}</style>
+    </section>
   );
-}
+};
 
 export default Career;

@@ -7,7 +7,10 @@ import Team from './Team';
 import Spline from '@splinetool/react-spline';
 import Services from './Services';
 import { useLanguage } from '../context/LanguageContext'; 
+import { useDarkMode } from '../context/DarkModeContext'; // Import the dark mode hook
 import client from "../sanityClient"; 
+import Footer from '../components/Footer';
+import Career from './Career';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,14 +29,17 @@ function Home() {
   const section3TitleRef = useRef(null);
   const section3DescriptionRef = useRef(null);
   const { isArabic } = useLanguage();
+  const { darkMode } = useDarkMode(); // Get dark mode state
   const [heroData, setHeroData] = useState(null);
 
   useEffect(() => {
     client
-    .fetch('*[_type == "hero"][0]')
-    .then((data) => setHeroData(data))
-    .catch(console.error);
+      .fetch('*[_type == "hero"][0]')
+      .then((data) => setHeroData(data))
+      .catch(console.error);
 
+    console.log(heroData);
+    
     // --- First Section Animations (Hero) ---
     const elements = [titleRef.current, descriptionRef.current, imageRef.current, buttonRef.current];
 
@@ -62,7 +68,6 @@ function Home() {
         }
       });
     }, mainRef);
-
 
     // --- Second Section Animations ---
     const ctx2 = gsap.context(() => {
@@ -127,12 +132,6 @@ function Home() {
       }
     
       // Set initial states
-      // gsap.set(section3TitleRef.current, { 
-      //   autoAlpha: 0, 
-      //   y: 100,
-      //   rotationX: 45
-      // });
-      
       gsap.set(section3DescriptionRef.current, { 
         autoAlpha: 0, 
         y: 80,
@@ -183,6 +182,10 @@ function Home() {
         autoAlpha: 1,
         y: 0,
         scale: 1,
+        duration: 0.8,
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
         duration: 1,
         ease: "power3.out"
       }, 0.7);
@@ -197,104 +200,134 @@ function Home() {
       });
     
     }, section3Ref);
-
+  
     return () => {
         ctx1.revert();
         ctx2.revert();
         ctx3.revert();
     }
   }, []);
-
-  // if (!heroData) return <div className="text-white">Loading...</div>;
-
+  
   return (
-    <div ref={mainRef} className="bg-black text-white min-h-screen overflow-x-hidden">
+    <div 
+      ref={mainRef} 
+      className={`${darkMode ? 'bg-gray-900' : 'bg-black'} text-white min-h-screen overflow-x-hidden transition-colors duration-300`}
+    >
       <Navbar />
-
+  
       {/* --- First Section (Hero) --- */}
       <main className="container mx-auto px-6 pt-36 pb-20">
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
-    {/* Text content with higher z-index to appear above Spline */}
-    <div className="max-w-2xl relative z-20">
-      <h1
-        ref={titleRef}
-        className="text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight text-left"
-      >
-       <p>{isArabic ? heroData.title["en"] : heroData.title["ar"]}</p>  <span className="text-blue-500">Digital</span> Experiences
-      </h1>
-      <p className="text-2xl md:text-xl mb-3 font-bold text-sky-500 uppercase">
-        Stop managing knowledge. Start using it.
-      </p>
-      <p
-        ref={descriptionRef}
-        className="text-lg md:text-xl text-gray-200 mb-5 leading-relaxed text-left"
-      >
-        We craft meaningful digital experiences that connect brands with their audience through innovative design and technology.
-      </p>
-      <button
-        ref={buttonRef}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
-      >
-        Explore Work
-      </button>
-    </div>
-
-    {/* Spline container moved to the right and made bigger */}
-    <div className="relative h-full flex justify-center items-center lg:ml-10"> {/* Increased margin to push right */}
-      {/* Gradient backgrounds */}
-      <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-green-600 rounded-full opacity-20 blur-3xl"></div>
-      <div className="absolute -top-10 -left-10 w-72 h-72 bg-blue-500 rounded-full opacity-15 blur-3xl"></div>
-
-      {/* Spline scene container with lower z-index, positioned behind the text */}
-      <div
-        ref={imageRef}
-        className="absolute z-0 w-[250%] h-full min-h-[800px] will-change-transform" 
-      >
-         <Spline scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode"
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
-    </div>
-  </div>
-</main>
-
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
+          {/* Text content with higher z-index to appear above Spline */}
+          <div className="max-w-2xl relative z-20">
+            <h1
+              ref={titleRef}
+              className="text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight text-left"
+            >
+              <p>{isArabic ? heroData?.title?.["en"] : heroData?.title?.["ar"] || "Loading..."}</p>
+              <span className={`${darkMode ? 'text-blue-400' : 'text-blue-500'} transition-colors duration-300`}>Digital</span> Experiences
+            </h1>
+            <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? 'text-sky-400' : 'text-sky-500'} uppercase transition-colors duration-300`}>
+              Stop managing knowledge. Start using it.
+            </p>
+            <p
+              ref={descriptionRef}
+              className={`text-lg md:text-xl ${darkMode ? 'text-gray-300' : 'text-gray-200'} mb-5 leading-relaxed text-left transition-colors duration-300`}
+            >
+              We craft meaningful digital experiences that connect brands with their audience through innovative design and technology.
+            </p>
+            <button
+              ref={buttonRef}
+              className={`${darkMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-700'} text-white px-8 py-4 rounded-full font-medium transition-colors duration-300 text-lg`}
+            >
+              Explore Work
+            </button>
+          </div>
+  
+          {/* Spline container moved to the right and made bigger */}
+          <div className="relative h-full flex justify-center items-center lg:ml-10"> {/* Increased margin to push right */}
+            {/* Gradient backgrounds */}
+            <div className={`absolute -bottom-10 -right-10 w-96 h-96 ${darkMode ? 'bg-green-500' : 'bg-green-600'} rounded-full opacity-20 blur-3xl transition-colors duration-300`}></div>
+            <div className={`absolute -top-10 -left-10 w-72 h-72 ${darkMode ? 'bg-blue-400' : 'bg-blue-500'} rounded-full opacity-15 blur-3xl transition-colors duration-300`}></div>
+  
+            {/* Spline scene container with lower z-index, positioned behind the text */}
+            <div
+              ref={imageRef}
+              className="absolute z-0 w-[250%] h-full min-h-[800px] will-change-transform" 
+            >
+              <Spline 
+                scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode"
+                onWheel={(e) => e.stopPropagation()}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+  
       {/* --- Second Section --- */}
-        <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
+      <section 
+        ref={section2Ref} 
+        className={`${darkMode ? 'bg-gray-900' : 'bg-black'} text-white min-h-screen flex items-center justify-end py-20 transition-colors duration-300`}
+      >
         <div className="container mx-auto px-6 text-right will-change-transform">
-          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600">
+          <h2 
+            ref={section2TitleRef} 
+            className={`text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text ${
+              darkMode 
+                ? 'bg-gradient-to-r from-blue-300 to-green-500' 
+                : 'bg-gradient-to-r from-blue-400 to-green-600'
+            } transition-colors duration-300`}
+          >
             Scroll-Driven Experience
           </h2>
-          <p ref={section2DescriptionRef} className="text-lg md:text-xl text-gray-300 max-w-3xl ml-auto">
+          <p 
+            ref={section2DescriptionRef} 
+            className={`text-lg md:text-xl ${darkMode ? 'text-gray-200' : 'text-gray-300'} max-w-3xl ml-auto transition-colors duration-300`}
+          >
             This text gradually fades in as you scroll, grows in size through the middle of the section, and then fades away as you continue scrolling. The animation is directly tied to your scroll position for a seamless, interactive experience.
           </p>
         </div>
-       </section>
+      </section>
+  
+      <section 
+        ref={section3Ref} 
+        className={`${darkMode ? 'bg-gray-900' : 'bg-black'} text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden transition-colors duration-300`}
+      >
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <h2 
+            ref={section3TitleRef} 
+            className={`text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text ${
+              darkMode 
+                ? 'bg-gradient-to-r from-blue-300 to-green-500' 
+                : 'bg-gradient-to-r from-blue-400 to-green-600'
+            } transition-colors duration-300`}
+          >
+            Experience the Magic
+          </h2>
+          <p 
+            ref={section3DescriptionRef} 
+            className="text-lg md:text-4xl text-white max-w-8xl mx-auto"
+          >
+            {/* Split text into words for individual animation */}
+            {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
+              <span key={i} className="section3-word inline-block mx-1 my-2">{word}</span>
+            ))}
+          </p>
+          
+          {/* Add decorative elements with dark mode adjustments */}
+          <div className={`absolute top-1/4 left-1/4 w-64 h-64 ${darkMode ? 'bg-purple-400' : 'bg-purple-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob transition-colors duration-300`}></div>
+          <div className={`absolute top-1/3 right-1/4 w-72 h-72 ${darkMode ? 'bg-yellow-400' : 'bg-yellow-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 transition-colors duration-300`}></div>
+          <div className={`absolute bottom-1/4 right-1/3 w-60 h-60 ${darkMode ? 'bg-pink-400' : 'bg-pink-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-300`}></div>
+        </div>
+      </section>
 
-
-      <section ref={section3Ref} className="bg-black text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
-      <div className="container mx-auto px-6 text-center relative z-10">
-        <h2 ref={section3TitleRef} className="text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600">
-          Experience the Magic
-        </h2>
-        <p ref={section3DescriptionRef} className="text-lg md:text-4xl text-white max-w-8xl mx-auto">
-          {/* Split text into words for individual animation */}
-          {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
-            <span key={i} className="section3-word inline-block mx-1 my-2">{word}</span>
-          ))}
-        </p>
-        
-        {/* Add decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-60 h-60 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-    </section>
-
-    <Services/>
-    <Team/>
-    <Contact/>
-    
-  </div>
+      <Services/>
+      <Team/>
+      <Contact/>
+      <Career/>
+      <Footer/>
+    </div>
   );
 }
 

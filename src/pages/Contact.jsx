@@ -141,7 +141,7 @@ const Contact = () => {
     <div ref={sectionRef} className="relative min-h-screen">
       {/* Spline background - positioned absolute to fill the entire space */}
       <div className="absolute inset-0 w-full h-full z-0">
-        <Spline scene="https://prod.spline.design/MHN8reumPGKWJGsY/scene.splinecode" />
+        <Spline scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
       </div>
       
       {/* Content positioned above the Spline background */}
@@ -230,6 +230,8 @@ const Contact = () => {
         </div>
       </section>
     </div>
+
+    
   );
 };
 
