@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,6 +6,8 @@ import Contact from './Contact';
 import Team from './Team';
 import Spline from '@splinetool/react-spline';
 import Services from './Services';
+import { useLanguage } from '../context/LanguageContext'; 
+import client from "../sanityClient"; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,8 +25,15 @@ function Home() {
   const section3Ref = useRef(null);
   const section3TitleRef = useRef(null);
   const section3DescriptionRef = useRef(null);
+  const { isArabic } = useLanguage();
+  const [heroData, setHeroData] = useState(null);
 
   useEffect(() => {
+    client
+    .fetch('*[_type == "hero"][0]')
+    .then((data) => setHeroData(data))
+    .catch(console.error);
+
     // --- First Section Animations (Hero) ---
     const elements = [titleRef.current, descriptionRef.current, imageRef.current, buttonRef.current];
 
@@ -196,6 +205,8 @@ function Home() {
     }
   }, []);
 
+  // if (!heroData) return <div className="text-white">Loading...</div>;
+
   return (
     <div ref={mainRef} className="bg-black text-white min-h-screen overflow-x-hidden">
       <Navbar />
@@ -209,7 +220,7 @@ function Home() {
         ref={titleRef}
         className="text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight text-left"
       >
-        Creative <span className="text-blue-500">Digital</span> Experiences
+       <p>{isArabic ? heroData.title["en"] : heroData.title["ar"]}</p>  <span className="text-blue-500">Digital</span> Experiences
       </h1>
       <p className="text-2xl md:text-xl mb-3 font-bold text-sky-500 uppercase">
         Stop managing knowledge. Start using it.
@@ -229,7 +240,7 @@ function Home() {
     </div>
 
     {/* Spline container moved to the right and made bigger */}
-    <div className="relative h-full flex justify-center items-center lg:ml-20"> {/* Increased margin to push right */}
+    <div className="relative h-full flex justify-center items-center lg:ml-10"> {/* Increased margin to push right */}
       {/* Gradient backgrounds */}
       <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-green-600 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute -top-10 -left-10 w-72 h-72 bg-blue-500 rounded-full opacity-15 blur-3xl"></div>
@@ -237,10 +248,9 @@ function Home() {
       {/* Spline scene container with lower z-index, positioned behind the text */}
       <div
         ref={imageRef}
-        className="absolute z-0 w-[150%] h-full min-h-[600px] will-change-transform" 
+        className="absolute z-0 w-[250%] h-full min-h-[800px] will-change-transform" 
       >
-        <Spline 
-          scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode"
+         <Spline scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode"
           style={{ width: '100%', height: '100%' }}
         />
       </div>
@@ -251,7 +261,7 @@ function Home() {
       {/* --- Second Section --- */}
         <section ref={section2Ref} className="bg-black text-white min-h-screen flex items-center justify-end py-20">
         <div className="container mx-auto px-6 text-right will-change-transform">
-          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+          <h2 ref={section2TitleRef} className="text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600">
             Scroll-Driven Experience
           </h2>
           <p ref={section2DescriptionRef} className="text-lg md:text-xl text-gray-300 max-w-3xl ml-auto">
@@ -263,7 +273,7 @@ function Home() {
 
       <section ref={section3Ref} className="bg-black text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
       <div className="container mx-auto px-6 text-center relative z-10">
-        <h2 ref={section3TitleRef} className="text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+        <h2 ref={section3TitleRef} className="text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600">
           Experience the Magic
         </h2>
         <p ref={section3DescriptionRef} className="text-lg md:text-4xl text-white max-w-8xl mx-auto">

@@ -1,6 +1,8 @@
 // src/components/Navbar.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { Globe } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext"
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,6 +12,7 @@ const Navbar = () => {
   const line3Ref = useRef(null);
   const menuOverlayRef = useRef(null);
   const menuItemsRef = useRef(null);
+  const { isArabic, setIsArabic } = useLanguage();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -99,31 +102,38 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full top-0 z-50 px-6 py-6">
       <div className="flex justify-between items-center">
-      <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 text-2xl font-bold">
-  LUBAB
-</div>
         
-        <button 
-          ref={menuButtonRef} 
-          onClick={toggleMenu} 
-          className="z-50 relative"
-          aria-label="Toggle menu"
-        >
-          <div className="flex flex-col justify-center items-end space-y-2 group">
-            <span 
-              ref={line1Ref} 
-              className="block w-8 h-0.5 bg-white origin-center transform transition-all"
-            ></span>
-            <span 
-              ref={line2Ref} 
-              className="block w-6 h-0.5 bg-white origin-center transform transition-all"
-            ></span>
-            <span 
-              ref={line3Ref} 
-              className="block w-8 h-0.5 bg-white origin-center transform transition-all"
-            ></span>
-          </div>
-        </button>
+        {/* Logo */}
+        <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 text-2xl font-bold">
+          {isArabic ? "لباب" : "LUBAB"}
+        </div>
+
+        <div className="flex items-center gap-6">
+          {/* Language Toggle Icon */}
+            <button 
+              onClick={() => setIsArabic(!isArabic)} 
+              className="flex items-center gap-2 text-white hover:text-blue-500 transition-colors"
+              aria-label="Switch Language"
+            >
+              <span>{isArabic ? "English" : "Arabic"}</span>
+              <Globe size={24} />
+            </button>
+
+
+          {/* Menu Button */}
+          <button 
+            ref={menuButtonRef} 
+            onClick={toggleMenu} 
+            className="z-50 relative"
+            aria-label="Toggle menu"
+          >
+            <div className="flex flex-col justify-center items-end space-y-2 group">
+              <span ref={line1Ref} className="block w-8 h-0.5 bg-white origin-center transform transition-all"></span>
+              <span ref={line2Ref} className="block w-6 h-0.5 bg-white origin-center transform transition-all"></span>
+              <span ref={line3Ref} className="block w-8 h-0.5 bg-white origin-center transform transition-all"></span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Menu Overlay */}
@@ -133,21 +143,26 @@ const Navbar = () => {
         style={{ clipPath: "circle(0% at top right)" }}
       >
         <div className="h-full flex items-center justify-center">
-          <ul 
-            ref={menuItemsRef}
-            className="text-center space-y-8"
-          >
+          <ul ref={menuItemsRef} className="text-center space-y-8">
             <li className="overflow-hidden">
-              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">Home</a>
+              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">
+                {isArabic ? "الرئيسية" : "Home"}
+              </a>
             </li>
             <li className="overflow-hidden">
-              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">Work</a>
+              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">
+                {isArabic ? "الأعمال" : "Work"}
+              </a>
             </li>
             <li className="overflow-hidden">
-              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">About</a>
+              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">
+                {isArabic ? "حول" : "About"}
+              </a>
             </li>
             <li className="overflow-hidden">
-              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">Contact</a>
+              <a href="#" className="text-white text-4xl md:text-6xl font-bold hover:text-purple-500 transition-colors">
+                {isArabic ? "اتصل بنا" : "Contact"}
+              </a>
             </li>
           </ul>
         </div>
