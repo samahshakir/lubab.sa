@@ -38,7 +38,6 @@ function Home() {
       .then((data) => setHeroData(data))
       .catch(console.error);
 
-    console.log(heroData);
     
     // --- First Section Animations (Hero) ---
     const elements = [titleRef.current, descriptionRef.current, imageRef.current, buttonRef.current];
@@ -183,14 +182,6 @@ function Home() {
         y: 0,
         scale: 1,
         duration: 0.8,
-        // eslint-disable-next-line no-dupe-keys
-        autoAlpha: 1,
-        // eslint-disable-next-line no-dupe-keys
-        y: 0,
-        // eslint-disable-next-line no-dupe-keys
-        scale: 1,
-        // eslint-disable-next-line no-dupe-keys
-        duration: 1,
         ease: "power3.out"
       }, 0.7);
     
@@ -216,29 +207,31 @@ function Home() {
   return (
     <div 
     ref={mainRef} 
-    className={`${darkMode ? 'bg-[#00BC78]' : 'bg-gray-900'} text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+    className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   >
       <Navbar />
   
       {/* --- First Section (Hero) --- */}
-      <main className="container mx-auto px-6 pt-36 pb-20 relative">
+      <main className="container min-h-screen mx-auto px-6 pt-36 pb-20 relative font-[Nizar ]">
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
                backgroundSize: '20px 20px'}}></div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
         {/* Text content with higher z-index to appear above Spline */}
-        <div className={`max-w-2xl relative z-20 ${isArabic ? 'text-right' : 'text-left'}`}>
+        <div className={`max-w-2xl relative z-20 pr-5 ${isArabic ? 'text-right' : 'text-left'}`}>
           <h1
             ref={titleRef}
             className={`text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight animate-fadeIn ${isArabic ? 'text-right' : 'text-left'}`}
           >
-            <p>{isArabic ? heroData?.title?.["ar"] : heroData?.title?.["en"] || "Loading..."}</p>
-            <span className={`${darkMode ? 'text-blue-600' : 'text-blue-500'} transition-colors duration-300 animate-gradientShift`}>{isArabic ? heroData?.title2?.["ar"] : heroData?.title2?.["en"] || "Loading..."}</span> {isArabic ? heroData?.title3?.["ar"] : heroData?.title3?.["en"] || "Loading..."}
+            <p className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}>{isArabic ? heroData?.title?.["ar"] : heroData?.title?.["en"] || "Loading..."}</p>
+            <p className={`${darkMode ? 'text-blue-600' : 'text-blue-500'} transition-colors duration-300 animate-gradientShift`}>{isArabic ? heroData?.title2?.["ar"] : heroData?.title2?.["en"] || "Loading..."}</p>
+            <span className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}> {isArabic ? heroData?.title3?.["ar"] : heroData?.title3?.["en"] || "Loading..."} </span>
           </h1>
-          <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? 'text-sky-700' : 'text-sky-500'} uppercase transition-colors duration-300 animate-slideIn`}> {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"] || "Loading..."} </p>
+          {/* Subtitle */}
+          <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? 'text-[#00BC78]' : 'text-sky-500'} uppercase transition-colors duration-300 animate-slideIn`}> {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"] || "Loading..."} </p>
           <p
             ref={descriptionRef}
-            className={`text-lg md:text-xl ${darkMode ? 'text-gray-300' : 'text-gray-200'} mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift ${isArabic ? 'text-right' : 'text-left'}`}
+            className={`text-lg md:text-xl ${darkMode ? 'text-[#374151]' : 'text-gray-200'} mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift ${isArabic ? 'text-right' : 'text-left'}`}
           >
             {isArabic ? heroData?.description?.["ar"] : heroData?.description?.["en"] || "Loading..."}
           </p>
@@ -252,7 +245,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Spline container moved to the right and made bigger */}
+        {/* Spline container*/}
         <div className="relative h-full flex justify-center items-center lg:ml-10"> {/* Increased margin to push right */}
           {/* Gradient backgrounds */}
           <div className={`absolute -bottom-10 -right-10 w-96 h-96 ${darkMode ? 'bg-green-500' : 'bg-green-600'} rounded-full opacity-20 blur-3xl transition-colors duration-300`}></div>
@@ -278,31 +271,19 @@ function Home() {
       {/* --- Second Section --- */}
       <section 
         ref={section2Ref} 
-        className={`${darkMode ? 'bg-[#00BC78CC]' : 'bg-gray-900'} text-white min-h-screen flex items-center justify-end py-20 transition-colors duration-300`}
+        className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} text-black min-h-screen flex items-center justify-end py-20 transition-colors duration-300`}
       >
-         <div className="absolute top-0 left-0 right-0 h-16 overflow-hidden">
-    <div className={`h-16 ${darkMode ? 'bg-[#00BC78]' : 'bg-gray-800'}`} 
-         style={{
-           clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 0)',
-           opacity: 0.8
-         }}></div>
-  </div>
-
-  <div className={`absolute right-0 top-16 bottom-16 w-2 ${darkMode ? 'bg-blue-500' : 'bg-blue-600'}`}></div>
+  <div className={`absolute right-0 top-16 bottom-1 w-2 ${darkMode ? 'bg-blue-500' : 'bg-blue-600'}`}></div>
         <div className="container mx-auto px-6 text-right will-change-transform">
           <h2 
             ref={section2TitleRef} 
-            className={`text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text ${
-              darkMode 
-                ? 'bg-gradient-to-r from-white to-black' 
-                : 'bg-gradient-to-r from-blue-400 to-green-600'
-            } transition-colors duration-300`}
+            className="text-4xl md:text-5xl font-bold mb-8 mr-15 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600 transition-colors duration-300"
           >
             Scroll-Driven Experience
           </h2>
           <p 
             ref={section2DescriptionRef} 
-            className={`text-lg md:text-xl ${darkMode ? 'text-gray-100' : 'text-gray-200'} max-w-3xl ml-auto transition-colors duration-300`}
+            className={`text-lg md:text-xl ${darkMode ? 'text-[#374151]' : 'text-gray-200'} max-w-3xl ml-auto transition-colors duration-300`}
           >
             This text gradually fades in as you scroll, grows in size through the middle of the section, and then fades away as you continue scrolling. The animation is directly tied to your scroll position for a seamless, interactive experience.
           </p>
@@ -311,7 +292,7 @@ function Home() {
   
       <section 
         ref={section3Ref} 
-        className={`${darkMode ? 'bg-[#00BC78CC]' : 'bg-[#0D1B2A]'} text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden transition-colors duration-300`}
+        className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-[#0D1B2A]'} text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden transition-colors duration-300`}
       >
     {/* Add floating geometric shapes */}
     <div className="absolute inset-0 pointer-events-none">
@@ -332,7 +313,7 @@ function Home() {
           </h2>
           <p 
             ref={section3DescriptionRef} 
-            className="text-lg md:text-4xl text-white max-w-8xl mx-auto"
+            className={`text-lg md:text-4xl ${darkMode ? 'text-[#374151]' : 'text-white'} max-w-8xl mx-auto`}
           >
             {/* Split text into words for individual animation */}
             {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
