@@ -57,7 +57,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed w-full top-0 z-50 px-6 py-4 transition-colors duration-300 backdrop-blur-md  ${darkMode ? 'bg-[#00BC78CC]' :  `bg-black/30 dark:bg-gray-900/50` }`}>
+    <nav className={`fixed w-full top-0 z-50 px-6 py-4 transition-colors duration-300 backdrop-blur-md  ${darkMode ? 'bg-[#E5E7EB]/30 dark:bg-white/50' :  `bg-black/30 dark:bg-gray-900/50` }`}>
       <div className="flex justify-between items-center">
         {/* Logo */}
         <div>
@@ -77,7 +77,7 @@ const Navbar = () => {
           >
             <div ref={themeIconRef}>
               {darkMode ? (
-                <Sun size={24} className="text-yellow-400" />
+                <Sun size={24} className="text-black" />
               ) : (
                 <Moon size={24} />
               )}
@@ -90,21 +90,21 @@ const Navbar = () => {
             className="flex items-center gap-2 text-white hover:text-blue-500 transition-colors"
             aria-label="Switch Language"
           >
-            <span>{isArabic ? "English" : "Arabic"}</span>
-            <Globe size={24} />
+            <span className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}>{isArabic ? "English" : "Arabic"}</span>
+            <Globe className={`${darkMode ? 'text-[#101828]' : 'text-white'}`} size={24} />
           </button>
 
           {/* Menu Button (visual only) */}
           <div 
             ref={menuButtonRef}
-            className="z-50 relative cursor-pointer"
+            className={`z-50 relative cursor-pointer ${darkMode ? '' : ''}`}
             aria-label="Menu button"
             onClick={toggleMenu}
           >
             <div className="flex flex-col justify-center items-end space-y-2 group">
-              <span ref={line1Ref} className="block w-8 h-0.5 bg-white origin-center transform transition-all dark:bg-white"></span>
-              <span ref={line2Ref} className="block w-6 h-0.5 bg-white origin-center transform transition-all dark:bg-white"></span>
-              <span ref={line3Ref} className="block w-8 h-0.5 bg-white origin-center transform transition-all dark:bg-white"></span>
+              <span ref={line1Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
+              <span ref={line2Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
+              <span ref={line3Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
             </div>
           </div>
         </div>
@@ -112,12 +112,12 @@ const Navbar = () => {
 
       {/* Menu */}
       <div ref={menuRef} className="hidden flex items-center justify-center gap-10 mt-4">
-        <a href="/" className="text-white hover:text-blue-500 transition-colors">Home</a>
-        <a href="team" className="text-white hover:text-blue-500 transition-colors">Team</a>
-        <a href="services" className="text-white hover:text-blue-500 transition-colors">Services</a>
-        <a href="about" className="text-white hover:text-blue-500 transition-colors">About us</a>
-        <a href="career" className="text-white hover:text-blue-500 transition-colors">Career</a>
-        <a href="contact" className="text-white hover:text-blue-500 transition-colors">Contact us</a>
+        <a href="/" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}>Home</a>
+        <a href="team" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Team</a>
+        <a href="services" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Services</a>
+        <a href="about" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`} >About us</a>
+        <a href="career" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Career</a>
+        <a href="contact" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`} >Contact us</a>
       </div>
     </nav>
   );

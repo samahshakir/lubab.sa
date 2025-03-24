@@ -19,12 +19,12 @@ const ServiceCard = ({ icon, title, description, index }) => {
     
     ScrollTrigger.create({
       trigger: cardRef.current,
-      start: "top 80%",
+      start: "top 70%",
       onEnter: () => {
         gsap.to(cardRef.current, {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 0.6,
           delay: index * 0.15,
           ease: "power3.out"
         });
@@ -33,7 +33,7 @@ const ServiceCard = ({ icon, title, description, index }) => {
         gsap.to(cardRef.current, {
           opacity: 0,
           y: 50,
-          duration: 0.6,
+          duration: 0.4,
           ease: "power2.in"
         });
       }
@@ -143,7 +143,7 @@ const Services = () => {
   }, []);
   
   return (
-    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-[#00BC78CC]' : 'bg-gray-900'} min-h-screen py-20 overflow-hidden`}>
+    <div ref={sectionRef} className={`relative${darkMode ?  'bg-[#F8FAFC]' : 'bg-gray-900'}'} min-h-screen py-20 overflow-hidden`}>
       {/* Background gradient effect */}
       {/* <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div> */}
       

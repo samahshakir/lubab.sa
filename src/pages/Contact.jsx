@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Spline from '@splinetool/react-spline';
+import { useDarkMode } from '../context/DarkModeContext';
+
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -15,6 +17,7 @@ const Contact = () => {
   const buttonRef = useRef(null);
   const containerRef = useRef(null);
   const formAnimationRef = useRef(null);
+  const { darkMode } = useDarkMode();
 
   // Set up ScrollTrigger for fade in/out animations
   useEffect(() => {
@@ -138,7 +141,7 @@ const Contact = () => {
   };
 
   return (
-    <div ref={sectionRef} className="relative min-h-screen">
+    <div ref={sectionRef} className={`relative min-h-screen ${darkMode ?  'bg-[#F8FAFC]' : 'bg-gray-900'}`}>
       {/* Spline background - positioned absolute to fill the entire space */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Spline scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
@@ -166,51 +169,63 @@ const Contact = () => {
           
           <div 
             ref={formRef} 
-            className="max-w-2xl ml-8 backdrop-filter backdrop-blur-lg bg-white/10 p-8 rounded-2xl shadow-2xl border border-white/20"
+            className="max-w-2xl ml-8 shadow-gray-600"
             style={{ opacity: 0, transform: 'translateX(-50px)' }}
           >
-            <form className="space-y-6">
+            <form className="space-y-8 p-8 bg-[#e0e5ec] dark:bg-[#202428] rounded-xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="group">
-                  <label htmlFor="name" className="block text-left text-sm font-medium text-gray-200 mb-1">Name</label>
+                  <label htmlFor="name" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
                   <input 
                     ref={addToInputRefs}
                     type="text" 
                     id="name" 
-                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
+                    className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
+                    shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
+                    dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     placeholder="Your name"
                   />
                 </div>
                 <div className="group">
-                  <label htmlFor="email" className="block text-left text-sm font-medium text-gray-200 mb-1">Email</label>
+                  <label htmlFor="email" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
                   <input 
                     ref={addToInputRefs}
                     type="email" 
                     id="email" 
-                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
+                    className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
+                    shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
+                    dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     placeholder="your@email.com"
                   />
                 </div>
               </div>
               
               <div className="group">
-                <label htmlFor="subject" className="block text-left text-sm font-medium text-gray-200 mb-1">Subject</label>
+                <label htmlFor="subject" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
                 <input 
                   ref={addToInputRefs}
                   type="text" 
                   id="subject" 
-                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
+                  className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
+                  shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
+                  dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   placeholder="What's this about?"
                 />
               </div>
               
               <div className="group">
-                <label htmlFor="message" className="block text-left text-sm font-medium text-gray-200 mb-1">Message</label>
+                <label htmlFor="message" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
                 <textarea 
                   ref={addToInputRefs}
                   id="message" 
                   rows="5" 
-                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
+                  className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
+                  shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
+                  dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   placeholder="Tell us about your project..."
                 ></textarea>
               </div>
@@ -219,8 +234,16 @@ const Contact = () => {
                 <button 
                   ref={buttonRef}
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-green-500/25 transition-all duration-300"
-                  style={{ opacity: 0, transform: 'scale(0.8)' }}
+                  className="w-full py-3 px-6 rounded-xl text-blue-600 dark:text-blue-400 font-medium text-lg
+                  bg-[#e0e5ec] dark:bg-[#202428]
+                  shadow-[3px_3px_6px_#b8b9be,-3px_-3px_6px_#ffffff] 
+                  dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]
+                  hover:shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff]
+                  dark:hover:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                  active:shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff]
+                  dark:active:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
+                  transition-all duration-300"
+                  style={{ opacity: 1, transform: 'scale(1)' }}
                 >
                   Send Message
                 </button>
