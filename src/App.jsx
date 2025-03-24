@@ -6,6 +6,7 @@ import Contact from './pages/Contact';
 import { LanguageProvider } from "./context/LanguageContext";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import Navbar from "./components/Navbar";
+import Career from './pages/Career';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path='/career' element={<Career/>}/>
           </Routes>
         </Router>
       </LanguageProvider>

@@ -49,32 +49,32 @@ const Contact = () => {
     tl.to(headingRef.current, {
       y: 0,
       opacity: 1,
-      duration: 1.2,
+      duration: 0.8,
       ease: "power2.out"
     })
     .to(textRef.current, {
       y: 0,
       opacity: 1,
-      duration: 1.2,
+      duration: 0.8,
       ease: "power2.out"
     }, "-=0.9")
     .to(formRef.current, {
       x: 0,
       opacity: 1,
-      duration: 1.5,
+      duration: 1.1,
       ease: "power2.out"
     }, "-=0.9")
     .to(inputRefs.current, {
       opacity: 1,
       x: 0,
       stagger: 0.15,
-      duration: 0.8,
+      duration: 0.4,
       ease: "power1.out"
     }, "-=0.8")
     .to(buttonRef.current, {
       opacity: 1,
       scale: 1,
-      duration: 0.8,
+      duration: 0.4,
       ease: "back.out(1.7)"
     }, "-=0.4");
     
@@ -110,14 +110,14 @@ const Contact = () => {
       buttonRef.current.addEventListener('mouseenter', () => {
         gsap.to(buttonRef.current, {
           scale: 1.05,
-          duration: 0.3
+          duration: 0.2
         });
       });
       
       buttonRef.current.addEventListener('mouseleave', () => {
         gsap.to(buttonRef.current, {
           scale: 1,
-          duration: 0.3
+          duration: 0.2
         });
       });
     }
@@ -150,7 +150,7 @@ const Contact = () => {
           <div className="text-left mb-16 ml-8">
             <h2 
               ref={headingRef} 
-              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600"
               style={{ opacity: 0, transform: 'translateY(30px)' }}
             >
               Get in Touch
@@ -177,7 +177,7 @@ const Contact = () => {
                     ref={addToInputRefs}
                     type="text" 
                     id="name" 
-                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
+                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
                     placeholder="Your name"
                   />
                 </div>
@@ -187,7 +187,7 @@ const Contact = () => {
                     ref={addToInputRefs}
                     type="email" 
                     id="email" 
-                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
+                    className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -199,7 +199,7 @@ const Contact = () => {
                   ref={addToInputRefs}
                   type="text" 
                   id="subject" 
-                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
                   placeholder="What's this about?"
                 />
               </div>
@@ -210,7 +210,7 @@ const Contact = () => {
                   ref={addToInputRefs}
                   id="message" 
                   rows="5" 
-                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all duration-300 hover:bg-white/10"
+                  className="w-full bg-white/5 border border-white/10 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:bg-white/10"
                   placeholder="Tell us about your project..."
                 ></textarea>
               </div>
@@ -219,7 +219,7 @@ const Contact = () => {
                 <button 
                   ref={buttonRef}
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-green-500/25 transition-all duration-300"
                   style={{ opacity: 0, transform: 'scale(0.8)' }}
                 >
                   Send Message

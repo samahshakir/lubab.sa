@@ -1,3 +1,3 @@
-import hero from './schemas/hero'
+import heroSection from './schemas/heroSection'
 
-export const schemaTypes = [hero]
+export const schemaTypes = [heroSection]

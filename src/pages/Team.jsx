@@ -147,10 +147,10 @@ const Team = () => {
   return (
     <div 
       ref={sectionRef} 
-      className="team-section h-screen w-full bg-black flex items-center justify-center overflow-hidden"
+      className="team-section h-screen w-full bg-gray-900 flex items-center justify-center overflow-hidden"
     >
       <div className="container mx-auto px-8 relative">
-        <h2 className="text-4xl md:text-6xl font-bold text-white mb-16 text-center">Our Team</h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-white mt-3 mb-16 text-center">Our Team</h2>
         
         <div className="relative h-[600px] w-full">
           {teamMembers.map((member, index) => (

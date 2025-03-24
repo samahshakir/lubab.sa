@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useDarkMode } from '../context/DarkModeContext';
+
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -64,6 +66,7 @@ const Services = () => {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const subheadingRef = useRef(null);
+  const { darkMode } = useDarkMode(); 
   
   // Sample services data
   const services = [
@@ -140,9 +143,9 @@ const Services = () => {
   }, []);
   
   return (
-    <div ref={sectionRef} className="relative bg-black min-h-screen py-20 overflow-hidden">
+    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-[#00BC78CC]' : 'bg-gray-900'} min-h-screen py-20 overflow-hidden`}>
       {/* Background gradient effect */}
-      <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div>
+      {/* <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div> */}
       
       {/* Animated particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
