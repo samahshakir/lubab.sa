@@ -141,91 +141,95 @@ const Contact = () => {
   };
 
   return (
-    <div ref={sectionRef} className={`relative min-h-screen ${darkMode ?  'bg-[#F8FAFC]' : 'bg-gray-900'}`}>
-      {/* Spline background - positioned absolute to fill the entire space */}
+    <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-gray-900'}`}>
+      {/* Spline background */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Spline scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
       </div>
       
-      {/* Content positioned above the Spline background */}
+      {/* Content */}
       <section className="relative z-10 min-h-screen flex items-start justify-start pt-32 pb-20">
         <div ref={containerRef} className="container mx-auto px-6">
           <div className="text-left mb-16 ml-8">
             <h2 
               ref={headingRef} 
-              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600"
+              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r 
+              from-blue-500 to-blue-600"
               style={{ opacity: 0, transform: 'translateY(30px)' }}
             >
               Get in Touch
             </h2>
             <p 
               ref={textRef} 
-              className="text-lg md:text-xl text-white max-w-3xl"
+              className={`text-lg md:text-xl ${darkMode ? 'text-gray-800' : 'text-white'} max-w-3xl`}
               style={{ opacity: 0, transform: 'translateY(30px)' }}
             >
               Ready to transform your digital presence? Contact us today to start your journey.
             </p>
           </div>
           
+          {/* Contact Form */}
           <div 
             ref={formRef} 
             className="max-w-2xl ml-8 shadow-gray-600"
             style={{ opacity: 0, transform: 'translateX(-50px)' }}
           >
-            <form className="space-y-8 p-8 bg-[#e0e5ec] dark:bg-[#202428] rounded-xl">
+            <form className={`space-y-8 p-8 rounded-xl 
+              ${darkMode ? 'bg-white shadow-lg' : 'bg-[#202428] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="group">
-                  <label htmlFor="name" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                  <label htmlFor="name" className={`block text-left text-sm font-medium 
+                    ${darkMode ? 'text-gray-700' : 'text-gray-300'} mb-2`}>Name</label>
                   <input 
                     ref={addToInputRefs}
                     type="text" 
                     id="name" 
-                    className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
-                    shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
-                    dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full py-3 px-4 rounded-lg border border-gray-300 
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                      focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="Your name"
                   />
                 </div>
                 <div className="group">
-                  <label htmlFor="email" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                  <label htmlFor="email" className={`block text-left text-sm font-medium 
+                    ${darkMode ? 'text-gray-700' : 'text-gray-300'} mb-2`}>Email</label>
                   <input 
                     ref={addToInputRefs}
                     type="email" 
                     id="email" 
-                    className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
-                    shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
-                    dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full py-3 px-4 rounded-lg border border-gray-300 
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                      focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="your@email.com"
                   />
                 </div>
               </div>
               
               <div className="group">
-                <label htmlFor="subject" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                <label htmlFor="subject" className={`block text-left text-sm font-medium 
+                  ${darkMode ? 'text-gray-700' : 'text-gray-300'} mb-2`}>Subject</label>
                 <input 
                   ref={addToInputRefs}
                   type="text" 
                   id="subject" 
-                  className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
-                  shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
-                  dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  className={`w-full py-3 px-4 rounded-lg border border-gray-300 
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder="What's this about?"
                 />
               </div>
               
               <div className="group">
-                <label htmlFor="message" className="block text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                <label htmlFor="message" className={`block text-left text-sm font-medium 
+                  ${darkMode ? 'text-gray-700' : 'text-gray-300'} mb-2`}>Message</label>
                 <textarea 
                   ref={addToInputRefs}
                   id="message" 
                   rows="5" 
-                  className="w-full bg-[#e0e5ec] dark:bg-[#202428] py-3 px-4 rounded-lg text-gray-800 dark:text-gray-200
-                  shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff] 
-                  dark:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  className={`w-full py-3 px-4 rounded-lg border border-gray-300 
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder="Tell us about your project..."
                 ></textarea>
               </div>
@@ -234,15 +238,8 @@ const Contact = () => {
                 <button 
                   ref={buttonRef}
                   type="submit" 
-                  className="w-full py-3 px-6 rounded-xl text-blue-600 dark:text-blue-400 font-medium text-lg
-                  bg-[#e0e5ec] dark:bg-[#202428]
-                  shadow-[3px_3px_6px_#b8b9be,-3px_-3px_6px_#ffffff] 
-                  dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]
-                  hover:shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff]
-                  dark:hover:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                  active:shadow-[inset_3px_3px_6px_#b8b9be,inset_-3px_-3px_6px_#ffffff]
-                  dark:active:shadow-[inset_3px_3px_6px_#16181c,inset_-3px_-3px_6px_#2a2e34]
-                  transition-all duration-300"
+                  className={`w-full py-3 px-6 rounded-xl font-medium text-lg transition-all duration-300
+                    ${darkMode ? 'text-blue-600 bg-white shadow-md hover:shadow-inner' : 'text-blue-400 bg-[#202428] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
                   style={{ opacity: 1, transform: 'scale(1)' }}
                 >
                   Send Message
@@ -253,9 +250,8 @@ const Contact = () => {
         </div>
       </section>
     </div>
-
-    
   );
+  
 };
 
 export default Contact;

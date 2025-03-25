@@ -7,6 +7,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import Navbar from "./components/Navbar";
 import Career from './pages/Career';
+import Team from './pages/Team';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/team" element={<Team />} />
+
             <Route path="/contact" element={<Contact />} />
             <Route path='/career' element={<Career/>}/>
           </Routes>

@@ -31,8 +31,15 @@ function Home() {
   const { isArabic } = useLanguage();
   const { darkMode } = useDarkMode(); // Get dark mode state
   const [heroData, setHeroData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const minLoadingTime = setTimeout(() => {
+      if (heroData) {
+        setIsLoading(false);
+      }
+    }, 1500); 
+
     client
       .fetch('*[_type == "heroSection"][0]')
       .then((data) => setHeroData(data))
@@ -200,19 +207,42 @@ function Home() {
         ctx1.revert();
         ctx2.revert();
         ctx3.revert();
+        clearTimeout(minLoadingTime)
     }
   }, []);
-  console.log(heroData)
+
+  useEffect(() => {
+    if (heroData && isLoading) {
+      // Check if minimum loading time has passed
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300); // Small buffer to ensure smooth transition
+    }
+  }, [heroData, isLoading]);
+
+  const LoadingScreen = () => (
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} transition-opacity duration-500`}>
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin" 
+             style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
+        <h2 className={`text-xl font-bold ${darkMode ? 'text-[#101828]' : 'text-white'}`}>Loading Content</h2>
+      </div>
+    </div>
+  );
     
   return (
+
+    <>
+      {isLoading && <LoadingScreen />}
+
     <div 
     ref={mainRef} 
-    className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+    className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} font-nizar text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   >
       <Navbar />
   
       {/* --- First Section (Hero) --- */}
-      <main className="container min-h-screen mx-auto px-6 pt-36 pb-20 relative font-[Nizar ]">
+      <main className="container min-h-screen mx-auto px-6 pt-36 pb-20 relative font-nizar">
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
                backgroundSize: '20px 20px'}}></div>
@@ -223,25 +253,25 @@ function Home() {
             ref={titleRef}
             className={`text-6xl md:text-9xl font-bold mb-4 leading-tight tracking-tight animate-fadeIn ${isArabic ? 'text-right' : 'text-left'}`}
           >
-            <p className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}>{isArabic ? heroData?.title?.["ar"] : heroData?.title?.["en"] || "Loading..."}</p>
-            <p className={`${darkMode ? 'text-blue-600' : 'text-blue-500'} transition-colors duration-300 animate-gradientShift`}>{isArabic ? heroData?.title2?.["ar"] : heroData?.title2?.["en"] || "Loading..."}</p>
+            <p className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}>{isArabic ? heroData?.title?.["ar"] : heroData?.title?.["en"]}</p>
+            <p className={`${darkMode ? 'text-[#3F73B7]' : 'text-blue-500'} transition-colors duration-300 animate-gradientShift`}>{isArabic ? heroData?.title2?.["ar"] : heroData?.title2?.["en"]}</p>
             <span className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}> {isArabic ? heroData?.title3?.["ar"] : heroData?.title3?.["en"] || "Loading..."} </span>
           </h1>
           {/* Subtitle */}
-          <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? 'text-[#00BC78]' : 'text-sky-500'} uppercase transition-colors duration-300 animate-slideIn`}> {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"] || "Loading..."} </p>
+          <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? 'text-[#00BC78]' : 'text-sky-500'} uppercase transition-colors duration-300 animate-slideIn`}> {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"]} </p>
           <p
             ref={descriptionRef}
             className={`text-lg md:text-xl ${darkMode ? 'text-[#374151]' : 'text-gray-200'} mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift ${isArabic ? 'text-right' : 'text-left'}`}
           >
-            {isArabic ? heroData?.description?.["ar"] : heroData?.description?.["en"] || "Loading..."}
+            {isArabic ? heroData?.description?.["ar"] : heroData?.description?.["en"]}
           </p>
           <div className={`${isArabic ? 'text-right' : 'text-left'}`}>
-            <button
+            {/* <button
               ref={buttonRef}
               className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-[#00BC78] hover:bg-[#00A86C]'} text-white px-8 py-4 rounded-full font-medium transition-colors duration-300 text-lg hover:shadow-glow`}
             >
-              {isArabic ? heroData?.buttonText?.["ar"] : heroData?.buttonText?.["en"] || "Loading..."}
-            </button>
+              {isArabic ? heroData?.buttonText?.["ar"] : heroData?.buttonText?.["en"]}
+            </button> */}
           </div>
         </div>
 
@@ -333,6 +363,7 @@ function Home() {
       <Contact/>
       <Footer/>
     </div>
+    </>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useDarkMode } from '../context/DarkModeContext';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -34,6 +35,7 @@ const Team = () => {
   const cardsRef = useRef([]);
   const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const {darkMode} = useDarkMode();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -147,55 +149,62 @@ const Team = () => {
   return (
     <div 
       ref={sectionRef} 
-      className="team-section h-screen w-full bg-gray-900 flex items-center justify-center overflow-hidden"
+      className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} team-section h-screen w-full flex items-center justify-center overflow-hidden`}
     >
       <div className="container mx-auto px-8 relative">
-        <h2 className="text-4xl md:text-6xl font-bold text-white mt-3 mb-16 text-center">Our Team</h2>
+      <h2 className={`${darkMode ? 'text-[#101828]' : 'text-white'} text-4xl md:text-6xl font-bold mt-3 mb-16 text-center`}>
+        Our Team
+      </h2>
+
         
-        <div className="relative h-[600px] w-full">
-          {teamMembers.map((member, index) => (
-            <div 
-              key={member.id}
-              ref={el => (cardsRef.current[index] = el)}
-              className="absolute inset-0 transition-all duration-700 ease-out"
-              style={{ perspective: '1000px' }}
-            >
-              <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-              <div className="w-full md:w-5/12">
-                <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                </div>
-            </div>
-                            
-                <div className="w-full md:w-1/2 text-white">
-                  <h3 className="text-3xl md:text-5xl font-bold mb-3">{member.name}</h3>
-                  <h4 className="text-xl md:text-2xl font-light text-gray-400 mb-6">{member.role}</h4>
-                  <p className="text-lg leading-relaxed">{member.bio}</p>
-                  <div className="mt-8">
-                    <button className="border border-white hover:bg-white hover:text-black rounded-md py-2 px-6 text-white transition-all duration-300">
-                      Learn more
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        <div className="flex justify-center mt-12">
-          {teamMembers.map((_, index) => (
-            <div 
-              key={index} 
-              className={`w-3 h-3 mx-2 rounded-full ${index === activeIndex ? 'bg-white' : 'bg-gray-600'}`} 
+      <div className="relative h-[600px] w-full">
+  {teamMembers.map((member, index) => (
+    <div 
+      key={member.id}
+      ref={el => (cardsRef.current[index] = el)}
+      className="absolute inset-0 transition-all duration-700 ease-out"
+      style={{ perspective: '1000px' }}
+    >
+      <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+        {/* Image Section */}
+        <div className="w-full md:w-5/12">
+          <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
+            <img 
+              src={member.image} 
+              alt={member.name} 
+              className="w-full h-full object-cover"
             />
-          ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          </div>
+        </div>
+                            
+        {/* Text Section */}
+        <div className={`w-full md:w-5/12 max-w-[500px] ${darkMode ? 'text-[#101828]' : 'text-white'}`}>
+          <h3 className={`text-3xl md:text-5xl font-bold mb-3 ${darkMode ? 'text-[#101828]' : 'text-white'}`}>
+            {member.name}
+          </h3>
+          <h4 className={`text-xl md:text-2xl font-light ${darkMode ? 'text-[#374151]' : 'text-gray-400'} mb-6`}>
+            {member.role}
+          </h4>
+          <p className={`text-lg leading-relaxed ${darkMode ? 'text-[#374151]' : 'text-gray-300'}`}>
+            {member.bio}
+          </p>
         </div>
       </div>
+    </div>
+  ))}
+</div>
+
+
+<div className="flex justify-center mt-12">
+  {teamMembers.map((_, index) => (
+    <div 
+      key={index} 
+      className={`w-3 h-3 mx-2 rounded-full ${index === activeIndex ? 'bg-white' : 'bg-gray-600'}`} 
+    />
+  ))}
+</div>
+</div>
     </div>
   );
 };

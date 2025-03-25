@@ -10,10 +10,23 @@ const Navbar = () => {
   const line2Ref = useRef(null);
   const line3Ref = useRef(null);
   const menuRef = useRef(null);
+  const navRef = useRef(null);
   const { isArabic, setIsArabic } = useLanguage();
   const { darkMode, toggleDarkMode } = useDarkMode();
   const themeIconRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setHasScrolled(scrollPosition > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Animation for theme toggle
   useEffect(() => {
@@ -57,7 +70,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed w-full top-0 z-50 px-6 py-4 transition-colors duration-300 backdrop-blur-md  ${darkMode ? 'bg-[#E5E7EB]/30 dark:bg-white/50' :  `bg-black/30 dark:bg-gray-900/50` }`}>
+    <nav 
+      ref={navRef}
+      className={`font-nizar fixed w-full top-0 z-50 px-6 py-4 transition-all duration-300 
+        ${hasScrolled 
+          ? darkMode 
+            ? 'bg-[#E5E7EB]/30' 
+            : 'bg-[#111c32]/30' 
+          : 'bg-transparent'}`}
+    >
       <div className="flex justify-between items-center">
         {/* Logo */}
         <div>
@@ -69,6 +90,16 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-6">
+          {/* Desktop Menu (only visible on large screens) */}
+          <div className="hidden lg:flex items-center gap-8">
+            <a href="/" className={`${darkMode ? 'text-[#101828] hover:text-[#]' : 'text-gray-400'}  transition-colors`}>HOME</a>
+            <a href="team" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >TEAM</a>
+            <a href="services" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >SERVICES</a>
+            <a href="about" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`}>ABOUT US</a>
+            <a href="career" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >CAREER</a>
+            <a href="contact" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`}>CONTACT US</a>
+          </div>
+          
           {/* Dark Mode Toggle Icon */}
           <button 
             onClick={toggleDarkMode} 
@@ -94,30 +125,33 @@ const Navbar = () => {
             <Globe className={`${darkMode ? 'text-[#101828]' : 'text-white'}`} size={24} />
           </button>
 
-          {/* Menu Button (visual only) */}
+          {/* Menu Button (only visible on mobile) */}
           <div 
             ref={menuButtonRef}
-            className={`z-50 relative cursor-pointer ${darkMode ? '' : ''}`}
+            className="z-50 relative cursor-pointer lg:hidden"
             aria-label="Menu button"
             onClick={toggleMenu}
           >
             <div className="flex flex-col justify-center items-end space-y-2 group">
-              <span ref={line1Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
-              <span ref={line2Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
-              <span ref={line3Ref} className={`block w-8 h-0.5 ${darkMode? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
+              <span ref={line1Ref} className={`block w-8 h-0.5 ${darkMode ? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
+              <span ref={line2Ref} className={`block w-8 h-0.5 ${darkMode ? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
+              <span ref={line3Ref} className={`block w-8 h-0.5 ${darkMode ? 'bg-[#101828]' : 'bg-white'} origin-center transform transition-all dark:bg-white`}></span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Menu */}
-      <div ref={menuRef} className="hidden flex items-center justify-center gap-10 mt-4">
-        <a href="/" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}>Home</a>
-        <a href="team" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Team</a>
-        <a href="services" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Services</a>
-        <a href="about" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`} >About us</a>
-        <a href="career" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`}  >Career</a>
-        <a href="contact" className={`${darkMode ? 'text-[#101828]' :  'text-white'}  hover:text-blue-700 transition-colors`} >Contact us</a>
+      {/* Mobile Menu (only visible on small screens) */}
+      <div 
+        ref={menuRef} 
+        className={`lg:hidden ${isMenuOpen ? 'flex' : 'hidden'} flex-col items-center gap-4 mt-4 ${hasScrolled ? 'backdrop-blur-md' : ''}`}
+      >
+        <a href="/" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>Home</a>
+        <a href="team" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Team</a>
+        <a href="services" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Services</a>
+        <a href="about" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>About us</a>
+        <a href="career" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Career</a>
+        <a href="contact" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>Contact us</a>
       </div>
     </nav>
   );

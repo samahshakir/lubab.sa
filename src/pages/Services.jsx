@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Service card component
 const ServiceCard = ({ icon, title, description, index }) => {
   const cardRef = useRef(null);
+  const {darkMode} = useDarkMode();
   
   useEffect(() => {
     gsap.set(cardRef.current, {
@@ -49,7 +50,7 @@ const ServiceCard = ({ icon, title, description, index }) => {
         <div className="mb-6 text-4xl text-gradient bg-gradient-to-r from-blue-400 to-green-400">
           {icon}
         </div>
-        <h3 className="text-2xl font-bold mb-4 text-white">{title}</h3>
+        <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-black' : 'text-white'}`}>{title}</h3>
         <p className="text-gray-300 mb-6 flex-grow">{description}</p>
         <button className="self-start text-blue-400 font-medium flex items-center hover:text-green-300 transition-colors duration-300">
           Learn more
@@ -145,7 +146,7 @@ const Services = () => {
   return (
     <div ref={sectionRef} className={`relative${darkMode ?  'bg-[#F8FAFC]' : 'bg-gray-900'}'} min-h-screen py-20 overflow-hidden`}>
       {/* Background gradient effect */}
-      {/* <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div> */}
+      <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div>
       
       {/* Animated particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -193,20 +194,8 @@ const Services = () => {
           ))}
         </div>
       </div>
+
       
-      {/* Add some decorative elements */}
-      <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full filter blur-3xl"></div>
-      <div className="absolute -top-32 -right-32 w-64 h-64 bg-green-500/10 rounded-full filter blur-3xl"></div>
-      
-      <style jsx>{`
-        @keyframes float {
-          0% { transform: translateY(0) translateX(0); }
-          25% { transform: translateY(-20px) translateX(10px); }
-          50% { transform: translateY(0) translateX(20px); }
-          75% { transform: translateY(20px) translateX(10px); }
-          100% { transform: translateY(0) translateX(0); }
-        }
-      `}</style>
     </div>
   );
 };

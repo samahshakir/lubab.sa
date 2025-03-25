@@ -15,4 +15,5 @@ export const LanguageProvider = ({ children }) => {
 };
 
 // Custom Hook for easy access
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = () => useContext(LanguageContext);
