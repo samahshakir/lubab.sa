@@ -175,7 +175,7 @@ const Contact = () => {
             style={{ opacity: 0, transform: 'translateX(-50px)' }}
           >
             <form className={`space-y-8 p-8 rounded-xl 
-              ${darkMode ? 'bg-white shadow-lg' : 'bg-[#202428] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}>
+              ${darkMode ? 'bg-gray-100 shadow-lg' : 'bg-[#0b1622] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="group">
@@ -186,7 +186,7 @@ const Contact = () => {
                     type="text" 
                     id="name" 
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="Your name"
                   />
@@ -199,7 +199,7 @@ const Contact = () => {
                     type="email" 
                     id="email" 
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="your@email.com"
                   />
@@ -214,7 +214,7 @@ const Contact = () => {
                   type="text" 
                   id="subject" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder="What's this about?"
                 />
@@ -228,7 +228,7 @@ const Contact = () => {
                   id="message" 
                   rows="5" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#202428] text-gray-200'}
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder="Tell us about your project..."
                 ></textarea>
@@ -239,7 +239,7 @@ const Contact = () => {
                   ref={buttonRef}
                   type="submit" 
                   className={`w-full py-3 px-6 rounded-xl font-medium text-lg transition-all duration-300
-                    ${darkMode ? 'text-blue-600 bg-white shadow-md hover:shadow-inner' : 'text-blue-400 bg-[#202428] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
+                    ${darkMode ? 'text-blue-600 bg-white shadow-md hover:shadow-inner' : 'text-blue-400 bg-[#030b13] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
                   style={{ opacity: 1, transform: 'scale(1)' }}
                 >
                   Send Message

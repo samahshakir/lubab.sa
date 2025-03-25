@@ -72,6 +72,7 @@ const Navbar = () => {
   return (
     <nav 
       ref={navRef}
+      dir={isArabic ? "rtl" : "ltr"}
       className={`font-nizar fixed w-full top-0 z-50 px-6 py-4 transition-all duration-300 
         ${hasScrolled 
           ? darkMode 
@@ -79,9 +80,10 @@ const Navbar = () => {
             : 'bg-[#111c32]/30' 
           : 'bg-transparent'}`}
     >
-      <div className="flex justify-between items-center">
+      <div className={`flex justify-between items-center ${isArabic ? "flex-row-reverse" : ""}`}>
+
         {/* Logo */}
-        <div>
+        <div className={isArabic ? "order-last" : "order-first"}>
           <img 
             src="src/assets/lubab-b.png" 
             alt="LUBAB" 
@@ -89,15 +91,15 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className={`flex items-center gap-6 ${isArabic ? "order-first" : "order-last"}`}>
           {/* Desktop Menu (only visible on large screens) */}
           <div className="hidden lg:flex items-center gap-8">
-            <a href="/" className={`${darkMode ? 'text-[#101828] hover:text-[#]' : 'text-gray-400'}  transition-colors`}>HOME</a>
-            <a href="team" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >TEAM</a>
-            <a href="services" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >SERVICES</a>
-            <a href="about" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`}>ABOUT US</a>
-            <a href="career" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`} >CAREER</a>
-            <a href="contact" className={`${darkMode ? 'text-[#101828] hover:text-white' : 'text-gray-400'} hover:text-white transition-colors`}>CONTACT US</a>
+            <a href="/" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'}  transition-colors`}>{isArabic ? "الرئيسية" : "HOME"}</a>
+            <a href="team" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "فريق العمل" : "TEAM"}</a>
+            <a href="services" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "خدماتنا" : "SERVICES"}</a>
+            <a href="about" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "من نحن" : "ABOUT US"}</a>
+            <a href="career" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "انضم إلى فريق لباب" : "CAREER"}</a>
+            <a href="contact" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "تواصل معنا" : "CONTACT US"}</a>
           </div>
           
           {/* Dark Mode Toggle Icon */}
@@ -118,11 +120,11 @@ const Navbar = () => {
           {/* Language Toggle Icon */}
           <button 
             onClick={() => setIsArabic(!isArabic)} 
-            className="flex items-center gap-2 text-white hover:text-blue-500 transition-colors"
+              className={`flex items-center gap-2 ${darkMode?  'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}
             aria-label="Switch Language"
           >
-            <span className={`${darkMode ? 'text-[#101828]' : 'text-white'}`}>{isArabic ? "English" : "Arabic"}</span>
-            <Globe className={`${darkMode ? 'text-[#101828]' : 'text-white'}`} size={24} />
+            <span>{isArabic ? "English" : "العربية"}</span>
+            <Globe size={24} />
           </button>
 
           {/* Menu Button (only visible on mobile) */}
@@ -146,12 +148,12 @@ const Navbar = () => {
         ref={menuRef} 
         className={`lg:hidden ${isMenuOpen ? 'flex' : 'hidden'} flex-col items-center gap-4 mt-4 ${hasScrolled ? 'backdrop-blur-md' : ''}`}
       >
-        <a href="/" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>Home</a>
-        <a href="team" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Team</a>
-        <a href="services" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Services</a>
-        <a href="about" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>About us</a>
-        <a href="career" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`} >Career</a>
-        <a href="contact" className={`${darkMode ? 'text-[#101828]' : 'text-white'} hover:text-white transition-colors`}>Contact us</a>
+        <a href="/" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'}  transition-colors`}>{isArabic ? "الرئيسية" : "HOME"}</a>
+            <a href="team" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "الفريق" : "TEAM"}</a>
+            <a href="services" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "الخدمات" : "SERVICES"}</a>
+            <a href="about" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "من نحن" : "ABOUT US"}</a>
+            <a href="career" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "وظائف" : "CAREER"}</a>
+            <a href="contact" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "اتصل بنا" : "CONTACT US"}</a>
       </div>
     </nav>
   );

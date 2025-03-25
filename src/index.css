@@ -7,8 +7,106 @@
 
 @theme{
   --font-nizar: Nizar;
+  --color-primary-green: #00BC78;
+  --color-secondary-blue: #3F73B7;
+	--color-light-shade-g: #66E0A3;
+	--color-dark-shade-g: #00995A;
+
+	--color-secondary-light-shade-b: #8AAEDC;
+	--color-secondary-dark-shade-b: #2C4B8B;
+	/* •	Neutral Colors: */
+	--color-light-gray: #F4F4F4;
+  --color-secondary-light-gray: #F8F8F8;
+	--color-dark-gray:#333333;
+  --color-secondary-dark-gray: #444444;
 }
 
+
+.bg-primary-g {
+  background-color: var(--color-primary-green);
+}
+
+.text-primary-g {
+  color: var(--color-primary-green);
+}
+
+.bg-primary-b {
+  background-color: var(--color-secondary-blue);
+}
+
+.text-primary-b {
+  color: var(--color-secondary-blue);
+}
+
+
+.bg-light-shade-g {
+  background-color: var(--color-light-shade-g);
+}
+
+.text-light-shade-g {
+  color: var(--color-light-shade-g);
+}
+
+.bg-dark-shade-g {
+  background-color: var(--color-dark-shade-g);
+}
+
+.text-dark-shade-g {
+  color: var(--color-dark-shade-g);
+}
+
+.text-primary-b{
+  color: var(--color-primary-blue);
+}
+
+.bg-secondary-light-shade-b {
+  background-color: var(--color-secondary-light-shade-b);
+}
+
+.text-secondary-light-shade {
+  color: var(--color-secondary-light-shade-b);
+}
+
+.bg-secondary-dark-shade-b {
+  background-color: var(--color-secondary-dark-shade-b);
+}
+
+.text-secondary-dark-shade {
+  color: var(--color-secondary-dark-shade-b);
+}
+
+.bg-light-gray {
+  background-color: var(--color-light-gray);
+}
+
+.text-light-gray {
+  color: var(--color-light-gray);
+}
+
+.bg-secondary-light-gray {
+  background-color: var(--color-secondary-light-gray);
+}
+
+.text-secondary-light-gray {
+  color: var(--color-secondary-light-gray);
+}
+
+
+.bg-dark-gray {
+  background-color: var(--color-dark-gray);
+}
+
+.text-dark-gray {
+  color: var(--color-dark-gray);
+}
+
+.bg-secondary-dark-gray{
+  background-color: var(--color-secondary-dark-gray);
+}
+
+.text-secondary-dark-gray{
+   color: var(--color-secondary-dark-gray);
+}
 
 body {
   margin: 0;
@@ -102,4 +200,5 @@ body {
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
 
