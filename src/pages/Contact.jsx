@@ -143,9 +143,9 @@ const Contact = () => {
   return (
     <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-gray-900'}`}>
       {/* Spline background */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      {/* <div className="absolute inset-0 w-full h-full z-0">
         <Spline scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
-      </div>
+      </div> */}
       
       {/* Content */}
       <section className="relative z-10 min-h-screen flex items-start justify-start pt-32 pb-20">
@@ -164,7 +164,7 @@ const Contact = () => {
               className={`text-lg md:text-xl ${darkMode ? 'text-gray-800' : 'text-white'} max-w-3xl`}
               style={{ opacity: 0, transform: 'translateY(30px)' }}
             >
-              Ready to transform your digital presence? Contact us today to start your journey.
+              Let’s build the future together
             </p>
           </div>
           
@@ -235,12 +235,11 @@ const Contact = () => {
               </div>
               
               <div>
-                <button 
+              <button 
                   ref={buttonRef}
                   type="submit" 
-                  className={`w-full py-3 px-6 rounded-xl font-medium text-lg transition-all duration-300
-                    ${darkMode ? 'text-blue-600 bg-white shadow-md hover:shadow-inner' : 'text-blue-400 bg-[#030b13] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
-                  style={{ opacity: 1, transform: 'scale(1)' }}
+                  className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
+                  style={{ opacity: 0, transform: 'scale(0.8)' }}
                 >
                   Send Message
                 </button>

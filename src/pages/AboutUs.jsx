@@ -61,7 +61,7 @@ const AboutUs = () => {
   }, [isArabic]); // Re-run when language changes
 
   return (
-    <main className="container min-h-screen mx-auto px-4 pt-24 pb-20 relative font-nizar">
+    <main className="container min-h-screen mx-auto px-4 pt-24 pb-20 relative font-nizar mt-10">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
@@ -88,12 +88,17 @@ const AboutUs = () => {
         {/* Main Content */}
         <div 
           ref={contentRef}
-          className={`mb-8 text-lg ${darkMode ? "text-secondary-dark-gray" : "text-gray-200"} ${isArabic ? "rtl text-right" : "ltr text-left"}`}
+          className={`mb-5 text-lg ${darkMode ? "text-secondary-dark-gray" : "text-gray-200"} ${isArabic ? "rtl text-right" : "ltr text-left"}`}
         >
           <p className="mb-6 leading-relaxed">
-            {isArabic 
-              ? "انطلقت لُباب عام 2024 من مدينة خميس مشيط، على يد الشريكين المؤسسين خالد سفر آل شلوان وعبدالوهاب رفدان الشهراني، برؤية ريادية لصياغة مستقبل التقنية عبر حلول مبتكرة تُحدث فرقًا حقيقيًا. تمثل لُباب اليوم كيانًا سعوديًا احترافيًا يدمج بين الإبداع والخبرة، ويُسهم في معالجة التحديات التجارية والشخصية من خلال أدوات تقنية عالية الكفاءة، واضعًا التحول الرقمي الذكي في متناول كل منشأة طموحة وكل فرد يسعى للتطور."
-              : "Lubab was launched in 2024 in Khamis Mushait by co-founders Khalid Safar Al-Shalwan and Abdulwahab Rafdan Al-Shahrani, with a pioneering vision to shape the future of technology. Lubab represents a professional Saudi entity dedicated to addressing both business and personal challenges through high-efficiency digital tools. We specialize in developing innovative solutions that empower organizations to adapt to the ever-evolving digital landscape."
+            {isArabic ? `انطلقت شركة لُباب لالتصاالت وتقنية المعلومات المحدودة عام
+          2024 في مدينة خميس مشيط، بقيادة المؤسسين خالد سفر آل
+          شلوان وعبدالوهاب رفدان الشهراني. هدفنا هو تطوير حلول
+          ا حقيقيًا في قطاع األعمال وحياة األفراد.
+          تقنية مبتكرة تحدث فرقً
+          اليوم نمثل كيانًا سعوديًا احترافيًا يوظف اإلبداع والخبرة
+          لمعالجة التحديات الرقمية بشكل فعّال`
+              : "Lubab CIT Ltd. was founded in 2024 in Khamis Mushait by Khalid Safer Al-Shalwan and Abdulwahab Rafdan Al-Shahrani with the aim of delivering innovative tech solutions that make a tangible impact on businesses and everyday life. Today, we stand as a professional Saudi entity combining creativity and expertise to address digital challenges effectively"
             }
           </p>
         </div>
@@ -105,83 +110,83 @@ const AboutUs = () => {
           </h3>
           
           <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Value 1 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "الابتكار" : "Innovation"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+           {/* Value 1 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "الابتكار" : "Innovation"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
               {isArabic 
-                  ? "نبحث باستمرار عن حلول جديدة وطرق غير تقليدية لمواجهة التحديات وتحقيق التميز."
-                  : "We continuously seek new and unconventional solutions to overcome challenges and achieve excellence."
-                }
-              </p>
-            </div>
-            
-            {/* Value 2 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "الاحترافية" : "Professionalism"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
-                {isArabic 
-                  ? "نلتزم بأعلى معايير الجودة والدقة في تنفيذ كل مشروع وخدمة باحتراف تقني وسلوكي."
-                  : "We adhere to the highest standards of quality and precision in every project, both technically and behaviorally."
-                }
-              </p>
-            </div>
-            
-            {/* Value 3 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "الشراكة" : "Partnership"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
-                {isArabic 
-                  ? "نبني علاقات استراتيجية طويلة الأمد تقوم على الثقة المتبادلة والعمل المشترك لتحقيق الأهداف."
-                  : "We build long-term strategic relationships based on mutual trust and collaborative effort to reach common goals."
-                }
-              </p>
-            </div>
-            
-            {/* Value 4 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "الشفافية" : "Transparency"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
-                {isArabic 
-                  ? "نؤمن بأن الوضوح والصدق في التعامل أساس نجاح كل علاقة مهنية."
-                  : "We value clear and honest communication in all our interactions with clients and partners."
-                }
-              </p>
-            </div>
-            
-            {/* Value 5 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "التركيز على الحلول" : "Solution Focus"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
-                {isArabic 
-                  ? "نقدم حلولاً واقعية وفعالة، ونقيس نجاحنا بمدى تأثيرها على تحديات العميل."
-                  : "We deliver realistic, effective solutions and measure our success by their impact on our clients' challenges."
-                }
-              </p>
-            </div>
-            
-            {/* Value 6 */}
-            <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary-green">
-                {isArabic ? "تمكين الإنسان بالتقنية" : "Empowering Through Technology"}
-              </h4>
-              <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
-                {isArabic 
-                  ? "نستخدم التكنولوجيا كأداة لتمكين الأفراد والمؤسسات نحو أداء أفضل وحياة أسهل."
-                  : "We use technology as a means to empower individuals and organizations, driving better performance and an improved quality of life."
-                }
-              </p>
-            </div>
+                ? "نسعى دائماً لاكتشاف فرص جديدة وابتكار حلول خارجة عن المألوف."
+                : "We constantly seek new opportunities and unique solutions."
+              }
+            </p>
+          </div>
+
+          {/* Value 2 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "الاحترافية" : "Professionalism"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+              {isArabic 
+                ? "نلتزم بأعلى معايير الجودة والدقة في جميع مشاريعنا."
+                : "We adhere to the highest standards of quality and precision in all our projects."
+              }
+            </p>
+          </div>
+
+          {/* Value 3 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "الشراكة" : "Partnership"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+              {isArabic 
+                ? "نبني علاقات استراتيجية طويلة الأمد ترتكز على الثقة والهدف المشترك."
+                : "We build long-term, strategic relationships grounded in trust and shared objectives."
+              }
+            </p>
+          </div>
+
+          {/* Value 4 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "الشفافية" : "Transparency"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+              {isArabic 
+                ? "نصارح عملاءنا بكل التفاصيل، فالمصداقية أساس نجاحنا."
+                : "We maintain honesty with our clients, as credibility is the foundation of our success."
+              }
+            </p>
+          </div>
+
+          {/* Value 5 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "التركيز على الحلول" : "Solutions-Driven"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+              {isArabic 
+                ? "نقيس نجاحنا بمقدار ما تحققه حلولنا من نتائج حقيقية."
+                : "We measure our success by how effectively our solutions produce real, measurable outcomes."
+              }
+            </p>
+          </div>
+
+          {/* Value 6 */}
+          <div className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <h4 className="text-xl font-bold mb-2 text-primary-green">
+              {isArabic ? "تمكين الإنسان بالتقنية" : "Empowering People through Tech"}
+            </h4>
+            <p className={`${darkMode ? "text-secondary-dark-gray" : "text-gray-300"}`}>
+              {isArabic 
+                ? "نؤمن بأن التكنولوجيا رافدٌ لتمكين الأفراد والمؤسسات نحو آفاق أوسع."
+                : "We believe technology serves as a powerful enabler for individuals and organizations to reach broader horizons."
+              }
+            </p>
+          </div>
           </div>
         </div>
         

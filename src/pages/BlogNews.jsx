@@ -6,6 +6,48 @@ import { useDarkMode } from '../context/DarkModeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const BlogPopup = ({ article, darkMode, isArabic, onClose }) => {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+      <div 
+        className={`relative max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl transition-all duration-300 p-8 
+          ${darkMode ? 'bg-white text-dark-gray' : 'bg-gray-800 text-white'}`}
+      >
+        <button 
+          onClick={onClose}
+          className={`absolute top-4 right-4 p-2 rounded-full 
+            ${darkMode ? 'bg-gray-100 text-dark-gray' : 'bg-gray-700 text-white'} 
+            hover:opacity-80 transition-opacity`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        
+        <div className="mb-4 flex items-center">
+          <span 
+            className={`text-sm font-medium ${darkMode ? 'text-primary-green' : 'text-secondary-blue'}`}
+          >
+            {article.readTime}
+          </span>
+        </div>
+        
+        <h2 className={`text-2xl font-bold mb-6 ${isArabic ? 'text-right' : 'text-left'}`}>
+          {article.title}
+        </h2>
+        
+        <div 
+          className={`prose ${isArabic ? 'text-right' : 'text-left'} max-w-none 
+            ${darkMode ? 'prose-dark' : 'prose-light text-gray-200'}`}
+        >
+          {article.popupContent}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function BlogNews() {
   const { isArabic } = useLanguage();
   const { darkMode } = useDarkMode();
@@ -13,21 +55,51 @@ function BlogNews() {
   const titleRef = useRef(null);
   // Add this to force re-render when language changes
   const [currentLanguage, setCurrentLanguage] = useState(isArabic ? 'ar' : 'en');
+  const [selectedArticle, setSelectedArticle] = useState(null);
+
+  const handleReadMore = (article) => {
+    setSelectedArticle(article);
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+  };
+  
+  const closePopup = () => {
+    setSelectedArticle(null);
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+  };
 
   // Update current language when isArabic changes
   useEffect(() => {
     setCurrentLanguage(isArabic ? 'ar' : 'en');
   }, [isArabic]);
 
+  
+
   const blogContent = {
     en: {
-      title: "Digital Insights. Innovative Visions. Steps Toward the Future.",
-      description: "Our blog offers analytical articles, professional insights, and inspiring content on the future of technology and digital transformation.",
+      title: "“Tech insights. Digital inspiration. Steps toward the future.",
+      description: "We share analytical articles, professional insights, and inspiring content about the future of technology and digital transformation.",
       articles: [
         {
           title: "Innovation Journey: How Artificial Intelligence is Revolutionizing Business",
           excerpt: "In the digital transformation era, AI has become a crucial tool for business development, extending beyond automation to direct decision-making and creating personalized customer experiences.",
-          readTime: "5 min read"
+          readTime: "5 min read",
+          popupContent: (
+            <p>
+                        The Innovation Journey: How AI Is Revolutionizing Business
+                In the era of digital transformation, AI has become one of the most
+                vital tools for business development. Its role is no longer limited to
+                automation; it now directly contributes to decision-making,
+                improving efficiency, and creating personalized customer
+                experiences.
+                At “Lubab,” we see AI as an enabling factor, integrating it into
+                digital solutions to provide real value reflected in operational and
+                strategic performance. We focus on building intelligent systems that
+                understand the work environment, integrate seamlessly with
+                processes, and deliver measurable results.
+                Investing in AI today means building a more flexible and proactive
+                business infrastructure for the future.
+                </p>
+          )
         },
         {
           title: "Digital Transformation in Companies: Challenges and Opportunities",
@@ -48,7 +120,20 @@ function BlogNews() {
         {
           title: "رحلة الابتكار: كيف يُحدث الذكاء الاصطناعي ثورة في الأعمال",
           excerpt: "في عصر التحوّل الرقمي، أصبح الذكاء الاصطناعي من أهم أدوات تطوير الأعمال، متجاوزاً الأتمتة إلى المساهمة المباشرة في اتخاذ القرار وخلق تجارب مخصصة.",
-          readTime: "٥ دقائق للقراءة"
+          readTime: "٥ دقائق للقراءة",
+          popupContent: (<p>رحلة االبتكار: كيف يُحدث الذكاء االصطناعي ثورة
+            في األعمال؟
+            في عصر التح ّول الرقمي، أصبح الذكاء االصطناعي من
+            أهم أدوات تطوير األعمال. لم يعد دوره مقتص ًرا على
+            األتمتة، بل امتد ليكون مساه ًما مباش ًرا في اتخاذ القرار،
+            .وتحسين الكفاءة، وخلق تجارب مخصصة للعمالء
+            في "لُباب"، نرى الذكاء االصطناعي كعنصر تمكيني،
+            نُدمجه في تصميم الحلول الرقمية لتقديم قيمة فعلية
+            تنعكس على األداء التشغيلي واالستراتيجي. نُركز على
+            بناء أنظمة ذكية تفهم بيئة العمل، وتتكامل مع العمليات
+            .بسالسة، وتُقدم نتائج قابلة للقياس
+            االستثمار في الذكاء االصطناعي اليوم، هو بناء لبنية
+            .أعمال أكثر مرونة واستباقية للمستقبل</p>)
         },
         {
           title: "التحول الرقمي في الشركات: التحديات والفرص",
@@ -133,8 +218,8 @@ function BlogNews() {
   return (
     <section 
       ref={sectionRef}
-      className={`container min-h-screen mx-auto px-6 pt-36 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
-      key={`blog-section-${currentLanguage}`} // Force re-render when language changes
+      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      key={`blog-section-${currentLanguage}`}
     >
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
@@ -143,7 +228,7 @@ function BlogNews() {
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 
           ref={titleRef}
-          className={`text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-dark-gray' : 'text-white'}`}
+          className={`text-5xl md:text-5xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-dark-gray' : 'text-white'}`}
         >
           {content.title.split('.').map((part, index) => (
             <React.Fragment key={index}>
@@ -193,6 +278,7 @@ function BlogNews() {
               {article.excerpt}
             </p>
             <button 
+              onClick={() => handleReadMore(article)}
               className={`mt-4 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 
                 ${darkMode 
                   ? 'bg-primary-green text-white hover:bg-blue-700' 
@@ -204,6 +290,15 @@ function BlogNews() {
           </div>
         ))}
       </div>
+      
+      {selectedArticle && (
+        <BlogPopup 
+          article={selectedArticle} 
+          darkMode={darkMode} 
+          isArabic={isArabic}
+          onClose={closePopup}
+        />
+      )}
     </section>
   );
 }

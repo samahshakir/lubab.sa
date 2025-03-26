@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 import Career from './Career';
 import AboutUs from './AboutUs';
 import BlogNews from './BlogNews';
+import FAQSection from '../components/FAQSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -116,99 +117,99 @@ function Home() {
     //   });
     // }, section2Ref);
 
-    const ctx3 = gsap.context(() => {
-      const tl3 = gsap.timeline({
-        scrollTrigger: {
-          trigger: section3Ref.current,
-          start: "top bottom", 
-          end: "bottom center",
-          scrub: 1, // Smoother scrubbing with slight delay
-          // markers: true,
-        }
-      });
+    // const ctx3 = gsap.context(() => {
+    //   const tl3 = gsap.timeline({
+    //     scrollTrigger: {
+    //       trigger: section3Ref.current,
+    //       start: "top bottom", 
+    //       end: "bottom center",
+    //       scrub: 1, // Smoother scrubbing with slight delay
+    //       // markers: true,
+    //     }
+    //   });
     
-      // Create background elements for transition effect
-      const bgElements = [];
-      for (let i = 0; i < 5; i++) {
-        const el = document.createElement('div');
-        el.className = 'absolute inset-0 transform-gpu';
-        el.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
-        el.style.opacity = '0';
-        el.style.zIndex = '-1';
-        section3Ref.current.appendChild(el);
-        bgElements.push(el);
-      }
+    //   // Create background elements for transition effect
+    //   const bgElements = [];
+    //   for (let i = 0; i < 5; i++) {
+    //     const el = document.createElement('div');
+    //     el.className = 'absolute inset-0 transform-gpu';
+    //     el.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
+    //     el.style.opacity = '0';
+    //     el.style.zIndex = '-1';
+    //     section3Ref.current.appendChild(el);
+    //     bgElements.push(el);
+    //   }
     
-      // Set initial states
-      gsap.set(section3DescriptionRef.current, { 
-        autoAlpha: 0, 
-        y: 80,
-        scale: 0.8
-      });
+    //   // Set initial states
+    //   gsap.set(section3DescriptionRef.current, { 
+    //     autoAlpha: 0, 
+    //     y: 80,
+    //     scale: 0.8
+    //   });
       
-      gsap.set('.section3-word', { 
-        autoAlpha: 0, 
-        y: 40,
-        rotationY: 40
-      });
+    //   gsap.set('.section3-word', { 
+    //     autoAlpha: 0, 
+    //     y: 40,
+    //     rotationY: 40
+    //   });
     
-      // Background transition effect
-      bgElements.forEach((el, i) => {
-        tl3.to(el, {
-          opacity: 0.7,
-          duration: 0.4,
-          ease: "power2.inOut"
-        }, i * 0.1)
-        .to(el, {
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.inOut"
-        }, i * 0.1 + 0.2);
-      });
+    //   // Background transition effect
+    //   bgElements.forEach((el, i) => {
+    //     tl3.to(el, {
+    //       opacity: 0.7,
+    //       duration: 0.4,
+    //       ease: "power2.inOut"
+    //     }, i * 0.1)
+    //     .to(el, {
+    //       opacity: 0,
+    //       duration: 0.4,
+    //       ease: "power2.inOut"
+    //     }, i * 0.1 + 0.2);
+    //   });
     
-      // Text animations
-      tl3.to(section3TitleRef.current, {
-        autoAlpha: 1,
-        y: 0,
-        rotationX: 0,
-        duration: 1.2,
-        ease: "elastic.out(1, 0.5)"
-      }, 0.3)
+    //   // Text animations
+    //   tl3.to(section3TitleRef.current, {
+    //     autoAlpha: 1,
+    //     y: 0,
+    //     rotationX: 0,
+    //     duration: 1.2,
+    //     ease: "elastic.out(1, 0.5)"
+    //   }, 0.3)
       
-      // Animate each word in description separately
-      .to('.section3-word', {
-        autoAlpha: 1,
-        y: 0,
-        rotationY: 0,
-        stagger: 0.0250,
-        duration: 0.8,
-        ease: "back.out(2.5)"
-      }, 0.5)
+    //   // Animate each word in description separately
+    //   .to('.section3-word', {
+    //     autoAlpha: 1,
+    //     y: 0,
+    //     rotationY: 0,
+    //     stagger: 0.0250,
+    //     duration: 0.8,
+    //     ease: "back.out(2.5)"
+    //   }, 0.5)
       
-      // Final fade-in for any remaining description elements
-      .to(section3DescriptionRef.current, {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power3.out"
-      }, 0.7);
+    //   // Final fade-in for any remaining description elements
+    //   .to(section3DescriptionRef.current, {
+    //     autoAlpha: 1,
+    //     y: 0,
+    //     scale: 1,
+    //     duration: 0.8,
+    //     ease: "power3.out"
+    //   }, 0.7);
     
-      // Add floating animation for continuous movement
-      gsap.to(section3TitleRef.current, {
-        y: "-=15",
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-      });
+    //   // Add floating animation for continuous movement
+    //   gsap.to(section3TitleRef.current, {
+    //     y: "-=15",
+    //     duration: 1.5,
+    //     repeat: -1,
+    //     yoyo: true,
+    //     ease: "sine.inOut"
+    //   });
     
-    }, section3Ref);
+    // }, section3Ref);
   
     return () => {
         ctx1.revert();
         // ctx2.revert();
-        ctx3.revert();
+        // ctx3.revert();
         clearTimeout(minLoadingTime)
     }
   }, []);
@@ -240,7 +241,7 @@ function Home() {
 
     <div 
     ref={mainRef} 
-    className={`${darkMode ? 'bg-light-gray' : 'bg-gray-900'} font-nizar text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+    className={`${darkMode ? 'bg-light-gray' : 'bg-[#2D3F3B]'} font-nizar text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   >
       <Navbar />
   
@@ -249,7 +250,7 @@ function Home() {
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
                backgroundSize: '20px 20px'}}></div>
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 mt-10 items-center relative ${isArabic ? "lg:flex-row-reverse" : ""}`}>
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative ${isArabic ? "lg:flex-row-reverse" : ""}`}>
   {/* Text Content */}
   <div className={`max-w-2xl relative z-20 pr-5 ${isArabic ? "lg:order-last text-right" : "lg:order-first text-left"}`}>
     <h1
@@ -277,7 +278,7 @@ function Home() {
         ref={buttonRef}
         className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
       >
-        Discover our solutions
+        Explore our solutions
       </button>
       <button
         ref={buttonRef}
@@ -334,17 +335,17 @@ function Home() {
   </div>
 </section> */}
   
-      <section 
+      {/* <section 
         ref={section3Ref} 
         className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-[#0D1B2A]'} text-white min-h-screen flex items-center justify-center py-20 relative overflow-hidden transition-colors duration-300`}
-      >
+      > */}
     {/* Add floating geometric shapes */}
-    <div className="absolute inset-0 pointer-events-none">
+    {/* <div className="absolute inset-0 pointer-events-none">
     <div className={`absolute top-1/4 left-1/5 w-16 h-16 ${darkMode ? 'border-blue-400' : 'border-blue-500'} border-2 rounded-lg opacity-20 animate-spin-slow`}></div>
     <div className={`absolute bottom-1/3 right-1/4 w-20 h-20 ${darkMode ? 'border-green-400' : 'border-green-500'} border-2 rounded-full opacity-20 animate-float`}></div>
     <div className={`absolute top-1/2 right-1/3 w-12 h-12 ${darkMode ? 'border-purple-400' : 'border-purple-500'} border-2 transform rotate-45 opacity-20 animate-pulse`}></div>
-  </div>
-        <div className="container mx-auto px-6 text-center relative z-10">
+  </div> */}
+        {/* <div className="container mx-auto px-6 text-center relative z-10">
           <h2 
             ref={section3TitleRef} 
             className={`text-5xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text ${
@@ -360,22 +361,23 @@ function Home() {
             className={`text-lg md:text-4xl ${darkMode ? 'text-[#374151]' : 'text-white'} max-w-8xl mx-auto`}
           >
             {/* Split text into words for individual animation */}
-            {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
+            {/* {"This immersive journey transforms how you interact with content. Each element responds to your scrolling, creating a dynamic and engaging".split(' ').map((word, i) => (
               <span key={i} className="section3-word inline-block mx-1 my-2">{word}</span>
-            ))}
-          </p>
+            ))} */}
+          {/* </p> } */}
           
           {/* Add decorative elements with dark mode adjustments */}
-          <div className={`absolute top-1/4 left-1/4 w-64 h-64 ${darkMode ? 'bg-purple-400' : 'bg-purple-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob transition-colors duration-300`}></div>
+          {/* <div className={`absolute top-1/4 left-1/4 w-64 h-64 ${darkMode ? 'bg-purple-400' : 'bg-purple-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob transition-colors duration-300`}></div>
           <div className={`absolute top-1/3 right-1/4 w-72 h-72 ${darkMode ? 'bg-yellow-400' : 'bg-yellow-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 transition-colors duration-300`}></div>
-          <div className={`absolute bottom-1/4 right-1/3 w-60 h-60 ${darkMode ? 'bg-pink-400' : 'bg-pink-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-300`}></div>
-        </div>
-      </section>
+          <div className={`absolute bottom-1/4 right-1/3 w-60 h-60 ${darkMode ? 'bg-pink-400' : 'bg-pink-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-300`}></div> */}
+        {/* </div> */}
+      {/* </section> */}
       <AboutUs/>
       <Services/>
       <Team/>
       <BlogNews/>
       <Contact/>
+      <FAQSection/>
       <Footer/>
     </div>
     </>

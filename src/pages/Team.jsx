@@ -42,7 +42,7 @@ const Team = () => {
       bio: isArabic 
         ? "مجموعة من الخبراء الذين يضمنون استثنائية في كل مشروع"
         : "A team of elite specialists who drive excellence in every project",
-      image: 'https://images.unsplash.com/photo-1587397845856-e6cf49176c70?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+   
     }
   ];
 
@@ -156,45 +156,77 @@ const Team = () => {
   }, [isArabic]);
 
   return (
-    <div 
-      ref={sectionRef} 
-      className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} team-section h-screen w-full flex items-center justify-center overflow-hidden`}
+    <div
+      ref={sectionRef}
+      className={`${
+        darkMode ? "bg-[#F8FAFC]" : "bg-gray-900"
+      } team-section h-screen w-full flex items-center justify-center overflow-hidden`}
     >
       <div className="container mx-auto px-8 relative">
-        <h2 className={`${darkMode ? 'text-[#101828]' : 'text-white'} text-4xl md:text-6xl font-bold mt-5 mb-5 text-center`}>
+        <h2
+          className={`${
+            darkMode ? "text-[#101828]" : "text-white"
+          } text-4xl md:text-6xl font-bold mt-5 mb-5 text-center`}
+        >
           {isArabic ? "فريق العمل" : "Our Team"}
         </h2>
-        <p className="text-gray-400 mb-14 flex-grow text-center">Leadership That Shapes the Future & A Team of Elite Experts</p>
+        <p className="text-gray-400 mb-14 flex-grow text-center">
+          {isArabic
+            ? "قيادة ترتقي بمستقبل التقنية ونخبة من الخبراء"
+            : "Leadership shaping the future of technology, backed by expert talent"}
+        </p>
         <div className="relative h-[600px] w-full">
           {teamMembers.map((member, index) => (
-            <div 
+            <div
               key={member.id}
-              ref={el => (cardsRef.current[index] = el)}
+              ref={(el) => (cardsRef.current[index] = el)}
               className="absolute inset-0 transition-all duration-700 ease-out"
-              style={{ perspective: '1000px' }}
+              style={{ perspective: "1000px" }}
             >
               <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
-                {/* Image Section */}
+                {/* Image or Fallback Text Section */}
                 <div className="w-full md:w-5/12">
-                  <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
-                    <img 
-                      src={member.image} 
-                      alt={member.name} 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                  </div>
+                  {member.image ? (
+                    <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-[300px] md:h-[450px] bg-gray-700 text-white text-2xl font-semibold rounded-lg shadow-2xl">
+                      {member.name}
+                    </div>
+                  )}
                 </div>
-                            
+
                 {/* Text Section */}
-                <div className={`w-full md:w-5/12 max-w-[500px] ${darkMode ? 'text-[#101828]' : 'text-white'}`}>
-                  <h3 className={`text-3xl md:text-5xl font-bold mb-3 ${darkMode ? 'text-[#101828]' : 'text-white'}`}>
+                <div
+                  className={`w-full md:w-5/12 max-w-[500px] ${
+                    darkMode ? "text-[#101828]" : "text-white"
+                  }`}
+                >
+                  <h3
+                    className={`text-3xl md:text-5xl font-bold mb-3 ${
+                      darkMode ? "text-[#101828]" : "text-white"
+                    }`}
+                  >
                     {member.name}
                   </h3>
-                  <h4 className={`text-xl md:text-2xl font-light ${darkMode ? 'text-[#374151]' : 'text-gray-400'} mb-6`}>
+                  <h4
+                    className={`text-xl md:text-2xl font-light ${
+                      darkMode ? "text-[#374151]" : "text-gray-400"
+                    } mb-6`}
+                  >
                     {member.role}
                   </h4>
-                  <p className={`text-lg leading-relaxed ${darkMode ? 'text-[#374151]' : 'text-gray-300'}`}>
+                  <p
+                    className={`text-lg leading-relaxed ${
+                      darkMode ? "text-[#374151]" : "text-gray-300"
+                    }`}
+                  >
                     {member.bio}
                   </p>
                 </div>
@@ -203,11 +235,14 @@ const Team = () => {
           ))}
         </div>
 
+        {/* Indicator Dots */}
         <div className="flex justify-center mt-12">
           {teamMembers.map((_, index) => (
-            <div 
-              key={index} 
-              className={`w-3 h-3 mx-2 rounded-full ${index === activeIndex ? 'bg-white' : 'bg-gray-600'}`} 
+            <div
+              key={index}
+              className={`w-3 h-3 mx-2 rounded-full ${
+                index === activeIndex ? "bg-black" : "bg-secondary-dark-gray"
+              }`}
             />
           ))}
         </div>

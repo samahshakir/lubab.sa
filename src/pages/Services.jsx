@@ -68,39 +68,40 @@ const Services = () => {
     {
       icon: <i className="fas fa-cloud-upload-alt"></i>, // Icon for SaaS Solutions
       title: isArabic ? "حلول SaaS" : "SaaS Solutions",
-      description: isArabic 
-        ? "نقوم بتطوير أنظمة SaaS مبتكرة مصممة لتغطية الفجوات التشغيلية الحيوية في بيئات العمل المتعددة."
-        : "We are developing innovative proprietary SaaS systems designed to bridge critical operational gaps in diverse work environments."
+      description: isArabic
+        ? "حزمة أنظمة تحت التطوير تستهدف سد فجوات تشغيلية مهمة في بيئات العمل، مع قابلية التطوير والتكامل."
+        : "A suite of developing systems aiming to fill critical operational gaps in work environments, with scalability and integration in mind."
     },
     {
-      icon: <i className="fas fa-shield-alt"></i>, // Icon for Technical and Security Consulting
-      title: isArabic ? "الاستشارات التقنية والأمنية" : "Technical and Security Consulting",
-      description: isArabic 
-        ? "نقدم استشارة تقنية ذكية لتحليل وتحسين بيئة تكنولوجيا المعلومات والتحول الرقمي مع إجراءات أمان صارمة."
-        : "We provide expert technical, programming, and security consultations that enable companies to achieve digital transformation and improve operations with rigorous security measures."
+      icon: <i className="fas fa-shield-alt"></i>, // Icon for Consultations
+      title: isArabic ? "الاستشارات" : "Consultations",
+      description: isArabic
+        ? "فريق من الخبراء يقدم دعمًا ذكيًا لتحليل وتحسين الأنظمة، وضمان الامتثال للمعايير الأمنية المحلية والدولية."
+        : "A team of experts providing intelligent support to analyze and enhance systems, ensuring compliance with local and global security standards."
     },
     {
-      icon: <i className="fas fa-handshake"></i>, // Icon for Building Strategic Partnerships
-      title: isArabic ? "بناء الشراكات الاستراتيجية" : "Building Strategic Partnerships",
-      description: isArabic 
-        ? "نبني علاقات استراتيجية طويلة الأمد مع رواد الأعمال والمستثمرين لفتح آفاق جديدة للابتكار."
-        : "We cultivate long-term, strategic relationships with entrepreneurs, investors, and specialized business leaders to unlock new avenues for innovation."
+      icon: <i className="fas fa-handshake"></i>, // Icon for Partnership Building
+      title: isArabic ? "بناء الشراكات" : "Partnership Building",
+      description: isArabic
+        ? "تعاون مع رواد الأعمال والمستثمرين لتطوير أفكار مبتكرة وتحويلها لمشاريع ذات أثر ملموس في السوق."
+        : "Collaborations with entrepreneurs and investors to develop innovative ideas and transform them into market-impact ventures."
     },
     {
-      icon: <i className="fas fa-code"></i>, // Icon for Custom Digital Solutions
-      title: isArabic ? "حلول رقمية مخصصة" : "Custom Digital Solutions",
-      description: isArabic 
-        ? "مع خبرتنا التقنية، نستطيع تصميم حلول رقمية مخصصة لكل منشأة تناسب تحدياتها الفريدة (قريباً)."
-        : "While we have not yet implemented custom projects, our technical expertise enables us to design bespoke digital solutions tailored to each organization’s unique challenges (coming soon)."
+      icon: <i className="fas fa-code"></i>, // Icon for Custom Solutions
+      title: isArabic ? "تطوير حلول مخصصة (قريبًا)" : "Custom Solutions (Coming Soon)",
+      description: isArabic
+        ? "تنفيذ مشاريع رقمية مصممة حسب الطلب، تلبّي احتياجات المنشآت على اختلاف أحجامها."
+        : "Delivering tailor-made digital projects that meet the unique requirements of organizations of all sizes."
     },
     {
-      icon: <i className="fas fa-robot"></i>, // Icon for AI-Powered Business Solutions
-      title: isArabic ? "حلول الذكاء الاصطناعي الموجهة للأعمال" : "AI-Powered Business Solutions",
-      description: isArabic 
-        ? "волتيف في حلول مصممة لتوفير تلقاوت وتحسين عمليات الأعمال. (قريباً)"
-        : "A future wave of solutions designed to further automate and optimize business processes (coming soon)."
+      icon: <i className="fas fa-robot"></i>, // Icon for AI Solutions
+      title: isArabic ? "حلول الذكاء الاصطناعي (قريبًا)" : "AI Solutions (Coming Soon)",
+      description: isArabic
+        ? "توظيف الخوارزميات الذكية لتطوير أدوات تُحسِّن الأداء وتعزز القدرة على اتخاذ قرارات مبنية على البيانات."
+        : "Utilizing intelligent algorithms to build tools that improve performance and enable data-driven decision-making."
     }
   ];
+  
   
   useEffect(() => {
     // Animate the heading and subheading
@@ -165,7 +166,7 @@ const Services = () => {
         ))}
       </div>
       
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 mt-15">
         <div className="text-center mb-16">
           <h2 
             ref={headingRef} 
