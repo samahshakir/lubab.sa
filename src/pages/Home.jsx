@@ -11,6 +11,8 @@ import { useDarkMode } from '../context/DarkModeContext'; // Import the dark mod
 import client from "../sanityClient"; 
 import Footer from '../components/Footer';
 import Career from './Career';
+import AboutUs from './AboutUs';
+import BlogNews from './BlogNews';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,45 +76,45 @@ function Home() {
       });
     }, mainRef);
 
-    const ctx2 = gsap.context(() => {
-      // Set initial state
-      gsap.set([section2TitleRef.current, section2DescriptionRef.current], { 
-        autoAlpha: 0, 
-        scale: 0.7
-      });
+    // const ctx2 = gsap.context(() => {
+    //   // Set initial state
+    //   gsap.set([section2TitleRef.current, section2DescriptionRef.current], { 
+    //     autoAlpha: 0, 
+    //     scale: 0.7
+    //   });
     
-      // Create a ScrollTrigger that controls the animation throughout the entire section
-      ScrollTrigger.create({
-        trigger: section2Ref.current,
-        start: "top bottom", // Start when the top of section2 hits the bottom of viewport
-        end: "bottom top",   // End when the bottom of section2 hits the top of viewport
-        scrub: 1,            // Smooth scrubbing with slight delay
-        // markers: true,    // Uncomment for debugging
-        onUpdate: (self) => {
-          // Calculate progress values
-          const progress = self.progress;
+    //   // Create a ScrollTrigger that controls the animation throughout the entire section
+    //   ScrollTrigger.create({
+    //     trigger: section2Ref.current,
+    //     start: "top bottom", // Start when the top of section2 hits the bottom of viewport
+    //     end: "bottom top",   // End when the bottom of section2 hits the top of viewport
+    //     scrub: 1,            // Smooth scrubbing with slight delay
+    //     // markers: true,    // Uncomment for debugging
+    //     onUpdate: (self) => {
+    //       // Calculate progress values
+    //       const progress = self.progress;
           
-          // First half of scroll - fade in and scale up
-          if (progress <= 0.5) {
-            const fadeInProgress = progress * 2; // Normalize to 0-1 range for first half
-            gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
-              autoAlpha: fadeInProgress,
-              // Limit scale to smaller value on mobile
-              scale: 0.7 + (fadeInProgress * 0.3) // Scale from 0.7 to 1.0 instead of 1.2
-            });
-          } 
-          // Second half of scroll - fade out and continue scaling
-          else {
-            const fadeOutProgress = (progress - 0.5) * 2; // Normalize to 0-1 range for second half
-            gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
-              autoAlpha: 1 - fadeOutProgress,
-              // Limit scale to smaller value on mobile
-              scale: 1.0 - (fadeOutProgress * 0.3) // Scale down from 1.0 to 0.7 instead of 1.2 to 0.7
-            });
-          }
-        }
-      });
-    }, section2Ref);
+    //       // First half of scroll - fade in and scale up
+    //       if (progress <= 0.5) {
+    //         const fadeInProgress = progress * 2; // Normalize to 0-1 range for first half
+    //         gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
+    //           autoAlpha: fadeInProgress,
+    //           // Limit scale to smaller value on mobile
+    //           scale: 0.7 + (fadeInProgress * 0.3) // Scale from 0.7 to 1.0 instead of 1.2
+    //         });
+    //       } 
+    //       // Second half of scroll - fade out and continue scaling
+    //       else {
+    //         const fadeOutProgress = (progress - 0.5) * 2; // Normalize to 0-1 range for second half
+    //         gsap.set([section2TitleRef.current, section2DescriptionRef.current], {
+    //           autoAlpha: 1 - fadeOutProgress,
+    //           // Limit scale to smaller value on mobile
+    //           scale: 1.0 - (fadeOutProgress * 0.3) // Scale down from 1.0 to 0.7 instead of 1.2 to 0.7
+    //         });
+    //       }
+    //     }
+    //   });
+    // }, section2Ref);
 
     const ctx3 = gsap.context(() => {
       const tl3 = gsap.timeline({
@@ -205,7 +207,7 @@ function Home() {
   
     return () => {
         ctx1.revert();
-        ctx2.revert();
+        // ctx2.revert();
         ctx3.revert();
         clearTimeout(minLoadingTime)
     }
@@ -247,7 +249,7 @@ function Home() {
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
                backgroundSize: '20px 20px'}}></div>
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative ${isArabic ? "lg:flex-row-reverse" : ""}`}>
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 mt-10 items-center relative ${isArabic ? "lg:flex-row-reverse" : ""}`}>
   {/* Text Content */}
   <div className={`max-w-2xl relative z-20 pr-5 ${isArabic ? "lg:order-last text-right" : "lg:order-first text-left"}`}>
     <h1
@@ -262,15 +264,27 @@ function Home() {
         {isArabic ? heroData?.title3?.["ar"] : heroData?.title3?.["en"] || "Loading..."}
       </span>
     </h1>
-    <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? "text-primary-green" : "text-secondary-blue"} uppercase transition-colors duration-300 animate-slideIn`}>
+    {/* <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? "text-primary-green" : "text-secondary-blue"} uppercase transition-colors duration-300 animate-slideIn`}>
       {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"]}
-    </p>
+    </p> */}
     <p
       ref={descriptionRef}
       className={`text-lg md:text-xl ${darkMode ? "text-secondary-dark-gray" : "text-gray-200"} mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift`}
     >
       {isArabic ? heroData?.description?.["ar"] : heroData?.description?.["en"]}
     </p>
+    <button
+        ref={buttonRef}
+        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
+      >
+        Discover our solutions
+      </button>
+      <button
+        ref={buttonRef}
+        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg ml-5 mt-2"
+      >
+        Contact us now
+      </button>
   </div>
 
   {/* Spline Container */}
@@ -299,7 +313,7 @@ function Home() {
 
 
       {/* --- Second Section --- */}
-      <section 
+      {/* <section 
   ref={section2Ref} 
   className={`${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} text-black min-h-screen flex items-center justify-end py-20 transition-colors duration-300 overflow-hidden`}
 >
@@ -318,7 +332,7 @@ function Home() {
       This text gradually fades in as you scroll, grows in size through the middle of the section, and then fades away as you continue scrolling. The animation is directly tied to your scroll position for a seamless, interactive experience.
     </p>
   </div>
-</section>
+</section> */}
   
       <section 
         ref={section3Ref} 
@@ -357,9 +371,10 @@ function Home() {
           <div className={`absolute bottom-1/4 right-1/3 w-60 h-60 ${darkMode ? 'bg-pink-400' : 'bg-pink-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-300`}></div>
         </div>
       </section>
-
+      <AboutUs/>
       <Services/>
       <Team/>
+      <BlogNews/>
       <Contact/>
       <Footer/>
     </div>

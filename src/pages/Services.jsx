@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDarkMode } from '../context/DarkModeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 
 // Register ScrollTrigger plugin
@@ -10,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Service card component
 const ServiceCard = ({ icon, title, description, index }) => {
   const cardRef = useRef(null);
-  const {darkMode} = useDarkMode();
+  const { darkMode } = useDarkMode();
   
   useEffect(() => {
     gsap.set(cardRef.current, {
@@ -20,7 +21,7 @@ const ServiceCard = ({ icon, title, description, index }) => {
     
     ScrollTrigger.create({
       trigger: cardRef.current,
-      start: "top 70%",
+      start: "top 80%",
       onEnter: () => {
         gsap.to(cardRef.current, {
           opacity: 1,
@@ -28,14 +29,6 @@ const ServiceCard = ({ icon, title, description, index }) => {
           duration: 0.6,
           delay: index * 0.15,
           ease: "power3.out"
-        });
-      },
-      onLeaveBack: () => {
-        gsap.to(cardRef.current, {
-          opacity: 0,
-          y: 50,
-          duration: 0.4,
-          ease: "power2.in"
         });
       }
     });
@@ -52,12 +45,12 @@ const ServiceCard = ({ icon, title, description, index }) => {
         </div>
         <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-black' : 'text-white'}`}>{title}</h3>
         <p className="text-gray-400 mb-6 flex-grow">{description}</p>
-        <button className="self-start text-blue-400 font-medium flex items-center hover:text-green-300 transition-colors duration-300">
+        {/* <button className="self-start text-blue-400 font-medium flex items-center hover:text-green-300 transition-colors duration-300">
           Learn more
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
-        </button>
+        </button> */}
       </div>
     </div>
   );
@@ -67,39 +60,45 @@ const Services = () => {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const subheadingRef = useRef(null);
-  const { darkMode } = useDarkMode(); 
+  const { darkMode } = useDarkMode();
+  const { isArabic } = useLanguage(); // Use the useLanguage hook to access the language context
   
-  // Sample services data
+  // Updated services data
   const services = [
     {
-      icon: <i className="fas fa-paint-brush"></i>,
-      title: "Web Design",
-      description: "Modern, responsive websites that captivate your audience. We create visually stunning sites optimized for all devices and screen sizes."
+      icon: <i className="fas fa-cloud-upload-alt"></i>, // Icon for SaaS Solutions
+      title: isArabic ? "حلول SaaS" : "SaaS Solutions",
+      description: isArabic 
+        ? "نقوم بتطوير أنظمة SaaS مبتكرة مصممة لتغطية الفجوات التشغيلية الحيوية في بيئات العمل المتعددة."
+        : "We are developing innovative proprietary SaaS systems designed to bridge critical operational gaps in diverse work environments."
     },
     {
-      icon: <i className="fas fa-code"></i>,
-      title: "Web Development",
-      description: "Custom web applications and robust back-end solutions. We build fast, scalable systems that grow with your business needs."
+      icon: <i className="fas fa-shield-alt"></i>, // Icon for Technical and Security Consulting
+      title: isArabic ? "الاستشارات التقنية والأمنية" : "Technical and Security Consulting",
+      description: isArabic 
+        ? "نقدم استشارة تقنية ذكية لتحليل وتحسين بيئة تكنولوجيا المعلومات والتحول الرقمي مع إجراءات أمان صارمة."
+        : "We provide expert technical, programming, and security consultations that enable companies to achieve digital transformation and improve operations with rigorous security measures."
     },
     {
-      icon: <i className="fas fa-bullhorn"></i>,
-      title: "Digital Marketing",
-      description: "Comprehensive strategies to boost your online presence. From SEO to social media campaigns, we help you reach and engage your target audience."
+      icon: <i className="fas fa-handshake"></i>, // Icon for Building Strategic Partnerships
+      title: isArabic ? "بناء الشراكات الاستراتيجية" : "Building Strategic Partnerships",
+      description: isArabic 
+        ? "نبني علاقات استراتيجية طويلة الأمد مع رواد الأعمال والمستثمرين لفتح آفاق جديدة للابتكار."
+        : "We cultivate long-term, strategic relationships with entrepreneurs, investors, and specialized business leaders to unlock new avenues for innovation."
     },
     {
-      icon: <i className="fas fa-chart-line"></i>,
-      title: "Growth Strategy",
-      description: "Data-driven approaches to scale your business. We analyze market trends and customer behaviors to develop effective growth plans."
+      icon: <i className="fas fa-code"></i>, // Icon for Custom Digital Solutions
+      title: isArabic ? "حلول رقمية مخصصة" : "Custom Digital Solutions",
+      description: isArabic 
+        ? "مع خبرتنا التقنية، نستطيع تصميم حلول رقمية مخصصة لكل منشأة تناسب تحدياتها الفريدة (قريباً)."
+        : "While we have not yet implemented custom projects, our technical expertise enables us to design bespoke digital solutions tailored to each organization’s unique challenges (coming soon)."
     },
     {
-      icon: <i className="fas fa-mobile-alt"></i>,
-      title: "Mobile App Development",
-      description: "Native and cross-platform mobile applications. We deliver seamless user experiences across iOS and Android platforms."
-    },
-    {
-      icon: <i className="fas fa-server"></i>,
-      title: "Cloud Solutions",
-      description: "Secure, scalable cloud infrastructure services. We help you migrate, manage, and optimize your business operations in the cloud."
+      icon: <i className="fas fa-robot"></i>, // Icon for AI-Powered Business Solutions
+      title: isArabic ? "حلول الذكاء الاصطناعي الموجهة للأعمال" : "AI-Powered Business Solutions",
+      description: isArabic 
+        ? "волتيف في حلول مصممة لتوفير تلقاوت وتحسين عمليات الأعمال. (قريباً)"
+        : "A future wave of solutions designed to further automate and optimize business processes (coming soon)."
     }
   ];
   
@@ -141,12 +140,12 @@ const Services = () => {
         scrub: true
       }
     });
-  }, []);
+  }, [isArabic]);
   
   return (
-    <div ref={sectionRef} className={`relative${darkMode ?  'bg-[#F8FAFC]' : 'bg-gray-900'}'} min-h-screen py-20 overflow-hidden`}>
+    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} min-h-screen py-20 overflow-hidden`}>
       {/* Background gradient effect */}
-      {/* <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div> */}
+      <div className="services-bg-gradient absolute inset-0 bg-gradient-to-b from-blue-900/10 to-green-900/10 bg-[length:100%_200%] bg-no-repeat"></div>
       
       {/* Animated particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -172,13 +171,16 @@ const Services = () => {
             ref={headingRef} 
             className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500"
           >
-            Our Services
+            {isArabic ? "خدماتنا" : "Our Services"}
           </h2>
           <p 
             ref={subheadingRef} 
             className="text-lg text-gray-500 max-w-3xl mx-auto"
           >
-            We provide comprehensive digital solutions tailored to help your business thrive in today's competitive landscape.
+            {isArabic 
+              ? "حلول تقنية متكاملة لأعمال متطورة"
+              : "Comprehensive Digital Solutions for Evolving Businesses"
+            }
           </p>
         </div>
         
@@ -194,8 +196,6 @@ const Services = () => {
           ))}
         </div>
       </div>
-
-      
     </div>
   );
 };
