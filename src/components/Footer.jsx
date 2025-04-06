@@ -32,24 +32,33 @@ function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>Quick Links</h3>
-            <ul className="space-y-2">
-              {["Home", "About Us", "Services", "Portfolio", "Contact"].map((link) => (
-                <li key={link}>
-                  <a href="#" className={`${darkMode ? 'text-[#374151] hover:text-[#101828]' : 'text-gray-400 hover:text-blue-400'} transition-colors duration-300`}>
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div>
+              <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>Quick Links</h3>
+              <ul className="space-y-2">
+                {[
+                  { name: "Blog", href: "/" },
+                  { name: "Careers", href: "/careers" },
+                  { name: "Contact", href: "/contact" },
+                  { name: "FAQ", href: "/faq" },
+                ].map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className={`${darkMode ? 'text-[#374151] hover:text-[#101828]' : 'text-gray-400 hover:text-blue-400'} transition-colors duration-300`}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
 
           {/* Services */}
           <div>
             <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>Our Services</h3>
             <ul className="space-y-2">
-              {["Web Development", "UI/UX Design", "Mobile Applications", "Digital Marketing", "Branding"].map((service) => (
+              {["SaaS Solutions", "Partnership Building", "Consultations", "Custom Solutions", "AI Solutions"].map((service) => (
                 <li key={service}>
                   <a href="#" className={`${darkMode ? 'text-[#374151] hover:text-[#101828]' : 'text-gray-400 hover:text-green-400'} transition-colors duration-300`}>
                     {service}
@@ -59,24 +68,26 @@ function Footer() {
             </ul>
           </div>
 
+          
+
           {/* Contact Info */}
           <div>
-            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>Contact Us</h3>
-            <div className="space-y-3">
-              {[
-                { icon: "location", text: "123 Innovation Drive, Tech Valley, CA 94103" },
-                { icon: "phone", text: "(555) 123-4567" },
-                { icon: "email", text: "info@Lubab.com" },
-              ].map((item) => (
-                <div key={item.icon} className="flex items-start">
-                  <svg className={`h-5 w-5 ${darkMode ? 'text-blue-500' : 'text-blue-400'} mt-1 mr-3`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {/* Add corresponding icon paths here */}
-                  </svg>
-                  <span className={`${darkMode ? 'text-[#374151]' : 'text-gray-400'}`}>{item.text}</span>
-                </div>
-              ))}
-            </div>
+          <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>Connect With Us</h3>
+          <div className="space-y-3">
+            {[
+              { icon: "linkedin", text: "LinkedIn" },
+              { icon: "twitter", text: "X" },
+            ].map((item) => (
+              <div key={item.icon} className="flex items-start">
+                <svg className={`h-5 w-5 ${darkMode ? 'text-blue-500' : 'text-blue-400'} mt-1 mr-3`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {/* Add corresponding icon paths here */}
+                </svg>
+                <span className={`${darkMode ? 'text-[#374151]' : 'text-gray-400'}`}>{item.text}</span>
+              </div>
+              
+            ))}
           </div>
+        </div>
         </div>
 
         {/* Copyright */}

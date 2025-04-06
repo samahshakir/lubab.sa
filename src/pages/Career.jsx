@@ -119,33 +119,13 @@ const Careers = () => {
   }, [isArabic]);
   
   return (
-    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-[#F8FAFC]' : 'bg-gray-900'} min-h-screen py-20 overflow-hidden`}>
-      {/* Background gradient effect */}
-      <div className="careers-bg-gradient absolute inset-0 bg-gradient-to-b from-purple-900/10 to-blue-900/10 bg-[length:100%_200%] bg-no-repeat"></div>
-      
-      {/* Animated particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div 
-            key={i}
-            className="absolute rounded-full bg-white/5"
-            style={{
-              width: `${Math.random() * 10 + 5}px`,
-              height: `${Math.random() * 10 + 5}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `float ${Math.random() * 10 + 10}s linear infinite`,
-              opacity: Math.random() * 0.5 + 0.1
-            }}
-          ></div>
-        ))}
-      </div>
+    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} font-nizar min-h-screen py-20 overflow-hidden`}>
       
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 
             ref={headingRef} 
-            className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500"
+            className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-secondary-blue"
           >
             {isArabic ? "التوظيف – انضم إلى فريق لُباب" : "Careers at Lubab"}
           </h2>
@@ -171,7 +151,7 @@ const Careers = () => {
               </p>
               <button
                 onClick={() => setShowForm(true)}
-                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full font-medium transition-all hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-full font-medium transition-all hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400"
               >
                 {isArabic ? "قدّم الآن" : "Apply Now"}
               </button>
@@ -202,11 +182,11 @@ const Careers = () => {
             
             <div className="mt-16 text-center">
               <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? 'text-gray-800' : 'text-white'}`}>
-                {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
+                {isArabic ? "لماذا تنضم إلى لُباب؟" : " Join Lubab?"}
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div className={`p-5 rounded-lg ${darkMode ? 'bg-purple-50' : 'bg-gray-800'}`}>
+                <div className={`p-5 rounded-lg ${darkMode ? 'bg-green-50' : 'bg-gray-800'}`}>
                   <div className="text-3xl text-purple-500 mb-3">
                     <i className="fas fa-rocket"></i>
                   </div>
@@ -230,7 +210,7 @@ const Careers = () => {
                   </p>
                 </div>
                 
-                <div className={`p-5 rounded-lg ${darkMode ? 'bg-indigo-50' : 'bg-gray-800'}`}>
+                <div className={`p-5 rounded-lg ${darkMode ? 'bg-yellow-50' : 'bg-gray-800'}`}>
                   <div className="text-3xl text-indigo-500 mb-3">
                     <i className="fas fa-lightbulb"></i>
                   </div>
@@ -366,7 +346,7 @@ const Careers = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg font-medium transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-medium transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
                     {isArabic ? "إرسال الطلب" : "Submit Application"}
                   </button>

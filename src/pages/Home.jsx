@@ -13,7 +13,6 @@ import Footer from '../components/Footer';
 import Career from './Career';
 import AboutUs from './AboutUs';
 import BlogNews from './BlogNews';
-import FAQSection from '../components/FAQSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -377,7 +376,7 @@ function Home() {
       <Team/>
       <BlogNews/>
       <Contact/>
-      <FAQSection/>
+      {/* <FAQSection/> */}
       <Footer/>
     </div>
     </>

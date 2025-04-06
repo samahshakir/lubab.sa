@@ -1,12 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef, useState } from 'react';
 import Spline from '@splinetool/react-spline';
 import { useDarkMode } from '../context/DarkModeContext';
-
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const sectionRef = useRef(null);
@@ -16,122 +10,7 @@ const Contact = () => {
   const inputRefs = useRef([]);
   const buttonRef = useRef(null);
   const containerRef = useRef(null);
-  const formAnimationRef = useRef(null);
   const { darkMode } = useDarkMode();
-
-  // Set up ScrollTrigger for fade in/out animations
-  useEffect(() => {
-    // Initial setup - hide all elements
-    gsap.set([headingRef.current, textRef.current, formRef.current, ...inputRefs.current, buttonRef.current], { 
-      opacity: 0 
-    });
-    
-    // Create ScrollTrigger for controlling animations
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top 25%", // Start when the top of the section hits 25% from the top (3/4 down the screen)
-      end: "bottom 25%", // End when bottom of the section hits 25% from the top
-      onEnter: () => playFormAnimation(),
-      onLeave: () => reverseFormAnimation(),
-      onEnterBack: () => playFormAnimation(),
-      onLeaveBack: () => reverseFormAnimation(),
-      markers: false // Set to true for debugging
-    });
-    
-    return () => {
-      // Clean up
-      if (scrollTrigger) scrollTrigger.kill();
-      if (formAnimationRef.current) formAnimationRef.current.kill();
-    };
-  }, []);
-  
-  // Create the animation timeline
-  const createFormAnimation = () => {
-    const tl = gsap.timeline({ paused: true });
-    
-    tl.to(headingRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    })
-    .to(textRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.9")
-    .to(formRef.current, {
-      x: 0,
-      opacity: 1,
-      duration: 1.1,
-      ease: "power2.out"
-    }, "-=0.9")
-    .to(inputRefs.current, {
-      opacity: 1,
-      x: 0,
-      stagger: 0.15,
-      duration: 0.4,
-      ease: "power1.out"
-    }, "-=0.8")
-    .to(buttonRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.4,
-      ease: "back.out(1.7)"
-    }, "-=0.4");
-    
-    formAnimationRef.current = tl;
-    return tl;
-  };
-  
-  // Play the animation
-  const playFormAnimation = () => {
-    // Reset positions for new animation
-    gsap.set(headingRef.current, { opacity: 0, y: 30 });
-    gsap.set(textRef.current, { opacity: 0, y: 30 });
-    gsap.set(formRef.current, { opacity: 0, x: -50 });
-    gsap.set(inputRefs.current, { opacity: 0, x: -20 });
-    gsap.set(buttonRef.current, { opacity: 0, scale: 0.8 });
-    
-    if (!formAnimationRef.current) {
-      formAnimationRef.current = createFormAnimation();
-    }
-    formAnimationRef.current.play();
-  };
-  
-  // Reverse the animation
-  const reverseFormAnimation = () => {
-    if (formAnimationRef.current) {
-      formAnimationRef.current.reverse();
-    }
-  };
-
-  // Set up button hover effects
-  useEffect(() => {
-    if (buttonRef.current) {
-      buttonRef.current.addEventListener('mouseenter', () => {
-        gsap.to(buttonRef.current, {
-          scale: 1.05,
-          duration: 0.2
-        });
-      });
-      
-      buttonRef.current.addEventListener('mouseleave', () => {
-        gsap.to(buttonRef.current, {
-          scale: 1,
-          duration: 0.2
-        });
-      });
-    }
-    
-    return () => {
-      if (buttonRef.current) {
-        buttonRef.current.removeEventListener('mouseenter', () => {});
-        buttonRef.current.removeEventListener('mouseleave', () => {});
-      }
-    };
-  }, []);
 
   // Function to add input elements to refs array
   const addToInputRefs = (el) => {
@@ -144,7 +23,7 @@ const Contact = () => {
     <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-gray-900'}`}>
       {/* Spline background */}
       {/* <div className="absolute inset-0 w-full h-full z-0">
-        <Spline scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
+        <Spline className="w-full h-full" scene="https://prod.spline.design/a46aE4kXx5xLK7Xo/scene.splinecode" />
       </div> */}
       
       {/* Content */}
@@ -155,14 +34,12 @@ const Contact = () => {
               ref={headingRef} 
               className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r 
               from-blue-500 to-blue-600"
-              style={{ opacity: 0, transform: 'translateY(30px)' }}
             >
               Get in Touch
             </h2>
             <p 
               ref={textRef} 
-              className={`text-lg md:text-xl ${darkMode ? 'text-gray-800' : 'text-white'} max-w-3xl`}
-              style={{ opacity: 0, transform: 'translateY(30px)' }}
+              className={`text-lg md:text-xl ${darkMode ? 'text-gray-800' : 'text-white'} max-3xl`}
             >
               Let’s build the future together
             </p>
@@ -172,7 +49,6 @@ const Contact = () => {
           <div 
             ref={formRef} 
             className="max-w-2xl ml-8 shadow-gray-600"
-            style={{ opacity: 0, transform: 'translateX(-50px)' }}
           >
             <form className={`space-y-8 p-8 rounded-xl 
               ${darkMode ? 'bg-gray-100 shadow-lg' : 'bg-[#0b1622] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}>
@@ -235,11 +111,10 @@ const Contact = () => {
               </div>
               
               <div>
-              <button 
+                <button 
                   ref={buttonRef}
                   type="submit" 
                   className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
-                  style={{ opacity: 0, transform: 'scale(0.8)' }}
                 >
                   Send Message
                 </button>
@@ -250,7 +125,6 @@ const Contact = () => {
       </section>
     </div>
   );
-  
 };
 
 export default Contact;

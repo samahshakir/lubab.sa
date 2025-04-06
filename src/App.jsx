@@ -8,6 +8,7 @@ import { DarkModeProvider } from "./context/DarkModeContext";
 import Navbar from "./components/Navbar";
 import Career from './pages/Career';
 import Team from './pages/Team';
+import FAQ from './pages/FAQ';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
 
             <Route path="/contact" element={<Contact />} />
             <Route path='/career' element={<Career/>}/>
+            <Route path='/faq' element={<FAQ/>}/>
+
           </Routes>
         </Router>
       </LanguageProvider>
