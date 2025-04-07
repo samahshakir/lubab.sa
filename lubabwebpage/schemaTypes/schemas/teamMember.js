@@ -1,4 +1,4 @@
-// /schemas/teamMember.js
+// schemas/teamMember.js
 export default {
     name: 'teamMember',
     title: 'Team Member',
@@ -11,7 +11,7 @@ export default {
         fields: [
           { name: 'en', title: 'English', type: 'string' },
           { name: 'ar', title: 'Arabic', type: 'string' },
-        ]
+        ],
       },
       {
         name: 'role',
@@ -20,7 +20,7 @@ export default {
         fields: [
           { name: 'en', title: 'English', type: 'string' },
           { name: 'ar', title: 'Arabic', type: 'string' },
-        ]
+        ],
       },
       {
         name: 'bio',
@@ -29,15 +29,15 @@ export default {
         fields: [
           { name: 'en', title: 'English', type: 'text' },
           { name: 'ar', title: 'Arabic', type: 'text' },
-        ]
+        ],
       },
       {
         name: 'image',
         title: 'Image',
         type: 'image',
         options: {
-          hotspot: true
-        }
-      }
-    ]
+          hotspot: true,
+        },
+      },
+    ],
   };

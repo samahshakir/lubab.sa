@@ -218,7 +218,7 @@ function BlogNews() {
   return (
     <section 
       ref={sectionRef}
-      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
       key={`blog-section-${currentLanguage}`}
     >
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
@@ -251,7 +251,7 @@ function BlogNews() {
             className={`blog-card p-6 rounded-xl shadow-lg transition-all duration-300 
               ${darkMode 
                 ? 'bg-white hover:bg-gray-100 text-dark-gray' 
-                : 'bg-gray-800 hover:bg-gray-700 text-white'}
+                : 'bg-dark-gray hover:bg-dark-mode text-white'}
             `}
           >
             <div className="mb-4 flex items-center justify-between">

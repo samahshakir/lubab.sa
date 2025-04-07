@@ -64,24 +64,6 @@ function Footer() {
                 ? 'تحويل الأفكار إلى تجارب رقمية تُلهم وتُبهر.'
                 : 'Transforming ideas into digital experiences that captivate and inspire.'}
             </p>
-
-            <div className="flex space-x-4">
-              {['linkedin', 'twitter'].map((platform) => (
-                <a
-                  key={platform}
-                  href={linkMap[platform]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${
-                    darkMode
-                      ? 'text-[#374151] hover:text-[#101828]'
-                      : 'text-gray-400 hover:text-white'
-                  } transition-colors duration-300`}
-                >
-                  <img src={iconMap[platform]} alt={platform} className="h-5 w-5" />
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Quick Links */}

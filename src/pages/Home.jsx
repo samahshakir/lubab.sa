@@ -144,7 +144,7 @@ function Home() {
     </p>
     <button
         ref={buttonRef}
-        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg"
+        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg mx-2"
       >
         Explore our solutions
       </button>
@@ -191,7 +191,7 @@ function Home() {
         </Element>
 
         {/* Add a spacer before Team section to ensure proper scrolling */}
-        <div className="h-[100px]"></div>
+        <div className={`h-[50px] ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode' }`}></div>
 
         {/* Team Section */}
         <Element name='team' className="section-container">

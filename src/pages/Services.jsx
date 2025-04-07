@@ -161,7 +161,7 @@ const Services = () => {
   return (
     <div
       ref={sectionRef}
-      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-gray-900"} min-h-screen py-20 overflow-hidden`}
+      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-screen py-20 overflow-hidden`}
       id="services-section" // Add a unique ID
     >
       <div className="services-bg-gradient absolute inset-0 z-0 opacity-20"></div>

@@ -19,6 +19,8 @@
   --color-secondary-light-gray: #F8F8F8;
 	--color-dark-gray:#333333;
   --color-secondary-dark-gray: #444444;
+
+  --color-dark-mode: #2D3F3B;
 }
 
 .rtl {
@@ -29,6 +31,10 @@
 .ltr {
   direction: ltr;
   text-align: left;
+}
+
+.bg-dark-mode {
+  background-color: var(--color-dark-mode);
 }
 
 .bg-primary-g {

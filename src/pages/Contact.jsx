@@ -61,7 +61,7 @@ const Contact = () => {
   };
 
   return (
-    <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-gray-900'}`}>
+    <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-dark-mode'} border-t`}>
       {/* Content */}
       <section className="relative z-10 min-h-screen flex items-start justify-start pt-15 pb-20">
         <div ref={containerRef} className="container mx-auto px-6">
@@ -87,7 +87,7 @@ const Contact = () => {
             className={`max-w-2xl ${isArabic ? 'mr-8' : 'ml-8'} shadow-gray-600`}
           >
             <form className={`space-y-8 p-8 rounded-xl 
-              ${darkMode ? 'bg-gray-100 shadow-lg' : 'bg-[#0b1622] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
+              ${darkMode ? 'bg-gray-100 shadow-lg' : 'bg-secondary-dark-gray dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
               dir={isArabic ? 'rtl' : 'ltr'}>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,7 +102,7 @@ const Contact = () => {
                     type="text" 
                     id="name" 
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder={content[language].formLabels.name}
                   />
@@ -117,7 +117,7 @@ const Contact = () => {
                     type="email" 
                     id="email" 
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                      ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
+                      ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="your@email.com"
                   />
@@ -135,7 +135,7 @@ const Contact = () => {
                   type="tel" 
                   id="mobile" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder="+1234567890"
                 />
@@ -151,7 +151,7 @@ const Contact = () => {
                   type="text" 
                   id="subject" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder={isArabic ? "ما هو موضوع رسالتك؟" : "What's this about?"}
                 />
@@ -167,7 +167,7 @@ const Contact = () => {
                   id="message" 
                   rows="5" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
-                    ${darkMode ? 'bg-white text-gray-800' : 'bg-[#030b13] text-gray-200'}
+                    ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                   placeholder={isArabic ? "أخبرنا عن مشروعك..." : "Tell us about your project..."}
                 ></textarea>
@@ -187,7 +187,7 @@ const Contact = () => {
           
           {/* Contact Info */}
           <div className={`max-w-2xl ${isArabic ? 'mr-8' : 'ml-8'} mt-8`}>
-            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-100' : 'bg-[#0b1622]'}`}>
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-100' : 'bg-dark-gray'}`}>
               <p className={`${darkMode ? 'text-gray-800' : 'text-white'} mb-2 ${isArabic ? 'text-right' : ''}`}>
                 {content[language].contactInfo.nationalAddress}
               </p>

@@ -88,7 +88,7 @@ const Navbar = () => {
         ${hasScrolled 
           ? darkMode 
             ? 'bg-[#E5E7EB]/30' 
-            : 'bg-[#111c32]/30' 
+            : 'bg-dark-mode/30' 
           : 'bg-transparent'}`}
     >
       <div className={`flex justify-between items-center ${isArabic ? "flex-row-reverse" : ""}`}>
