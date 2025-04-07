@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 import { Globe, Moon, Sun } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { useDarkMode } from "../context/DarkModeContext";
+import { Link as RouterLink } from 'react-router-dom';
+import { Link as ScrollLink } from 'react-scroll';
 
 const Navbar = () => {
   const menuButtonRef = useRef(null);
@@ -69,11 +71,20 @@ const Navbar = () => {
     }
   };
 
+  const navLinks = [
+    { name: isArabic ? "الرئيسية" : "HOME", to: "#", isExternal: false },
+    { name: isArabic ? "فريق العمل" : "TEAM", to: "team", isExternal: false },
+    { name: isArabic ? "خدماتنا" : "SERVICES", to: "services", isExternal: false },
+    { name: isArabic ? "من نحن" : "ABOUT US", to: "about", isExternal: false },
+    { name: isArabic ? "تواصل معنا" : "CONTACT US", to: "contact", isExternal: false },
+    { name: isArabic ? "انضم إلى فريق لباب" : "CAREER", to: "/career", isExternal: true },
+  ];
+
   return (
     <nav 
       ref={navRef}
       dir={isArabic ? "rtl" : "ltr"}
-      className={`font-nizar fixed w-full top-0 z-50 px-6 py-4 transition-all duration-300 
+      className={`font-nizar fixed w-full z-50 px-6 py-4 transition-all duration-300 
         ${hasScrolled 
           ? darkMode 
             ? 'bg-[#E5E7EB]/30' 
@@ -84,28 +95,47 @@ const Navbar = () => {
 
         {/* Logo */}
         <div className={isArabic ? "order-last" : "order-first"}>
-          <img 
-            src="src/assets/lubab-b.png" 
-            alt="LUBAB" 
-            className="h-11 w-auto"
-          />
+          <div className="h-11">
+            <img 
+              src="src/assets/lubab-b.png" 
+              alt="LUBAB" 
+              className="h-full w-auto"
+            />
+          </div>
         </div>
 
         <div className={`flex items-center gap-6 ${isArabic ? "order-first" : "order-last"}`}>
           {/* Desktop Menu (only visible on large screens) */}
           <div className="hidden lg:flex items-center gap-8">
-            <a href="/" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'}  transition-colors`}>{isArabic ? "الرئيسية" : "HOME"}</a>
-            <a href="team" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "فريق العمل" : "TEAM"}</a>
-            <a href="services" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "خدماتنا" : "SERVICES"}</a>
-            <a href="about" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "من نحن" : "ABOUT US"}</a>
-            <a href="career" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "انضم إلى فريق لباب" : "CAREER"}</a>
-            <a href="contact" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "تواصل معنا" : "CONTACT US"}</a>
+            {navLinks.map((link) => (
+              <React.Fragment key={link.name}>
+                {link.isExternal ? (
+                  <RouterLink
+                    to={link.to}
+                    className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
+                    aria-label={link.name}
+                  >
+                    {link.name}
+                  </RouterLink>
+                ) : (
+                  <ScrollLink
+                    to={link.to}
+                    smooth={true}
+                    duration={500}
+                    className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
+                    aria-label={link.name}
+                  >
+                    {link.name}
+                  </ScrollLink>
+                )}
+              </React.Fragment>
+            ))}
           </div>
           
           {/* Dark Mode Toggle Icon */}
           <button 
             onClick={toggleDarkMode} 
-            className="flex items-center gap-2 text-white hover:text-yellow-400 transition-colors"
+            className="flex items-center gap-2 text-white hover:text-yellow-400 transition-colors cursor-pointer"
             aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             <div ref={themeIconRef}>
@@ -120,7 +150,7 @@ const Navbar = () => {
           {/* Language Toggle Icon */}
           <button 
             onClick={() => setIsArabic(!isArabic)} 
-              className={`flex items-center gap-2 ${darkMode?  'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}
+            className={`flex items-center gap-2 ${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
             aria-label="Switch Language"
           >
             <span>{isArabic ? "English" : "العربية"}</span>
@@ -148,12 +178,29 @@ const Navbar = () => {
         ref={menuRef} 
         className={`lg:hidden ${isMenuOpen ? 'flex' : 'hidden'} flex-col items-center gap-4 mt-4 ${hasScrolled ? 'backdrop-blur-md' : ''}`}
       >
-        <a href="/" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'}  transition-colors`}>{isArabic ? "الرئيسية" : "HOME"}</a>
-            <a href="team" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "الفريق" : "TEAM"}</a>
-            <a href="services" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "الخدمات" : "SERVICES"}</a>
-            <a href="about" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "من نحن" : "ABOUT US"}</a>
-            <a href="career" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "وظائف" : "CAREER"}</a>
-            <a href="contact" className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors`}>{isArabic ? "اتصل بنا" : "CONTACT US"}</a>
+        {navLinks.map((link) => (
+          <React.Fragment key={link.name}>
+            {link.isExternal ? (
+              <RouterLink
+                to={link.to}
+                className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
+                aria-label={link.name}
+              >
+                {link.name}
+              </RouterLink>
+            ) : (
+              <ScrollLink
+                to={link.to}
+                smooth={true}
+                duration={500}
+                className={`${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
+                aria-label={link.name}
+              >
+                {link.name}
+              </ScrollLink>
+            )}
+          </React.Fragment>
+        ))}
       </div>
     </nav>
   );

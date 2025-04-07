@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Career from './pages/Career';
 import Team from './pages/Team';
 import FAQ from './pages/FAQ';
+import BlogNews from './pages/BlogNews';
 
 function App() {
   return (
@@ -18,9 +19,9 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/team" element={<Team />} />
-
-            <Route path="/contact" element={<Contact />} />
+            {/* <Route path="/team" element={<Team />} /> */}
+            {/* <Route path="/blog" element={<BlogNews/>} /> */}
+            {/* <Route path="/contact" element={<Contact />} /> */}
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
 

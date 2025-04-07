@@ -13,6 +13,8 @@ import Footer from '../components/Footer';
 import Career from './Career';
 import AboutUs from './AboutUs';
 import BlogNews from './BlogNews';
+import { Element } from "react-scroll";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,13 +25,13 @@ function Home() {
   const buttonRef = useRef(null);
   const mainRef = useRef(null);
 
-  const section2Ref = useRef(null);
-  const section2TitleRef = useRef(null);
-  const section2DescriptionRef = useRef(null);
+  // const section2Ref = useRef(null);
+  // const section2TitleRef = useRef(null);
+  // const section2DescriptionRef = useRef(null);
 
-  const section3Ref = useRef(null);
-  const section3TitleRef = useRef(null);
-  const section3DescriptionRef = useRef(null);
+  // const section3Ref = useRef(null);
+  // const section3TitleRef = useRef(null);
+  // const section3DescriptionRef = useRef(null);
   const { isArabic } = useLanguage();
   const { darkMode } = useDarkMode(); // Get dark mode state
   const [heroData, setHeroData] = useState(null);
@@ -243,6 +245,7 @@ function Home() {
     className={`${darkMode ? 'bg-light-gray' : 'bg-[#2D3F3B]'} font-nizar text-white min-h-screen overflow-x-hidden transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   >
       <Navbar />
+      <Element name='#'>
   
       {/* --- First Section (Hero) --- */}
       <main className="container min-h-screen mx-auto px-6 pt-36 pb-20 relative font-nizar">
@@ -310,6 +313,7 @@ function Home() {
 </div>
 
     </main>
+    </Element>
 
 
       {/* --- Second Section --- */}
@@ -371,12 +375,27 @@ function Home() {
           <div className={`absolute bottom-1/4 right-1/3 w-60 h-60 ${darkMode ? 'bg-pink-400' : 'bg-pink-500'} rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-300`}></div> */}
         {/* </div> */}
       {/* </section> */}
+      <Element name='about'>
       <AboutUs/>
+      </Element>
+
+      <Element name='services'>
       <Services/>
+      </Element>
+
+      <Element name='team'>
       <Team/>
+      </Element>
+      
+
+      <Element name="blog">
       <BlogNews/>
+      </Element>
+
+      <Element name="contact">
       <Contact/>
-      {/* <FAQSection/> */}
+      </Element>
+
       <Footer/>
     </div>
     </>

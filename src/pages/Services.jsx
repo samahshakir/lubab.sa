@@ -34,24 +34,6 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
     });
   }, [index]);
 
-  // Determine badge text and color
-  const getStatusBadge = () => {
-    if (status === "available") {
-      return (
-        <span className="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-2">
-          {darkMode ? "Available" : "Available"}
-        </span>
-      );
-    } else if (status === "coming-soon") {
-      return (
-        <span className="inline-block bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-2">
-          {darkMode ? "Coming Soon" : "Coming Soon"}
-        </span>
-      );
-    }
-    return null;
-  };
-
   return (
     <div
       ref={cardRef}
