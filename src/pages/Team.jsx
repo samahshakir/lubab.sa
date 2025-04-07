@@ -34,6 +34,7 @@ const Team = () => {
   const cardsRef = useRef([]);
   const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const scrollTriggerRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -69,12 +70,16 @@ const Team = () => {
       zIndex: 1 
     });
     
-    ScrollTrigger.create({
+    // Create a ScrollTrigger
+    scrollTriggerRef.current = ScrollTrigger.create({
       trigger: section,
       pin: true,
       start: "top top",
       end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
       scrub: 1,
+      // Important: Add a unique id and specific scope to prevent conflicts
+      id: "teamScroll",
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
         // Calculate which team member should be active based on scroll progress
         const newIndex = Math.min(
@@ -140,7 +145,10 @@ const Team = () => {
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      // Use the ref to ensure we only kill this component's ScrollTrigger
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
     };
   }, []);
 
@@ -148,9 +156,12 @@ const Team = () => {
     <div 
       ref={sectionRef} 
       className="team-section h-screen w-full bg-light-gray flex items-center justify-center overflow-hidden"
+      id="team-section" // Add a unique ID to help with debugging
     >
       <div className="container mx-auto px-8 relative">
-        <h2 className="text-4xl md:text-6xl font-bold text-dark-gray mt-3 mb-16 text-center">Our Team</h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-dark-gray mt-3 text-center">Our Team</h2>
+        <p className="text-sm md:text-md font-bold text-gray-400 mt-2 mb-12 text-center">Leadership shaping the future of
+        technology, backed by expert talent</p>
         
         <div className="relative h-[600px] w-full">
           {teamMembers.map((member, index) => (
