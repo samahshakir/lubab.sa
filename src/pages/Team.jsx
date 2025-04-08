@@ -30,13 +30,13 @@ const teamMembers = [
 ];
 
 const Team = () => {
-  const sectionRef = useRef(null);
+  const sectionRefs = useRef(null);
   const cardsRef = useRef([]);
   const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const section = sectionRef.current;
+    const sections = sectionRefs.current;
     const cards = cardsRef.current;
     
     // Initial setup
@@ -70,10 +70,11 @@ const Team = () => {
     });
     
     ScrollTrigger.create({
-      trigger: section,
+      trigger: sections,
       pin: true,
       start: "top top",
       end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
+      markers: true,
       scrub: 1,
       onUpdate: (self) => {
         // Calculate which team member should be active based on scroll progress
@@ -139,6 +140,12 @@ const Team = () => {
       }
     });
 
+    // Refresh ScrollTrigger after a short delay to ensure layout is settled
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+
+
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
@@ -146,8 +153,8 @@ const Team = () => {
 
   return (
     <div 
-      ref={sectionRef} 
-      className="team-section h-screen w-full bg-light-gray flex items-center justify-center overflow-hidden"
+      ref={sectionRefs} 
+      className="team-section min-h-screen w-full bg-light-gray flex items-center justify-center overflow-hidden"
     >
       <div className="container mx-auto px-8 relative">
         <h2 className="text-4xl md:text-6xl font-bold text-dark-gray mt-3 mb-16 text-center">Our Team</h2>
