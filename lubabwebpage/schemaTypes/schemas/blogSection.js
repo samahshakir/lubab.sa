@@ -1,38 +1,31 @@
-
 export default {
-    name: 'blogSection',
-    title: 'Blog Section',
-    type: 'document',
-    fields: [
-      {
-        name: 'title_en',
-        title: 'Title (English)',
-        type: 'string',
-      },
-      {
-        name: 'title_ar',
-        title: 'Title (Arabic)',
-        type: 'string',
-      },
-      {
-        name: 'description_en',
-        title: 'Description (English)',
-        type: 'text',
-      },
-      {
-        name: 'description_ar',
-        title: 'Description (Arabic)',
-        type: 'text',
-      },
-      {
-        name: 'articles',
-        title: 'Articles',
-        type: 'array',
-        of: [
-          {
-            type: 'article',
-          },
-        ],
-      },
-    ],
-  };
+  name: 'blogSection',
+  title: 'Blog Section',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Section Title (English)',
+      type: 'string',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'titleAr',
+      title: 'Section Title (Arabic)',
+      type: 'string',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'description',
+      title: 'Section Description (English)',
+      type: 'text',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'descriptionAr',
+      title: 'Section Description (Arabic)',
+      type: 'text',
+      validation: Rule => Rule.required()
+    }
+  ]
+}

@@ -63,7 +63,7 @@ const Careers = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
+    // send the form data to your backend
     console.log('Form submitted:', formData);
     // Reset form and show success message
     setFormData({
@@ -226,7 +226,7 @@ const Careers = () => {
           </>
         ) : (
           <div className="max-w-2xl mx-auto">
-            <div className={`p-8 rounded-xl ${darkMode ? 'bg-white shadow-lg' : 'bg-gray-800'}`}>
+            <div className={`p-8 rounded-xl ${darkMode ? 'bg-white shadow-lg' : 'bg-secondary-dark-gray'}`}>
               <h3 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-800' : 'text-white'} text-center`}>
                 {isArabic ? "استمارة التقديم" : "Application Form"}
               </h3>
@@ -244,7 +244,7 @@ const Careers = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
+                      className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
                     />
                   </div>
                   
@@ -259,7 +259,7 @@ const Careers = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
+                      className={`w-full px-4 py-2 rounded-lg border  ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
                     />
                   </div>
                 </div>
@@ -275,7 +275,7 @@ const Careers = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
+                      className={`w-full px-4 py-2 rounded-lg border  ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
                     />
                   </div>
                   
@@ -289,7 +289,7 @@ const Careers = () => {
                       value={formData.position}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
+                      className={`w-full px-4 py-2 rounded-lg border  ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
                     >
                       <option value="">{isArabic ? "اختر المنصب" : "Select Position"}</option>
                       <option value="developer">{isArabic ? "مطور برمجيات" : "Software Developer"}</option>
@@ -311,8 +311,7 @@ const Careers = () => {
                     value={formData.experience}
                     onChange={handleInputChange}
                     required
-                    className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
-                  >
+                    className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}>
                     <option value="">{isArabic ? "اختر سنوات الخبرة" : "Select Experience"}</option>
                     <option value="entry">{isArabic ? "أقل من سنتين" : "Less than 2 years"}</option>
                     <option value="mid">{isArabic ? "2-5 سنوات" : "2-5 years"}</option>
@@ -332,7 +331,7 @@ const Careers = () => {
                     onChange={handleInputChange}
                     rows="5"
                     required
-                    className={`w-full px-4 py-2 rounded-lg border ${darkMode ? 'border-gray-300 focus:border-purple-500' : 'border-gray-700 bg-gray-700 focus:border-purple-400'} focus:outline-none focus:ring-2 focus:ring-purple-200 transition-colors`}
+                    className={`w-full px-4 py-2 rounded-lg border  ${darkMode ? 'border-gray-300 focus:border-white' : 'border-gray-700 bg-dark-gray focus:border-white'} focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
                   ></textarea>
                 </div>
                 
@@ -340,7 +339,7 @@ const Careers = () => {
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className={`px-6 py-2 rounded-lg border ${darkMode ? 'border-gray-300 text-gray-700 hover:bg-gray-100' : 'border-gray-600 text-gray-300 hover:bg-gray-700'} transition-colors`}
+                    className={`px-6 py-2 rounded-lg border ${darkMode ? 'border-gray-300 text-gray-700 hover:bg-gray-100' : 'border-gray-600 text-gray-300 hover:bg-dark-gray'} transition-colors`}
                   >
                     {isArabic ? "إلغاء" : "Cancel"}
                   </button>
@@ -360,7 +359,6 @@ const Careers = () => {
   );
 };
 
-// Add a CareerCard component similar to ServiceCard for animations
 const CareerCard = ({ icon, title, description, index }) => {
   const cardRef = useRef(null);
   const { darkMode } = useDarkMode();

@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import Spline from '@splinetool/react-spline';
+import React, { useRef, useState } from 'react';
+import axios from 'axios';
 import { useDarkMode } from '../context/DarkModeContext';
-import { useLanguage } from '../context/LanguageContext'; // Assuming this context exists
+import { useLanguage } from '../context/LanguageContext';
 
 const Contact = () => {
   const sectionRef = useRef(null);
@@ -12,12 +12,10 @@ const Contact = () => {
   const buttonRef = useRef(null);
   const containerRef = useRef(null);
   const { darkMode } = useDarkMode();
-  const { isArabic } = useLanguage(); // Using isArabic from context
+  const { isArabic } = useLanguage();
 
-  // Determine current language
   const language = isArabic ? 'ar' : 'en';
 
-  // Multilanguage content
   const content = {
     en: {
       title: "Get in Touch",
@@ -53,16 +51,41 @@ const Contact = () => {
     }
   };
 
-  // Function to add input elements to refs array
   const addToInputRefs = (el) => {
     if (el && !inputRefs.current.includes(el)) {
       inputRefs.current.push(el);
     }
   };
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+    subject: '',
+    message: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/send-email', formData);
+      alert(response.data.message);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email. Please try again later.');
+    }
+  };
+
   return (
     <div ref={sectionRef} className={`relative min-h-screen ${darkMode ? 'bg-[rgb(230,230,230)]' : 'bg-dark-mode'} border-t`}>
-      {/* Content */}
       <section className="relative z-10 min-h-screen flex items-start justify-start pt-15 pb-20">
         <div ref={containerRef} className="container mx-auto px-6">
           <div className={`text-left mb-16 ml-8 ${isArabic ? 'text-right mr-8' : ''}`}>
@@ -81,12 +104,11 @@ const Contact = () => {
             </p>
           </div>
           
-          {/* Contact Form */}
           <div 
             ref={formRef} 
             className={`max-w-2xl ${isArabic ? 'mr-8' : 'ml-8'} shadow-gray-600`}
           >
-            <form className={`space-y-8 p-8 rounded-xl 
+            <form onSubmit={handleSubmit} className={`space-y-8 p-8 rounded-xl 
               ${darkMode ? 'bg-gray-100 shadow-lg' : 'bg-secondary-dark-gray dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]'}`}
               dir={isArabic ? 'rtl' : 'ltr'}>
               
@@ -101,6 +123,9 @@ const Contact = () => {
                     ref={addToInputRefs}
                     type="text" 
                     id="name" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
                       ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
@@ -115,7 +140,10 @@ const Contact = () => {
                   <input 
                     ref={addToInputRefs}
                     type="email" 
-                    id="email" 
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className={`w-full py-3 px-4 rounded-lg border border-gray-300 
                       ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
@@ -124,7 +152,6 @@ const Contact = () => {
                 </div>
               </div>
               
-              {/* Mobile Number Field (Optional) */}
               <div className="group">
                 <label htmlFor="mobile" className={`block text-sm font-medium 
                   ${darkMode ? 'text-gray-700' : 'text-gray-300'} mb-2`}>
@@ -133,11 +160,14 @@ const Contact = () => {
                 <input 
                   ref={addToInputRefs}
                   type="tel" 
-                  id="mobile" 
+                  id="mobile"
+                  name="mobile"
+                  value={formData.mobile}
+                  onChange={handleChange}
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
                     ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
-                  placeholder="+1234567890"
+                  placeholder="+9664567890"
                 />
               </div>
               
@@ -149,7 +179,10 @@ const Contact = () => {
                 <input 
                   ref={addToInputRefs}
                   type="text" 
-                  id="subject" 
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
                     ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
@@ -164,7 +197,10 @@ const Contact = () => {
                 </label>
                 <textarea 
                   ref={addToInputRefs}
-                  id="message" 
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows="5" 
                   className={`w-full py-3 px-4 rounded-lg border border-gray-300 
                     ${darkMode ? 'bg-white text-gray-800' : 'bg-dark-gray text-gray-200'}
@@ -185,7 +221,6 @@ const Contact = () => {
             </form>
           </div>
           
-          {/* Contact Info */}
           <div className={`max-w-2xl ${isArabic ? 'mr-8' : 'ml-8'} mt-8`}>
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-100' : 'bg-dark-gray'}`}>
               <p className={`${darkMode ? 'text-gray-800' : 'text-white'} mb-2 ${isArabic ? 'text-right' : ''}`}>

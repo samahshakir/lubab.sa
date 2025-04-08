@@ -53,6 +53,10 @@
   color: var(--color-secondary-blue);
 }
 
+.border-color-focus{
+  border-color: var(--color-primary-blue)
+}
+
 
 .bg-light-shade-g {
   background-color: var(--color-light-shade-g);

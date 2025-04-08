@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -13,6 +13,7 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
   const cardRef = useRef(null);
   const { darkMode } = useDarkMode();
   const cardAnimationRef = useRef(null);
+  const {isArabic} = useLanguage();
 
   useEffect(() => {
     gsap.set(cardRef.current, {
@@ -100,74 +101,38 @@ const Services = () => {
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    // Clean up previous animations if they exist
-    if (headingAnimationRef.current) {
-      headingAnimationRef.current.kill();
-    }
-    if (backgroundAnimationRef.current) {
-      backgroundAnimationRef.current.kill();
-    }
-
-    // Animate the heading and subheading
-    gsap.set([headingRef.current, subheadingRef.current], {
-      opacity: 0,
-      y: 30,
-    });
-
-    const tl = gsap.timeline({
-      paused: true,
-    });
-
-    tl.to(headingRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: "power3.out",
-    }).to(
-      subheadingRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out",
-      },
-      "-=0.7"
-    );
-
-    // Create the ScrollTrigger with a unique ID
-    headingAnimationRef.current = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top 70%",
-      id: "servicesHeading",
-      onEnter: () => tl.play(),
-      onLeaveBack: () => tl.reverse(),
-    });
-
-    // Add a slight parallax effect to the background with a unique ID
-    backgroundAnimationRef.current = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top bottom",
-      end: "bottom top",
-      id: "servicesBackground",
-      scrub: true,
-      onUpdate: (self) => {
-        gsap.set(".services-bg-gradient", {
-          backgroundPosition: `0% ${100 * self.progress}%`,
-        });
-      }
-    });
-    
-    return () => {
-      // Ensure proper cleanup
-      if (headingAnimationRef.current) {
-        headingAnimationRef.current.kill();
-      }
-      if (backgroundAnimationRef.current) {
-        backgroundAnimationRef.current.kill();
-      }
-    };
-  }, [isArabic]);
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.set([headingRef.current, subheadingRef.current], { opacity: 0, y: 30 });
+  
+      const tl = gsap.timeline().to(headingRef.current, { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
+        .to(subheadingRef.current, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.7");
+  
+      ScrollTrigger.create({
+        id: "services-heading",
+        trigger: sectionRef.current,
+        start: "top 70%",
+        onEnter: () => tl.play(),
+        onLeaveBack: () => tl.reverse(),
+      });
+  
+      ScrollTrigger.create({
+        id: "services-bg",
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+        onUpdate: (self) => {
+          gsap.set(".services-bg-gradient", { backgroundPosition: `0% ${100 * self.progress}%` });
+        },
+      });
+  
+      ScrollTrigger.refresh();
+    }, sectionRef);
+  
+    return () => ctx.revert();
+  }, []);
+  
 
   return (
     <div

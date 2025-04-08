@@ -195,17 +195,19 @@ function Home() {
         {/* Add a spacer before Team section to ensure proper scrolling */}
         <div className={`h-[100px] ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode' }`}></div>
 
-        {/* Team Section */}
-        <Element name='team' className='section-container'>
-          <Team/>
-        </Element>
       
-        <div className={`h-24 ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode'}`}></div>
+        <div className={`h-20 ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'}`}></div>
 
       <Element name="blog">
       <BlogNews/>
       </Element>
 
+
+        {/* Team Section */}
+        <Element name='team' className='section-container'>
+          <Team/>
+        </Element>
+        
       <Element name="contact">
       <Contact/>
       </Element>

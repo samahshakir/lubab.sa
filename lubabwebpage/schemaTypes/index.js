@@ -5,6 +5,7 @@ import blogSection from './schemas/blogSection'
 import article from './schemas/article'
 import faq from './schemas/faq'
 import teamMember from './schemas/teamMember'
+import blog from './schemas/blog'
 
 
-export const schemaTypes = [heroSection,aboutUs,service,blogSection,article,faq,teamMember]
+export const schemaTypes = [heroSection,aboutUs,service,faq,teamMember,blogSection,blog]
