@@ -92,7 +92,7 @@ function Home() {
   }, [heroData, isLoading]);
 
   const LoadingScreen = () => (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} transition-opacity duration-500`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
       <div className="text-center">
         <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin" 
              style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
@@ -185,19 +185,22 @@ function Home() {
           <AboutUs/>
         </Element>
 
+        <div className={`h-24 ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode'}`}></div>
+
         {/* Services Section - Add spacer to prevent overlap */}
-        <Element name='services' className="section-container">
+        <Element name='services'>
           <Services/>
         </Element>
 
         {/* Add a spacer before Team section to ensure proper scrolling */}
-        <div className={`h-[50px] ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode' }`}></div>
+        <div className={`h-[100px] ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode' }`}></div>
 
         {/* Team Section */}
-        <Element name='team' className="section-container">
+        <Element name='team' className='section-container'>
           <Team/>
         </Element>
       
+        <div className={`h-24 ${darkMode ? 'bg-[#F8FAFC]' : 'bg-dark-mode'}`}></div>
 
       <Element name="blog">
       <BlogNews/>

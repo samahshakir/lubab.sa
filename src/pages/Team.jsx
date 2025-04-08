@@ -53,9 +53,7 @@ const Team = () => {
 
 
   useEffect(() => {
-    const section = sectionRef.current;
     const cards = cardsRef.current;
-    
     // Initial setup
     // Current card (center, fully visible)
     gsap.set(cards[0], { 
@@ -88,7 +86,7 @@ const Team = () => {
     
     // Create a ScrollTrigger
     scrollTriggerRef.current = ScrollTrigger.create({
-      trigger: section,
+      trigger: sectionRef.current,
       pin: true,
       start: "top top",
       end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
@@ -171,7 +169,7 @@ const Team = () => {
   return (
     <div
       ref={sectionRef}
-      className={`team-section h-screen w-full ${
+      className={`team-section min-h-screen w-full ${
         darkMode ? 'bg-light-gray' : 'bg-[#2D3F3B]'
       } flex items-center justify-center overflow-hidden border-b border-t`}
       id="team-section"

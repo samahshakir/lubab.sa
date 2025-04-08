@@ -198,7 +198,7 @@ function BlogNews() {
                 trigger: card,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: 1
+                scrub: 1,
               }
             }
           );

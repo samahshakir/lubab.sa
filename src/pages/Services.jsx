@@ -23,7 +23,9 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
     // Create a unique identifier for this specific card's ScrollTrigger
     cardAnimationRef.current = ScrollTrigger.create({
       trigger: cardRef.current,
-      start: "top 80%",
+      start: "top 80%", // Start animation when top of the card hits 80% of the viewport height
+      end: "bottom 20%", // End the animation when the bottom of the card is at 20% of the viewport height
+      toggleActions: "play none none reverse", // Play the animation when entering the viewport, reverse it when leaving
       id: `serviceCard-${index}`,
       onEnter: () => {
         gsap.to(cardRef.current, {
@@ -34,8 +36,17 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
           ease: "power3.out",
         });
       },
+      onLeaveBack: () => {
+        gsap.to(cardRef.current, {
+          opacity: 0,
+          y: 50,
+          duration: 0.6,
+          ease: "power3.out",
+        });
+      },
     });
 
+    // Cleanup function to kill the ScrollTrigger instance when the component unmounts
     return () => {
       if (cardAnimationRef.current) {
         cardAnimationRef.current.kill();
