@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ServiceCard = ({ icon, title, description, status, index }) => {
   const cardRef = useRef(null);
   const { darkMode } = useDarkMode();
+  const cardAnimationRef = useRef(null);
 
   useEffect(() => {
     gsap.set(cardRef.current, {
@@ -19,9 +20,13 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
       y: 50,
     });
 
-    ScrollTrigger.create({
+    // Create a unique identifier for this specific card's ScrollTrigger
+    cardAnimationRef.current = ScrollTrigger.create({
       trigger: cardRef.current,
-      start: "top 80%",
+      start: "top 80%", // Start animation when top of the card hits 80% of the viewport height
+      end: "bottom 20%", // End the animation when the bottom of the card is at 20% of the viewport height
+      toggleActions: "play none none reverse", // Play the animation when entering the viewport, reverse it when leaving
+      id: `serviceCard-${index}`,
       onEnter: () => {
         gsap.to(cardRef.current, {
           opacity: 1,
@@ -31,7 +36,22 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
           ease: "power3.out",
         });
       },
+      onLeaveBack: () => {
+        gsap.to(cardRef.current, {
+          opacity: 0,
+          y: 50,
+          duration: 0.6,
+          ease: "power3.out",
+        });
+      },
     });
+
+    // Cleanup function to kill the ScrollTrigger instance when the component unmounts
+    return () => {
+      if (cardAnimationRef.current) {
+        cardAnimationRef.current.kill();
+      }
+    };
   }, [index]);
 
   return (
@@ -50,7 +70,6 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
         <span className="inline-block text-gray-500 text-md font-semibold">
           {status}
         </span>
-
       </div>
     </div>
   );
@@ -63,6 +82,8 @@ const Services = () => {
   const { darkMode } = useDarkMode();
   const { isArabic } = useLanguage();
   const [services, setServices] = useState([]);
+  const headingAnimationRef = useRef(null);
+  const backgroundAnimationRef = useRef(null);
 
   // Fetch services from Sanity
   useEffect(() => {
@@ -80,6 +101,14 @@ const Services = () => {
   }, []);
 
   useEffect(() => {
+    // Clean up previous animations if they exist
+    if (headingAnimationRef.current) {
+      headingAnimationRef.current.kill();
+    }
+    if (backgroundAnimationRef.current) {
+      backgroundAnimationRef.current.kill();
+    }
+
     // Animate the heading and subheading
     gsap.set([headingRef.current, subheadingRef.current], {
       opacity: 0,
@@ -87,12 +116,7 @@ const Services = () => {
     });
 
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 70%",
-        onEnter: () => tl.play(),
-        onLeaveBack: () => tl.reverse(),
-      },
+      paused: true,
     });
 
     tl.to(headingRef.current, {
@@ -111,25 +135,48 @@ const Services = () => {
       "-=0.7"
     );
 
-    // Add a slight parallax effect to the background
-    gsap.to(".services-bg-gradient", {
-      backgroundPosition: "0% 100%",
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
+    // Create the ScrollTrigger with a unique ID
+    headingAnimationRef.current = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 70%",
+      id: "servicesHeading",
+      onEnter: () => tl.play(),
+      onLeaveBack: () => tl.reverse(),
+    });
+
+    // Add a slight parallax effect to the background with a unique ID
+    backgroundAnimationRef.current = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      id: "servicesBackground",
+      scrub: true,
+      onUpdate: (self) => {
+        gsap.set(".services-bg-gradient", {
+          backgroundPosition: `0% ${100 * self.progress}%`,
+        });
+      }
     });
     
+    return () => {
+      // Ensure proper cleanup
+      if (headingAnimationRef.current) {
+        headingAnimationRef.current.kill();
+      }
+      if (backgroundAnimationRef.current) {
+        backgroundAnimationRef.current.kill();
+      }
+    };
   }, [isArabic]);
 
   return (
     <div
       ref={sectionRef}
-      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-gray-900"} min-h-screen py-20 overflow-hidden`}
+      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-screen py-20 overflow-hidden`}
+      id="services-section" // Add a unique ID
     >
-      <div className="container mx-auto px-6">
+      <div className="services-bg-gradient absolute inset-0 z-0 opacity-20"></div>
+      <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2
             ref={headingRef}
@@ -143,16 +190,16 @@ const Services = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {services.map((service, index) => (
-        <ServiceCard
-          key={index}
-          icon={service.icon}
-          title={isArabic ? service.title?.ar : service.title?.en}
-          description={isArabic ? service.description?.ar : service.description?.en}
-          status={service.status}
-          index={index}
-        />
-      ))}
+          {services.map((service, index) => (
+            <ServiceCard
+              key={index}
+              icon={service.icon}
+              title={isArabic ? service.title?.ar : service.title?.en}
+              description={isArabic ? service.description?.ar : service.description?.en}
+              status={service.status}
+              index={index}
+            />
+          ))}
         </div>
       </div>
     </div>

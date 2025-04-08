@@ -16,10 +16,9 @@ function App() {
     <DarkModeProvider>
       <LanguageProvider>
         <Router>
-          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/team" element={<Team />} /> */}
+            <Route path="/team" element={<Team />} />
             {/* <Route path="/blog" element={<BlogNews/>} /> */}
             {/* <Route path="/contact" element={<Contact />} /> */}
             <Route path='/career' element={<Career/>}/>

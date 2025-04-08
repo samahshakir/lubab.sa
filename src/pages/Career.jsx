@@ -119,7 +119,7 @@ const Careers = () => {
   }, [isArabic]);
   
   return (
-    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-light-gray' : 'bg-gray-900'} font-nizar min-h-screen py-20 overflow-hidden`}>
+    <div ref={sectionRef} className={`relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar min-h-screen py-20 overflow-hidden`}>
       
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
@@ -161,7 +161,7 @@ const Careers = () => {
               {careerAreas.map((area, index) => (
                 <div 
                   key={index}
-                  className={`p-6 rounded-xl transition-all ${darkMode ? 'bg-white shadow-md hover:shadow-xl' : 'bg-gray-800 hover:bg-gray-750'} transform hover:-translate-y-2 duration-300`}
+                  className={`p-6 rounded-xl transition-all ${darkMode ? 'bg-white shadow-md hover:shadow-xl' : 'bg-dark-gray hover:bg-gray-750'} transform hover:-translate-y-2 duration-300`}
                   style={{
                     opacity: 0,
                     animation: `fadeIn 0.5s ease-out forwards ${0.2 + index * 0.1}s`
@@ -186,7 +186,7 @@ const Careers = () => {
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div className={`p-5 rounded-lg ${darkMode ? 'bg-green-50' : 'bg-gray-800'}`}>
+                <div className={`p-5 rounded-lg ${darkMode ? 'bg-green-50' : 'bg-dark-gray'}`}>
                   <div className="text-3xl text-purple-500 mb-3">
                     <i className="fas fa-rocket"></i>
                   </div>
@@ -198,7 +198,7 @@ const Careers = () => {
                   </p>
                 </div>
                 
-                <div className={`p-5 rounded-lg ${darkMode ? 'bg-blue-50' : 'bg-gray-800'}`}>
+                <div className={`p-5 rounded-lg ${darkMode ? 'bg-blue-50' : 'bg-dark-gray'}`}>
                   <div className="text-3xl text-blue-500 mb-3">
                     <i className="fas fa-users"></i>
                   </div>
@@ -210,7 +210,7 @@ const Careers = () => {
                   </p>
                 </div>
                 
-                <div className={`p-5 rounded-lg ${darkMode ? 'bg-yellow-50' : 'bg-gray-800'}`}>
+                <div className={`p-5 rounded-lg ${darkMode ? 'bg-yellow-50' : 'bg-dark-gray'}`}>
                   <div className="text-3xl text-indigo-500 mb-3">
                     <i className="fas fa-lightbulb"></i>
                   </div>

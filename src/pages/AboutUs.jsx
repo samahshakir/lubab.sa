@@ -100,7 +100,7 @@ const AboutUs = () => {
         </h3>
         <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {aboutData.values.map((value, index) => (
-            <div key={index} className="bg-opacity-10 bg-white p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300">
+            <div key={index} className={`bg-opacity-10 ${darkMode ? 'bg-white' : 'bg-dark-gray'} p-6 rounded-lg backdrop-blur-sm border border-gray-700 border-opacity-20 hover:border-primary-green transition-all duration-300`}>
               <h4 className="text-xl font-bold mb-2 text-primary-green">
                 {isArabic ? value.title.ar : value.title.en}
               </h4>
