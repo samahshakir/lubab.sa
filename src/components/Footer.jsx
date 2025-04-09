@@ -16,7 +16,7 @@ function Footer() {
 
   const linkMap = {
     linkedin: 'https://www.linkedin.com/company/lubab/posts/?feedView=all',
-    twitter: '#', // Replace with actual Twitter/X link if needed
+    twitter: '#', // Replace with actual Twitter/X link
   };
 
   const navLinks = [
@@ -109,6 +109,7 @@ function Footer() {
           </div>
 
           {/* Services */}
+          
           <div>
             <h3
               className={`${
@@ -117,37 +118,39 @@ function Footer() {
             >
               {isArabic ? 'خدماتنا' : 'Our Services'}
             </h3>
-            <ul className="space-y-2">
-              {(isArabic
-                ? [
-                    'حلول البرمجيات كخدمة (SaaS)',
-                    'بناء الشراكات',
-                    'الاستشارات',
-                    'حلول مخصصة',
-                    'حلول الذكاء الاصطناعي',
-                  ]
-                : [
-                    'SaaS Solutions',
-                    'Partnership Building',
-                    'Consultations',
-                    'Custom Solutions',
-                    'AI Solutions',
-                  ]
-              ).map((service) => (
-                <li key={service}>
-                  <a
-                    href="#"
-                    className={`${
-                      darkMode
-                        ? 'text-[#374151] hover:text-[#101828]'
-                        : 'text-gray-400 hover:text-green-400'
-                    } transition-colors duration-300`}
-                  >
-                    {service}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <ScrollLink to="services" smooth={true} duration={500}>
+              <ul className="space-y-2">
+                {(isArabic
+                  ? [
+                      'حلول البرمجيات كخدمة (SaaS)',
+                      'بناء الشراكات',
+                      'الاستشارات',
+                      'حلول مخصصة',
+                      'حلول الذكاء الاصطناعي',
+                    ]
+                  : [
+                      'SaaS Solutions',
+                      'Partnership Building',
+                      'Consultations',
+                      'Custom Solutions',
+                      'AI Solutions',
+                    ]
+                ).map((service) => (
+                  <li key={service}>
+                    <span
+                      className={`${
+                        darkMode
+                          ? 'text-[#374151] hover:text-[#101828]'
+                          : 'text-gray-400 hover:text-green-400'
+                      } transition-colors duration-300`}
+                    >
+                      {service}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </ScrollLink>
+
           </div>
 
           {/* Connect With Us */}
@@ -178,11 +181,18 @@ function Footer() {
                       darkMode ? 'text-[#374151]' : 'text-gray-400'
                     } pt-1`}
                   >
-                    {isArabic && platform === 'twitter' ? 'إكس' : platform.charAt(0).toUpperCase() + platform.slice(1)}
+                    {isArabic && platform === 'linkedin'
+                      ? 'لينكدإن' 
+                      : platform === 'linkedin'
+                      ? 'LinkedIn' 
+                      : isArabic
+                      ? 'إكس' 
+                      : 'Twitter'}
                   </span>
                 </a>
               ))}
             </div>
+
           </div>
         </div>
 

@@ -92,7 +92,7 @@ const Team = () => {
               style={{ perspective: "1000px" }}
             >
               {member.imageUrl ? (
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 md:pt-35 lg:pt-10">
                   <div className="w-full md:w-5/12">
                     <div className="relative overflow-hidden rounded-lg shadow-2xl aspect-[3/4] max-w-[380px] mx-auto">
                       <img src={member.imageUrl} alt={member.name[isArabic ? "ar" : "en"]} className="w-full h-full object-cover" />
@@ -114,7 +114,7 @@ const Team = () => {
                 </div>
               ) : (
                 // Special layout for "The Team" without an image
-                <div className="flex flex-col items-center justify-center h-full text-center max-w-   xl mx-auto">
+                <div className="flex flex-col items-center justify-center h-full text-center max-w-xl mx-auto">
                   <div className="bg-dark-gray/5 p-8 md:p-12 rounded-xl shadow-lg">
                     <h3 className={`text-3xl md:text-5xl font-bold mb-6 ${darkMode ? 'text-dark-gray' : 'text-light-gray'}`}>
                       {member.name[isArabic ? "ar" : "en"]}

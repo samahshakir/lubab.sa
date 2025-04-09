@@ -13,7 +13,7 @@ import Footer from '../components/Footer';
 import Career from './Career';
 import AboutUs from './AboutUs';
 import BlogNews from './BlogNews';
-import { Element } from "react-scroll";
+import { Element,Link } from "react-scroll";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -114,7 +114,7 @@ function Home() {
       <Element name='#'>
   
       {/* --- First Section (Hero) --- */}
-      <main className="container min-h-screen mx-auto px-6 pt-36 pb-20 relative font-nizar">
+      <main className="container min-h-screen mx-auto px-6 pt-22 pb-20 relative font-nizar">
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
                backgroundSize: '20px 20px'}}></div>
@@ -123,7 +123,7 @@ function Home() {
   <div className={`max-w-2xl relative z-20 pr-5 ${isArabic ? "lg:order-last text-right" : "lg:order-first text-left"}`}>
     <h1
       ref={titleRef}
-      className={`text-5xl md:text-7xl font-bold mb-4 leading-tight tracking-tight animate-fadeIn`}
+      className={`text-5xl lg:text-7xl font-bold mb-4 leading-tight tracking-tight animate-fadeIn`}
     >
       <p className={`${darkMode ? "text-dark-gray" : "text-white"}`}>{isArabic ? heroData?.title?.["ar"] : heroData?.title?.["en"]}</p>
       <p className="text-secondary-blue transition-colors duration-300 animate-gradientShift">
@@ -133,27 +133,35 @@ function Home() {
         {isArabic ? heroData?.title3?.["ar"] : heroData?.title3?.["en"] || "Loading..."}
       </span>
     </h1>
-    {/* <p className={`text-2xl md:text-xl mb-3 font-bold ${darkMode ? "text-primary-green" : "text-secondary-blue"} uppercase transition-colors duration-300 animate-slideIn`}>
-      {isArabic ? heroData?.subTitle?.["ar"] : heroData?.subTitle?.["en"]}
-    </p> */}
     <p
       ref={descriptionRef}
       className={`text-lg md:text-xl ${darkMode ? "text-secondary-dark-gray" : "text-gray-200"} mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift`}
     >
       {isArabic ? heroData?.description?.["ar"] : heroData?.description?.["en"]}
     </p>
+
     <button
-        ref={buttonRef}
-        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg mx-2"
-      >
-        Explore our solutions
-      </button>
-      <button
-        ref={buttonRef}
-        className="bg-primary-green hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-colors duration-200 text-lg ml-5 mt-2"
-      >
-        Contact us now
-      </button>
+      ref={buttonRef}
+      className="px-6 py-2 rounded-4xl font-medium transition-all duration-200 text-lg mx-2 w-full sm:w-auto bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] border-none relative overflow-hidden"
+    >
+      <Link to="services" smooth={true} duration={500}>
+        <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">
+          {isArabic ? 'اكتشف حلولنا' : 'Explore our services'}
+        </span>
+      </Link>
+    </button>
+
+    <button
+      ref={buttonRef}
+      className="px-6 py-2 rounded-4xl font-medium mt-5 transition-all duration-200 text-lg mx-2 w-full sm:w-auto bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] border-none relative overflow-hidden"
+    >
+      <Link to="contact" smooth={true} duration={500}>
+        <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">
+          {isArabic? 'اتصل بنا الآن' : 'Contact us now'}
+        </span>
+      </Link>
+    </button>
+
   </div>
 
   {/* Spline Container */}

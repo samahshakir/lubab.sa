@@ -30,7 +30,7 @@ const Contact = () => {
       buttonText: "Send Message",
       contactInfo: {
         nationalAddress: "National Address: As per official records",
-        linkedin: "LinkedIn: https://www.linkedin.com/company/lubab/"
+        linkedin: "LinkedIn: company/lubab"
       }
     },
     ar: {
@@ -46,7 +46,7 @@ const Contact = () => {
       buttonText: "إرسال الرسالة",
       contactInfo: {
         nationalAddress: "العنوان الوطني: حسب السجلات الرسمية",
-        linkedin: "لينكد إن: https://www.linkedin.com/company/lubab/"
+        linkedin: "لينكد إن: company/lubab/"
       }
     }
   };
@@ -65,6 +65,10 @@ const Contact = () => {
     message: '',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -75,12 +79,39 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
     try {
-      const response = await axios.post('http://localhost:5000/send-email', formData);
-      alert(response.data.message);
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Failed to send email. Please try again later.');
+      const response = await fetch('http://localhost:5000/send-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+      console.log(result); 
+
+      if (response.ok) {
+        setSuccess("Your message has been sent successfully!");
+        setFormData({
+          name: '',
+          email: '',
+          mobile: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        setError(result.message || "Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      setError("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -208,16 +239,27 @@ const Contact = () => {
                   placeholder={isArabic ? "أخبرنا عن مشروعك..." : "Tell us about your project..."}
                 ></textarea>
               </div>
+
+              {error && <p className="text-red-600">{error}</p>}
+              {success && <p className="text-green-600">{success}</p>}
               
               <div>
-                <button 
-                  ref={buttonRef}
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-medium py-3 px-6 rounded-md shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
-                >
-                  {content[language].buttonText}
-                </button>
-              </div>
+              <button 
+                ref={buttonRef}
+                type="submit" 
+                className="w-full text-primary-green hover:text-secondary-blue font-medium py-3 px-6 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+                disabled={loading}
+                style={{
+                  backgroundImage: `
+                    linear-gradient(45deg, transparent 45%, rgba(0, 0, 0, 0.03) 46%, rgba(0, 0, 0, 0.03) 54%, transparent 55%),
+                    linear-gradient(135deg, transparent 45%, rgba(0, 0, 0, 0.03) 46%, rgba(0, 0, 0, 0.03) 54%, transparent 55%)
+                  `,
+                  backgroundSize: '8px 8px'
+                }}
+              >
+                {loading ? "Sending..." : content[language].buttonText}
+              </button>
+            </div>
             </form>
           </div>
           
@@ -226,11 +268,29 @@ const Contact = () => {
               <p className={`${darkMode ? 'text-gray-800' : 'text-white'} mb-2 ${isArabic ? 'text-right' : ''}`}>
                 {content[language].contactInfo.nationalAddress}
               </p>
-              <p className={`${darkMode ? 'text-gray-800' : 'text-white'} ${isArabic ? 'text-right' : ''}`}>
-                {content[language].contactInfo.linkedin}
+              <p className={`${darkMode ? 'text-gray-800' : 'text-white'} flex items-center gap-2 ${isArabic ? 'text-right' : ''}`}>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor" 
+                  className="text-blue-600 mb-2"
+                >
+                  <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM5 8H0v16h5V8zM24 24h-5v-7c0-1.68-.03-3.85-2.34-3.85-2.34 0-2.7 1.83-2.7 3.72V24h-5V8h4.8v2.2h.07c.67-1.26 2.3-2.6 4.73-2.6C23.2 7.6 24 11 24 14.83V24z"/>
+                </svg>
+                <a 
+                  href="https://www.linkedin.com/company/lubab/"
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {content[language].contactInfo.linkedin}
+                </a>
               </p>
             </div>
           </div>
+
         </div>
       </section>
     </div>

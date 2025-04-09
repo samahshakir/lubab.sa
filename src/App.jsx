@@ -11,6 +11,7 @@ import Team from './pages/Team';
 import FAQ from './pages/FAQ';
 import BlogNews from './pages/BlogNews';
 import ArticlePage from './pages/ArticlePage';
+import ApplicationsPage from './pages/ApplicationsPage';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
             <Route path="/blog/article/:articleId" element={<ArticlePage />} />
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
+            <Route path='/applications' element={<ApplicationsPage/>}/>
+
 
           </Routes>
         </Router>
