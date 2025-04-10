@@ -12,6 +12,7 @@ import FAQ from './pages/FAQ';
 import BlogNews from './pages/BlogNews';
 import ArticlePage from './pages/ArticlePage';
 import ApplicationsPage from './pages/ApplicationsPage';
+import AuthPage from './pages/AuthPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/blog/article/:articleId" element={<ArticlePage />} />
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
+            <Route path='/auth' element={<AuthPage/>}/>
             <Route path='/applications' element={<ApplicationsPage/>}/>
 
 

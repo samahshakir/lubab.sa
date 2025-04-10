@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDarkMode } from '../context/DarkModeContext';
 import { useLanguage } from '../context/LanguageContext';
 import client from "../sanityClient"; 
+import { Link } from 'react-router-dom';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,7 @@ const Careers = () => {
   const [showForm, setShowForm] = useState(false);
   const [careerAreas, setCareerAreas] = useState([]);
   const [whyJoin, setWhyJoin] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,37 +26,6 @@ const Careers = () => {
     experience: '',
     message: ''
   });
-  
-  // const careerAreas = [
-  //   {
-  //     icon: <i className="fas fa-laptop-code"></i>,
-  //     title: isArabic ? "تطوير البرمجيات" : "Software Development",
-  //     description: isArabic 
-  //       ? "انضم إلى فريق المطورين لدينا لبناء حلول SaaS مبتكرة وتطبيقات متطورة."
-  //       : "Join our development team to build innovative SaaS solutions and cutting-edge applications."
-  //   },
-  //   {
-  //     icon: <i className="fas fa-shield-alt"></i>,
-  //     title: isArabic ? "الاستشارات التقنية والأمنية" : "Technical Consulting",
-  //     description: isArabic 
-  //       ? "قدم خبرتك في مجال الاستشارات التقنية وأمن المعلومات لمساعدة عملائنا."
-  //       : "Provide your expertise in technical consulting and information security to help our clients."
-  //   },
-  //   {
-  //     icon: <i className="fas fa-chart-line"></i>,
-  //     title: isArabic ? "تحليل البيانات" : "Data Analysis",
-  //     description: isArabic 
-  //       ? "استخدم مهاراتك التحليلية لاستخراج رؤى قيمة من البيانات وتحسين عمليات الأعمال."
-  //       : "Use your analytical skills to extract valuable insights from data and improve business operations."
-  //   },
-  //   {
-  //     icon: <i className="fas fa-tasks"></i>,
-  //     title: isArabic ? "إدارة المشاريع" : "Project Management",
-  //     description: isArabic 
-  //       ? "قم بتنسيق وإدارة مشاريع التحول الرقمي وضمان تسليمها بنجاح."
-  //       : "Coordinate and manage digital transformation projects and ensure their successful delivery."
-  //   }
-  // ];
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -96,10 +67,13 @@ const Careers = () => {
   
   useEffect(() => {
     // Animate the heading and subheading
-    gsap.set([headingRef.current, subheadingRef.current], {
-      opacity: 0,
-      y: 30
-    });
+    if (headingRef.current && subheadingRef.current) {
+      // Animate the heading and subheading
+      gsap.set([headingRef.current, subheadingRef.current], {
+        opacity: 0,
+        y: 30
+      });
+    }
     
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -123,21 +97,43 @@ const Careers = () => {
     }, "-=0.7");
 
     const fetchCareers = async () => {
+      setLoading(true); 
       const careers = await client.fetch(`*[_type == "career"]{titleEn, titleAr, descriptionEn, descriptionAr}`);
       const whyJoinData = await client.fetch(`*[_type == "whyJoin"]{titleEn, titleAr, descriptionEn, descriptionAr}`);
       
       setCareerAreas(careers);
       setWhyJoin(whyJoinData);
+      setLoading(false);
     };
 
     fetchCareers();
 
   }, [isArabic]);
+
+  const LoadingScreen = () => (
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin" 
+             style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
+        <h2 className={`text-xl font-bold ${darkMode ? 'text-[#101828]' : 'text-white'}`}>Loading Content</h2>
+      </div>
+    </div>
+  );
+
+   if (loading) {
+    return <LoadingScreen />;
+  }
   
   return (
     <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen py-20 overflow-hidden`}>
       
       <div className="container mx-auto px-6">
+
+      <Link to="/auth" className="absolute top-6 right-6 text-2xl text-gray-600 hover:text-primary-blue transition">
+      <img src="./src/assets/user.png" alt="" className="h-6 w-auto mr-1"
+              />
+      </Link>
+
         {/* Section Title */}
         <div className="text-center mb-16">
           <h2 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-secondary-blue">

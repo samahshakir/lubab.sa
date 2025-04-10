@@ -1,11 +1,20 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 // Create Context
 const LanguageContext = createContext();
 
 // Provider Component
 export const LanguageProvider = ({ children }) => {
-  const [isArabic, setIsArabic] = useState(false);
+  // Get initial language preference from localStorage, default to true (Arabic) if not set
+  const storedLanguage = localStorage.getItem("isArabic");
+  const initialLanguage = storedLanguage ? JSON.parse(storedLanguage) : true;
+
+  const [isArabic, setIsArabic] = useState(initialLanguage);
+
+  // Update localStorage whenever the language preference changes
+  useEffect(() => {
+    localStorage.setItem("isArabic", JSON.stringify(isArabic));
+  }, [isArabic]);
 
   return (
     <LanguageContext.Provider value={{ isArabic, setIsArabic }}>
@@ -15,5 +24,4 @@ export const LanguageProvider = ({ children }) => {
 };
 
 // Custom Hook for easy access
-// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = () => useContext(LanguageContext);
