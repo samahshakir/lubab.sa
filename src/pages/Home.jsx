@@ -14,7 +14,8 @@ import Career from './Career';
 import AboutUs from './AboutUs';
 import BlogNews from './BlogNews';
 import { Element,Link } from "react-scroll";
-
+import { initGA, trackPageView } from "../utils/analytics";
+import CookieConsent from "react-cookie-consent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +29,7 @@ function Home() {
   const { darkMode } = useDarkMode(); // Get dark mode state
   const [heroData, setHeroData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [consentGiven, setConsentGiven] = useState(false);
 
   useEffect(() => {
     const minLoadingTime = setTimeout(() => {
@@ -35,11 +37,18 @@ function Home() {
         setIsLoading(false);
       }
     }, 1500); 
+    const consent = localStorage.getItem("cookieConsent");
+    if (consent === "true") {
+      trackPageView(); // Track first page load
+    }
+    initGA(); // Initialize GA
+
+
     client
       .fetch('*[_type == "heroSection"][0]')
       .then((data) => setHeroData(data))
       .catch(console.error);
-
+   
     
     // --- First Section Animations (Hero) ---
     // const elements = [titleRef.current, descriptionRef.current, imageRef.current, buttonRef.current];
@@ -121,6 +130,26 @@ function Home() {
       backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
       backgroundSize: '20px 20px'
     }}></div>
+
+     <CookieConsent
+        location="bottom"
+        buttonText="Accept"
+        declineButtonText="Deny"
+        enableDeclineButton
+        onAccept={() => {
+          localStorage.setItem("cookieConsent", "true");
+          setConsentGiven(true);
+          initGA(); // Only enable GA after consent
+        }}
+        onDecline={() => {
+          localStorage.setItem("cookieConsent", "false");
+        }}
+      >
+        This website uses cookies to improve your experience.{" "}
+        <a href="/privacy-policy" style={{ color: "#fff" }}>
+          Learn more
+        </a>
+      </CookieConsent>
   <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative ${isArabic ? "lg:flex-row-reverse" : ""}`}>
     {/* Text Content */}
     <div className={`max-w-2xl relative z-20 pr-5 ${isArabic ? "lg:order-last text-right" : "lg:order-first text-left"}`}>

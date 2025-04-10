@@ -14,6 +14,7 @@ import ArticlePage from './pages/ArticlePage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import AuthPage from './pages/AuthPage';
 
+
 function App() {
   return (
     <DarkModeProvider>
