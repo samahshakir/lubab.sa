@@ -195,7 +195,7 @@ function Home() {
     </div>
 
     {/* Spline Container */}
-    <div className={`relative h-full flex justify-center items-center lg:ml-10 ${isArabic ? "lg:order-first" : "lg:order-last"}`}>
+    <div className={`relative h-full flex justify-center items-center lg:ml-25 ${isArabic ? "lg:order-first" : "lg:order-last"}`}>
       {/* Gradient Backgrounds */}
       <div className={`absolute -bottom-10 -right-10 w-96 h-96 ${darkMode ? "bg-green-500" : "bg-green-600"} rounded-full opacity-20 blur-3xl transition-colors duration-300`}></div>
       <div className={`absolute -top-10 -left-10 w-72 h-72 ${darkMode ? "bg-blue-400" : "bg-blue-500"} rounded-full opacity-15 blur-3xl transition-colors duration-300`}></div>

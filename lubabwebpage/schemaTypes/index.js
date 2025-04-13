@@ -6,7 +6,18 @@ import article from './schemas/article'
 import faq from './schemas/faq'
 import teamMember from './schemas/teamMember'
 import blog from './schemas/blog'
-import career, { whyJoinSchema } from './schemas/career'
+import career, {whyJoinSchema} from './schemas/career'
+import job from './schemas/job'
 
-
-export const schemaTypes = [heroSection,aboutUs,service,faq,teamMember,blogSection,blog,career,whyJoinSchema]
+export const schemaTypes = [
+  heroSection,
+  aboutUs,
+  service,
+  faq,
+  teamMember,
+  blogSection,
+  blog,
+  career,
+  whyJoinSchema,
+  job,
+]
