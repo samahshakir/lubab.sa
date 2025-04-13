@@ -113,27 +113,42 @@ const ApplicationForm = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
 
-    const fetchApplicationByUserId = async () => {
-        if (!userId) return;
+    const loadApplicationData = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?.id;
     
-        try {
-          const res = await axios.get(`/api/applications/by-user/${userId}`);
-          const data = res.data;
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
     
-          if (data) {
-            setFormData({
-              personal: data.personal || {},
-              education: data.education || [],
-              experience: data.experience || [],
-              skills: data.skills || { skillList: [''], proficiencyLevels: {} },
-              links: data.links || {},
-              questions: data.questions || { answers: {} }
-            });
-          }
-        } catch (error) {
-          console.error('Error fetching application by userId:', error);
+      try {
+        const response = await fetch(`http://localhost:5000/api/applications/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+    
+          // Flatten structure if needed before setting formData
+          setFormData({
+            userId: data.userId,
+            jobSlug: data.jobSlug,
+            status: data.status,
+            personal: data.personal || {},
+            education: data.education || [],
+            experience: data.experience || [],
+            skills: data.skills || { skillList: [], proficiencyLevels: {} },
+            links: data.links || {},
+          });
+    
+        } else if (response.status === 404) {
+          console.log("No application found for this user.");
+        } else {
+          console.error("Failed to fetch application:", response.statusText);
         }
-      };
+      } catch (error) {
+        console.error("Error loading application:", error);
+      }
+    };
+    
 
     const fetchJobDetails = async () => {
     if (!jobSlug) {
@@ -169,26 +184,26 @@ const ApplicationForm = () => {
     }
     };
 
-    const fetchDraftApplication = async (userId, jobSlug) => {
-        try {
-          const response = await axios.get(`http://localhost:5000/api/applications/draft`, {
-            params: { userId, jobSlug }
-          });
-      
-          if (response.data) {
-            setFormData(response.data.formData);
-            setDraftSaved(true);
-          }
-        } catch (error) {
-          console.error("Failed to fetch draft application:", error);
-        }
-      };
-       
 
+    const fetchDraftApplication = async () => {
+       try {
+      const response = await axios.post("http://localhost:5000/api/check-drafts", {
+        userId,
+        jobSlug,
+      });
+
+      if (response.status === 200) {
+        setFormData(response.data.application); 
+      }
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    };
+    
     // fetchUserData();
     fetchJobDetails();
-    fetchApplicationByUserId();
-    fetchDraftApplication(userId,jobSlug);
+    loadApplicationData();
+    fetchDraftApplication();
   }, [jobSlug]);
 
   // Check form completion status
@@ -393,7 +408,7 @@ const ApplicationForm = () => {
     const userId = user?.id;
     try {
       setSaving(true);
-      const response = await fetch('/api/applications/draft', {
+      const response = await fetch('http://localhost:5000/api/applications/draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -430,23 +445,24 @@ const ApplicationForm = () => {
   
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const applicationData = new FormData();
+      
+      // Prepare the application data as a JSON object
+      const applicationData = {
+        userId: user.id,
+        jobSlug: jobSlug,
+        status: 'submitted',
+        personal: formData.personal,
+        education: formData.education,
+        experience: formData.experience,
+        skills: formData.skills,
+        links: formData.links,
+      };
   
-      applicationData.append('userId', user.id);
-      applicationData.append('jobSlug', jobSlug);
-      applicationData.append('status', 'submitted');
-  
-      // Append each section of formData individually as JSON strings
-      applicationData.append('personal', JSON.stringify(formData.personal));
-      applicationData.append('education', JSON.stringify(formData.education));
-      applicationData.append('experience', JSON.stringify(formData.experience));
-      applicationData.append('skills', JSON.stringify(formData.skills));
-      applicationData.append('links', JSON.stringify(formData.links));
-  
+      // Send the application data as JSON
       await axios.post('http://localhost:5000/api/applications/submit', applicationData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
       });
   
       navigate('/applications/success', { state: { jobId, jobTitle: jobDetails?.title } });
@@ -557,7 +573,7 @@ const ApplicationForm = () => {
                     id="firstName"
                     value={formData.personal.firstName}
                     onChange={(e) => handleInputChange('personal', 'firstName', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -570,7 +586,7 @@ const ApplicationForm = () => {
                     id="lastName"
                     value={formData.personal.lastName}
                     onChange={(e) => handleInputChange('personal', 'lastName', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -583,7 +599,7 @@ const ApplicationForm = () => {
                     id="email"
                     value={formData.personal.email}
                     onChange={(e) => handleInputChange('personal', 'email', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -596,7 +612,7 @@ const ApplicationForm = () => {
                     id="phone"
                     value={formData.personal.phone}
                     onChange={(e) => handleInputChange('personal', 'phone', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -609,7 +625,7 @@ const ApplicationForm = () => {
                     id="address"
                     value={formData.personal.address}
                     onChange={(e) => handleInputChange('personal', 'address', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -621,7 +637,7 @@ const ApplicationForm = () => {
                     id="city"
                     value={formData.personal.city}
                     onChange={(e) => handleInputChange('personal', 'city', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -633,7 +649,7 @@ const ApplicationForm = () => {
                     id="state"
                     value={formData.personal.state}
                     onChange={(e) => handleInputChange('personal', 'state', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -645,7 +661,7 @@ const ApplicationForm = () => {
                     id="zipCode"
                     value={formData.personal.zipCode}
                     onChange={(e) => handleInputChange('personal', 'zipCode', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -657,7 +673,7 @@ const ApplicationForm = () => {
                     id="country"
                     value={formData.personal.country}
                     onChange={(e) => handleInputChange('personal', 'country', e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -669,7 +685,7 @@ const ApplicationForm = () => {
                     value={formData.personal.coverLetter}
                     onChange={(e) => handleInputChange('personal', 'coverLetter', e.target.value)}
                     rows="5"
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="You can write a brief cover letter here"
                   ></textarea>
                 </div>
@@ -714,7 +730,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.institution}
                         onChange={(e) => handleArrayInputChange('education', index, 'institution', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
                     </div>
@@ -726,7 +742,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.degree}
                         onChange={(e) => handleArrayInputChange('education', index, 'degree', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
                     </div>
@@ -738,7 +754,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.fieldOfStudy}
                         onChange={(e) => handleArrayInputChange('education', index, 'fieldOfStudy', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
                     </div>
@@ -750,7 +766,7 @@ const ApplicationForm = () => {
                         type="date"
                         value={edu.startDate}
                         onChange={(e) => handleArrayInputChange('education', index, 'startDate', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -760,7 +776,7 @@ const ApplicationForm = () => {
                           id={`currentlyStudying-${index}`}
                           checked={edu.currentlyStudying}
                           onChange={(e) => handleArrayInputChange('education', index, 'currentlyStudying', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 text-dark-gray rounded"
                         />
                         <label htmlFor={`currentlyStudying-${index}`} className="ml-2 block text-sm text-gray-700">
                           Currently Studying
@@ -775,7 +791,7 @@ const ApplicationForm = () => {
                             type="date"
                             value={edu.endDate}
                             onChange={(e) => handleArrayInputChange('education', index, 'endDate', e.target.value)}
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required={!edu.currentlyStudying}
                           />
                         </div>
@@ -789,7 +805,7 @@ const ApplicationForm = () => {
                         value={edu.description}
                         onChange={(e) => handleArrayInputChange('education', index, 'description', e.target.value)}
                         rows="3"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Describe your studies, achievements, etc."
                       ></textarea>
                     </div>
@@ -835,7 +851,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.company}
                         onChange={(e) => handleArrayInputChange('experience', index, 'company', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
                     </div>
@@ -847,7 +863,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.position}
                         onChange={(e) => handleArrayInputChange('experience', index, 'position', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
                     </div>
@@ -859,7 +875,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.location}
                         onChange={(e) => handleArrayInputChange('experience', index, 'location', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -870,7 +886,7 @@ const ApplicationForm = () => {
                         type="date"
                         value={exp.startDate}
                         onChange={(e) => handleArrayInputChange('experience', index, 'startDate', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -880,7 +896,7 @@ const ApplicationForm = () => {
                           id={`currentlyWorking-${index}`}
                           checked={exp.currentlyWorking}
                           onChange={(e) => handleArrayInputChange('experience', index, 'currentlyWorking', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 text-dark-gray rounded"
                         />
                         <label htmlFor={`currentlyWorking-${index}`} className="ml-2 block text-sm text-gray-700">
                           Currently Working Here
@@ -895,7 +911,7 @@ const ApplicationForm = () => {
                             type="date"
                             value={exp.endDate}
                             onChange={(e) => handleArrayInputChange('experience', index, 'endDate', e.target.value)}
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required={!exp.currentlyWorking}
                           />
                         </div>
@@ -909,7 +925,7 @@ const ApplicationForm = () => {
                         value={exp.description}
                         onChange={(e) => handleArrayInputChange('experience', index, 'description', e.target.value)}
                         rows="3"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Describe your responsibilities, achievements, etc."
                       ></textarea>
                     </div>
@@ -945,7 +961,7 @@ const ApplicationForm = () => {
                           type="text"
                           value={skill}
                           onChange={(e) => handleSkillChange(index, e.target.value)}
-                          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="e.g., JavaScript, Project Management, etc."
                         />
                         {formData.skills.skillList.length > 1 && (
@@ -969,7 +985,7 @@ const ApplicationForm = () => {
                         <select
                           value={formData.skills.proficiencyLevels[skill] || 'Intermediate'}
                           onChange={(e) => handleProficiencyChange(skill, e.target.value)}
-                          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="Beginner">Beginner</option>
                           <option value="Intermediate">Intermediate</option>
@@ -997,7 +1013,7 @@ const ApplicationForm = () => {
             type="url"
             value={formData.links.linkedin}
             onChange={(e) => handleInputChange('links', 'linkedin', e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://www.linkedin.com/in/your-profile"
           />
         </div>
@@ -1010,7 +1026,7 @@ const ApplicationForm = () => {
             type="url"
             value={formData.links.portfolio}
             onChange={(e) => handleInputChange('links', 'portfolio', e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://www.yourportfolio.com"
           />
         </div>
@@ -1023,7 +1039,7 @@ const ApplicationForm = () => {
             type="url"
             value={formData.links.github}
             onChange={(e) => handleInputChange('links', 'github', e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://github.com/yourusername"
           />
         </div>
@@ -1036,7 +1052,7 @@ const ApplicationForm = () => {
             type="url"
             value={formData.links.other}
             onChange={(e) => handleInputChange('links', 'other', e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://www.otherlink.com"
           />
         </div>
@@ -1051,7 +1067,7 @@ const ApplicationForm = () => {
                 type="button"
                 onClick={saveDraft}
                 disabled={saving}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 {saving ? (
                   <>
@@ -1075,7 +1091,7 @@ const ApplicationForm = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Cancel
               </button>

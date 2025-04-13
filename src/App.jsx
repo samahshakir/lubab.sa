@@ -14,6 +14,7 @@ import ArticlePage from './pages/ArticlePage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import AuthPage from './pages/AuthPage';
 import ApplicationForm from './pages/ApplicationForm';
+import JobApplicationSuccess from './components/JobApplicationSuccess';
 
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
             <Route path='/auth' element={<AuthPage/>}/>
             <Route path='/applications' element={<ApplicationsPage/>}/>
             <Route path="/apply/:jobIdOrSlug" element={<ApplicationForm />} />
+            <Route path="/applications/success" element={<JobApplicationSuccess/>} />
+
 
 
           </Routes>
