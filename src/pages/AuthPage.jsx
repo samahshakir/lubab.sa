@@ -85,7 +85,7 @@ const AuthPage = () => {
           <button
             className={`flex-1 py-3 rounded-lg font-medium text-gray-700 transition mr-4 ${
               activeTab === 'login'
-                ? 'bg-white shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
+                ? 'bg-white shadow-[inset_2px_2px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
                 : 'bg-gray-100 shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
             }`}
             onClick={() => setActiveTab('login')}
@@ -95,7 +95,7 @@ const AuthPage = () => {
           <button
             className={`flex-1 py-3 rounded-lg font-medium text-gray-700 transition ${
               activeTab === 'signup'
-                ? 'bg-white shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
+                ? 'bg-white shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
                 : 'bg-gray-100 shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
             }`}
             onClick={() => setActiveTab('signup')}
@@ -127,7 +127,7 @@ const AuthPage = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your username"
                 required
               />
@@ -141,20 +141,22 @@ const AuthPage = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
                 required
               />
             </div>
+            <div className="flex justify-center items-center">
             <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full text-primary-green hover:text-secondary-blue font-medium py-3 px-6 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+                className="w-[30%] text-primary-green hover:text-secondary-blue font-medium py-2 px-4 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_2px_2px_8px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
               >
                 <span className='bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent'>
                   {isLoading ? 'Logging in...' : 'Login'}
                 </span>
               </button>
+          </div>
           </form>
         ) : (
           <form onSubmit={handleSignup}>
@@ -167,7 +169,7 @@ const AuthPage = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Choose a username"
                 required
               />
@@ -181,7 +183,7 @@ const AuthPage = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email"
                 required
               />
@@ -195,28 +197,34 @@ const AuthPage = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_5px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
                 required
               />
             </div>
+            <div className="flex justify-center items-center">
             <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full text-primary-green hover:text-secondary-blue font-medium py-3 px-6 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+                className="w-[30%] text-primary-green hover:text-secondary-blue font-medium py-2 px-4 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_2px_2px_8px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
               >
                 <span className='bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent'>
                   {isLoading ? 'Signing up...' : 'Sign up'}
                 </span>
               </button>
+              </div>
           </form>
         )}
         
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             {activeTab === 'login' 
-              ? "Don't have an account? Switch to Sign Up." 
+              ? <a href='/' className='hover:text-secondary-blue'>Forgot password ?</a> 
               : "Already have an account? Switch to Login."}
+          </p>
+          <p className="text-gray-600">
+            {activeTab === 'login' 
+              ? "Don't have an account? Switch to Sign Up." : ""}
           </p>
         </div>
       </div>

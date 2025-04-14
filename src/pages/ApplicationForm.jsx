@@ -15,7 +15,6 @@ const ApplicationForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [formCompleted, setFormCompleted] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
-  const [userData, setUserData] = useState(null);
   const darkMode  = useDarkMode();
   
   // Form data state
@@ -83,39 +82,15 @@ const ApplicationForm = () => {
   
   const jobSlug = sessionStorage.getItem("jobSlug");
 
-  // Check if the user is authenticated on component mount
   useEffect(() => {
-    // const fetchUserData = async () => {
-    //   try {
-    //     const response = await axios.get('/api/user/profile');
-    //     setUserData(response.data);
-        
-    //     // Pre-fill personal information from user profile
-    //     setFormData(prev => ({
-    //       ...prev,
-    //       personal: {
-    //         ...prev.personal,
-    //         firstName: response.data.firstName || '',
-    //         lastName: response.data.lastName || '',
-    //         email: response.data.email || '',
-    //         phone: response.data.phone || '',
-    //         address: response.data.address || '',
-    //         city: response.data.city || '',
-    //         state: response.data.state || '',
-    //         zipCode: response.data.zipCode || '',
-    //         country: response.data.country || ''
-    //       }
-    //     }));
-    //   } catch (error) {
-    //     console.error('Error fetching user data:', error);
-    //   }
-    // };
+
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
 
     const loadApplicationData = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?.id;
+      console.log(userId)
     
       if (!userId) {
         console.error("User ID not found");
@@ -123,23 +98,13 @@ const ApplicationForm = () => {
       }
     
       try {
-        const response = await fetch(`http://localhost:5000/api/applications/${userId}`);
-        if (response.ok) {
-          const data = await response.json();
-    
-          // Flatten structure if needed before setting formData
-          setFormData({
-            userId: data.userId,
-            jobSlug: data.jobSlug,
-            status: data.status,
-            personal: data.personal || {},
-            education: data.education || [],
-            experience: data.experience || [],
-            skills: data.skills || { skillList: [], proficiencyLevels: {} },
-            links: data.links || {},
-          });
-    
-        } else if (response.status === 404) {
+        const response = await axios.post("http://localhost:5000/api/applications/userId", {
+          userId,
+        });
+        console.log(response)
+        if (response.status === 200) {
+          setFormData(response.data); 
+        }else if (response.status === 404) {
           console.log("No application found for this user.");
         } else {
           console.error("Failed to fetch application:", response.statusText);
@@ -195,6 +160,9 @@ const ApplicationForm = () => {
       if (response.status === 200) {
         setFormData(response.data.application); 
       }
+      else if(response.status === 201){
+        await loadApplicationData();
+      }
     } catch (error) {
       console.error("There was an error!", error);
     }
@@ -202,7 +170,6 @@ const ApplicationForm = () => {
     
     // fetchUserData();
     fetchJobDetails();
-    loadApplicationData();
     fetchDraftApplication();
   }, [jobSlug]);
 
@@ -265,6 +232,23 @@ const ApplicationForm = () => {
       }
     }));
   };
+
+  // Define the tab order
+    const tabOrder = ['personal', 'education', 'experience', 'skills', 'links'];
+
+    // Get current tab index
+    const currentTabIndex = tabOrder.indexOf(activeTab);
+
+    // Determine if current tab is the last one
+    const isLastTab = currentTabIndex === tabOrder.length - 1;
+
+    const isFirstTab = currentTabIndex === 0;
+
+    // Determine the next tab
+    const nextTab = isLastTab ? activeTab : tabOrder[currentTabIndex + 1];
+
+    const previousTab = isFirstTab ? activeTab : tabOrder[currentTabIndex - 1];
+
 
   const handleArrayInputChange = (section, index, field, value) => {
     setFormData(prev => {
@@ -474,24 +458,24 @@ const ApplicationForm = () => {
       setSubmitting(false);
     }
   };
-  
-//   if (loading) {
-//     return (
-//         <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
-//         <div className="text-center">
-//           <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin"
-//                style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
-//           <h2 className={`text-xl font-bold ${darkMode ? 'text-[#101828]' : 'text-white'}`}>Loading Content</h2>
-//         </div>
-//       </div>
-//     );
-//   }
+
+  if (loading) {
+    return (
+        <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin"
+               style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
+          <h2 className={`text-xl font-bold ${darkMode ? 'text-[#101828]' : 'text-white'}`}>Loading Content</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 font-nizar">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Job Header */}
-        <div className="bg-secondary-blue p-6 text-white">
+        <div className="bg-secondary-blue p-6 text-light-gray">
           <h1 className="text-2xl font-bold">{jobDetails?.titleEn || 'Job Application'}</h1>
           <p className="text-blue-100">{jobDetails?.jobType} • {jobDetails?.location}</p>
         </div>
@@ -562,7 +546,7 @@ const ApplicationForm = () => {
           {/* Personal Information Tab */}
           {activeTab === 'personal' && (
             <div>
-              <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+              <h2 className="text-xl font-semibold mb-4 text-dark-gray">Personal Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -697,7 +681,7 @@ const ApplicationForm = () => {
           {activeTab === 'education' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Education</h2>
+                <h2 className="text-xl font-semibold text-dark-gray">Education</h2>
                 <button
                   type="button"
                   onClick={addEducation}
@@ -819,7 +803,7 @@ const ApplicationForm = () => {
           {activeTab === 'experience' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Work Experience</h2>
+                <h2 className="text-xl font-semibold text-dark-gray">Work Experience</h2>
                 <button
                   type="button"
                   onClick={addExperience}
@@ -939,7 +923,7 @@ const ApplicationForm = () => {
           {activeTab === 'skills' && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Skills</h2>
+                <h2 className="text-xl font-semibold text-dark-gray">Skills</h2>
                 <button
                   type="button"
                   onClick={addSkill}
@@ -1003,7 +987,7 @@ const ApplicationForm = () => {
             {/* Links Tab */}
   {activeTab === 'links' && (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Links</h2>
+      <h2 className="text-xl font-semibold mb-4 text-dark-gray">Links</h2>
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1062,63 +1046,76 @@ const ApplicationForm = () => {
 
           {/* Form Controls */}
           <div className="mt-8 flex justify-between border-t pt-6">
-            <div>
-              <button
-                type="button"
-                onClick={saveDraft}
-                disabled={saving}
-                className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                {saving ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Saving...
-                  </>
-                ) : (
-                  'Save Draft'
-                )}
-              </button>
-              {draftSaved && (
-                <span className="ml-3 text-sm text-green-600">
-                  Draft saved successfully!
-                </span>
-              )}
-            </div>
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-                className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={submitApplication}
-                disabled={submitting || !formCompleted}
-                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                  formCompleted 
-                    ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500' 
-                    : 'bg-green-300 cursor-not-allowed'
-                }`}
-              >
-                {submitting ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Submitting...
-                  </>
-                ) : (
-                  'Submit Application'
-                )}
-              </button>
-            </div>
-          </div>
+  <div>
+    <button
+      type="button"
+      onClick={saveDraft}
+      disabled={saving}
+      className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      {saving ? (
+        <>
+          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Saving...
+        </>
+      ) : (
+        'Save Draft'
+      )}
+    </button>
+    {draftSaved && (
+      <span className="ml-3 text-sm text-green-600">
+        Draft saved successfully!
+      </span>
+    )}
+  </div>
+  <div className="flex gap-4">
+    { !isFirstTab && (
+    <button
+      type="button"
+      onClick={() => setActiveTab(previousTab)}
+      className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      Back
+    </button>)
+}
+    
+    {isLastTab ? (
+      <button
+        type="button"
+        onClick={submitApplication}
+        disabled={submitting || !formCompleted}
+        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
+          formCompleted 
+            ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500' 
+            : 'bg-green-300 cursor-not-allowed'
+        }`}
+      >
+        {submitting ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Submitting...
+          </>
+        ) : (
+          'Submit Application'
+        )}
+      </button>
+    ) : (
+      <button 
+        type="button"
+        onClick={() => setActiveTab(nextTab)}
+        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Next
+      </button>
+    )}
+  </div>
+</div>
         </div>
       </div>
     </div>

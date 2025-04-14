@@ -19,3 +19,7 @@ Element Color Example
 Background #101828 (Dark Blue-Gray), #0F172A (Deep Navy), #1E1E1E (Charcoal Black)
 Text #F1F5F9 (Soft White), #E2E8F0 (Light Gray), #FFFFFF (Pure White)
 Accent #00BC78 (Vibrant Green), #EAB308 (Gold), #3B82F6 (Bright Blue)
+
+2. Change the about us part user interface 
+3. Make the current login page inputs and buttons smaller
+4. BlogPost to sanity is left 

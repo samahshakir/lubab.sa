@@ -69,6 +69,10 @@ const Careers = () => {
         setOpenPositions(jobsData || []);
         setWhyJoin(whyJoinData || []);
 
+        if(!verifyToken()){
+          logout();
+        }
+
       } catch (err) {
         console.error("Error fetching careers data:", err);
         setError("Failed to load career information. Please try again later.");
@@ -128,7 +132,7 @@ const Careers = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/'); // Redirect to home or login page after logout
+    navigate('/career'); // Redirect to home or login page after logout
   }
 
   const LoadingScreen = () => (
@@ -162,9 +166,13 @@ const Careers = () => {
               </button>
             </>
           ) : (
-            <Link to="/auth" title="Login / Sign Up">
-              <img src="./src/assets/user.png" alt="Login/Sign Up" className="h-6 w-auto" />
+
+            <Link to="/auth"  className='flex justify-center items-center gap-2 bg-secondary-blue rounded-2xl px-2 py-2' title="Login / Sign Up">
+            <p className='text-[15px] text-white hover:text-dark-gray'>Log in</p>
+              {/* <img src="./src/assets/user.png" alt="Login/Sign Up" className="h-6 w-auto" /> */}
             </Link>
+
+            
           )}
         </div>
 

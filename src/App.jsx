@@ -11,10 +11,14 @@ import Team from './pages/Team';
 import FAQ from './pages/FAQ';
 import BlogNews from './pages/BlogNews';
 import ArticlePage from './pages/ArticlePage';
-import ApplicationsPage from './pages/ApplicationsPage';
+// import ApplicationsPage from './pages/ApplicationsPage';
 import AuthPage from './pages/AuthPage';
 import ApplicationForm from './pages/ApplicationForm';
 import JobApplicationSuccess from './components/JobApplicationSuccess';
+import ApplicationsList from './components/ApplicationList';
+import ApplicationDetail from './components/ApplicationDetail';
+import ProtectedRoute from './components/protectedRoute';
+import AdminRoute from './components/adminRoute';
 
 
 function App() {
@@ -32,12 +36,12 @@ function App() {
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
             <Route path='/auth' element={<AuthPage/>}/>
-            <Route path='/applications' element={<ApplicationsPage/>}/>
-            <Route path="/apply/:jobIdOrSlug" element={<ApplicationForm />} />
+            {/* <Route path='/applications' element={<ApplicationsPage/>}/> */}
+            <Route path="/applications" element={ <AdminRoute>
+              <ApplicationsList /> </AdminRoute>} />
+            <Route path="/application/:slug" element={<ProtectedRoute><ApplicationDetail /> </ProtectedRoute>} />
+            <Route path="/apply/:jobIdOrSlug" element={<ProtectedRoute><ApplicationForm /> </ProtectedRoute>} />
             <Route path="/applications/success" element={<JobApplicationSuccess/>} />
-
-
-
           </Routes>
         </Router>
       </LanguageProvider>

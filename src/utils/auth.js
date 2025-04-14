@@ -28,7 +28,6 @@ export const verifyToken = async () => {
     const response = await authAxios().get("/auth/verify");
     return response.data.user;
   } catch (error) {
-    // Token is invalid or expired
     logout();
     return null;
   }
@@ -38,5 +37,5 @@ export const verifyToken = async () => {
 export const logout = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("user");
-  window.location.href = "/auth"; // Redirect to login page
+  // window.location.href = "/career";
 };

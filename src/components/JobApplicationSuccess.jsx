@@ -33,7 +33,7 @@ export default function JobApplicationSuccess() {
             <p>A confirmation email has been sent to your registered email address.</p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <div className="flex justify-center sm:flex-row gap-4 w-full ">
             <button 
               className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-md font-medium transition-colors duration-300"
               onClick={() => window.location.href = '/'}
@@ -41,18 +41,12 @@ export default function JobApplicationSuccess() {
               Back to Home
             </button>
             
-            <button 
-              className="border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-6 rounded-md font-medium transition-colors duration-300"
-              onClick={() => window.location.href = '/dashboard'}
-            >
-              View Applications
-            </button>
           </div>
         </div>
       </div>
       
       <div className="mt-8 text-gray-500 text-center text-sm">
-        <p>Need help? Contact our support team at <span className="text-indigo-600">support@company.com</span></p>
+        <p>Need help? Contact our support team at <span className="text-indigo-600">info@lubab.sa</span></p>
       </div>
     </div>
   );

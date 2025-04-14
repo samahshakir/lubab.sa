@@ -20,13 +20,9 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-// app.use(formidable());
 
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
@@ -103,7 +99,7 @@ const authMiddleware = async (req, res, next) => {
 
       await new User({
         username: process.env.DEFAULT_ADMIN_USERNAME,
-        email: "admin@example.com", // Default email for admin
+        email: "info@lubab.sa", // Default email for admin
         password: hashedPassword,
         isAdmin: true,
       }).save();
@@ -200,33 +196,48 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
-app.post("/api/job-application", async (req, res) => {
+app.get("/api/user/:id/is-admin", async (req, res) => {
   try {
-    const { userId, formData } = req.body;
+    const user = await User.findById(req.params.id).select("isAdmin");
 
-    const newApplication = new JobApplication({
-      userId,
-      ...formData,
-    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    await newApplication.save();
-    res.status(201).json({ message: "Application saved successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error saving application" });
+    res.json({ isAdmin: user.isAdmin });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// Endpoint to get all applications - now uses adminMiddleware
-app.get("/applications", authMiddleware, async (req, res) => {
+//admin only route
+app.get('/api/applications', async (req, res) => {
   try {
-    const applications = await Application.find();
-    res.status(200).json(applications);
-  } catch (err) {
-    console.error("Error fetching applications:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch applications", error: err.message });
+    const applications = await JobApplication.find({})
+      .select('personal.firstName personal.lastName skills status createdAt jobSlug userId')
+      .sort({ createdAt: -1 });
+    
+    res.json(applications);
+  } catch (error) {
+    console.error('Error fetching applications:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get application by slug
+app.get('/api/applications/:slug', async (req, res) => {
+  try {
+    const application = await JobApplication.findOne({ jobSlug: req.params.slug });
+    
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
+    
+    res.json(application);
+  } catch (error) {
+    console.error(`Error fetching application with slug ${req.params.slug}:`, error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -246,31 +257,15 @@ app.get("/api/username/by-id/:userId", async (req, res) => {
   }
 });
 
-// app.get("/by-user/:userId", async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-//     const application = await JobApplication.findOne({ userId });
-
-//     if (!application) {
-//       return res
-//         .status(404)
-//         .json({ message: "No application found for this user." });
-//     }
-
-//     res.status(200).json(application);
-//   } catch (err) {
-//     console.error("Error fetching application by userId:", err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
-
-app.get("/api/applications/:userId", async (req, res) => {
-  const { userId } = req.params;
+app.post("/api/applications/userId", async (req, res) => {
+  const { userId } = req.body;
 
   try {
-    const application = await JobApplication.findOne({ userId });
+    const objectId = new mongoose.Types.ObjectId(userId); // Convert to ObjectId
+    const application = await JobApplication.findOne({ userId: objectId });
 
     if (!application) {
+      console.log("not found")
       return res.status(404).json({ message: "No application found for this user" });
     }
 
@@ -280,7 +275,6 @@ app.get("/api/applications/:userId", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 
 app.post("/api/check-drafts", async (req, res) => {
@@ -302,7 +296,7 @@ app.post("/api/check-drafts", async (req, res) => {
       });
     } else {
       // If no draft application is found
-      return res.status(404).json({ message: "No draft application found" });
+      return res.status(201).json({ message: "No draft application found" });
     }
   } catch (err) {
     console.error(err);
@@ -377,15 +371,16 @@ app.post("/api/applications/draft", async (req, res) => {
 });
 
 // Fetch a previous application
-app.get("/api/applications/:userId", async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const application = await JobApplication.findOne({ userId });
-    res.json(application);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// app.get("/api/applications/:userId", async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     console.log(userId)
+//     const application = await JobApplication.findOne({ userId });
+//     res.json(application);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 app.post("/api/applications/submit", async (req, res) => {
   try {
@@ -451,8 +446,6 @@ app.get("/auth/verify", authMiddleware, (req, res) => {
 
 app.post("/send-message", async (req, res) => {
   const { name, email, phone, subject, message } = req.body;
-  console.log(req.body);
-
   // Create the email content
   const mailOptions = {
     from: "samah-s@lubab.sa", // Your Zoho email
