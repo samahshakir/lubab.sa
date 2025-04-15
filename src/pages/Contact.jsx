@@ -158,7 +158,7 @@ const Contact = () => {
               ${
                 darkMode
                   ? "bg-gray-100 shadow-lg"
-                  : "bg-[#30413c] dark:shadow-[3px_3px_6px_#16181c,-3px_-3px_6px_#2a2e34]"
+                  : "bg-white/10 backdrop-blur-md shadow xl"
               }`}
               dir={isArabic ? "rtl" : "ltr"}
             >
@@ -174,7 +174,7 @@ const Contact = () => {
                   </label>
                   <div
                     className={`relative ${
-                      darkMode ? "bg-gray-100" : "bg-dark-mode"
+                      darkMode ? "bg-gray-100" : "bg-white/5"
                     } rounded-lg p-1`}
                   >
                     <input
@@ -188,7 +188,7 @@ const Contact = () => {
                       ${
                         darkMode
                           ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                          : "bg-dark-mode text-gray-200 shadow-[inset_3px_3px_6px_#1a1b1c,inset_-3px_-3px_6px_#38393c]"
+                          : "bg-dark-mode text-gray-200"
                       }
                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                       placeholder={content[language].formLabels.name}
@@ -205,7 +205,7 @@ const Contact = () => {
                   </label>
                   <div
                     className={`relative ${
-                      darkMode ? "bg-gray-100" : "bg-dark-mode"
+                      darkMode ? "bg-gray-100" : "bg-white/5"
                     } rounded-lg p-1`}
                   >
                     <input
@@ -219,7 +219,7 @@ const Contact = () => {
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                            : "bg-dark-mode text-gray-200 shadow-[inset_3px_3px_6px_#1a1b1c,inset_-3px_-3px_6px_#38393c]"
+                            : "bg-dark-mode text-gray-200"
                         }
                         focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                       placeholder="your@email.com"
@@ -238,7 +238,7 @@ const Contact = () => {
                 </label>
                 <div
                   className={`relative ${
-                    darkMode ? "bg-gray-100" : "bg-dark-mode"
+                    darkMode ? "bg-gray-100" : "bg-white/10"
                   } rounded-lg p-1`}
                 >
                   <input
@@ -252,7 +252,7 @@ const Contact = () => {
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                            : "bg-dark-mode text-gray-200 shadow-[inset_3px_3px_6px_#1a1b1c,inset_-3px_-3px_6px_#38393c]"
+                            : "bg-dark-mode text-gray-200"
                         }
                         focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder="+9664567890"
@@ -270,7 +270,7 @@ const Contact = () => {
                 </label>
                 <div
                   className={`relative ${
-                    darkMode ? "bg-gray-100" : "bg-dark-mode"
+                    darkMode ? "bg-gray-100" : "bg-white/10"
                   } rounded-lg p-1`}
                 >
                   <input
@@ -284,7 +284,7 @@ const Contact = () => {
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                            : "bg-dark-mode text-gray-200 shadow-[inset_3px_3px_6px_#1a1b1c,inset_-3px_-3px_6px_#38393c]"
+                            : "bg-dark-mode text-gray-200"
                         }
                         focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder={
@@ -318,7 +318,7 @@ const Contact = () => {
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                            : "bg-dark-mode text-gray-200 shadow-[inset_3px_3px_6px_#1a1b1c,inset_-3px_-3px_6px_#38393c]"
+                            : "bg-dark-mode text-gray-200"
                         }
                         focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     placeholder={
@@ -339,7 +339,7 @@ const Contact = () => {
               type="submit"
               className={`w-full font-medium py-3 px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
                 !darkMode 
-                  ? "bg-dark-mode shadow-[5px_5px_10px_#1a1a1a,_-5px_-5px_10px_#3a3a3a] hover:shadow-[inset_5px_5px_10px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]" 
+                  ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]" 
                   : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
               }`}
               disabled={loading}
@@ -355,7 +355,7 @@ const Contact = () => {
           <div className={`max-w-2xl ${isArabic ? "mr-1" : "ml-1"} mt-8`}>
             <div
               className={`p-6 rounded-xl ${
-                darkMode ? "bg-gray-100" : "bg-dark-gray"
+                darkMode ? "bg-gray-100" : "bg-white/10"
               }`}
             >
               <p

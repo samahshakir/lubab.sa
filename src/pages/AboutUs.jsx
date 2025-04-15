@@ -130,7 +130,7 @@ const AboutUs = () => {
               className={`relative backdrop-blur-sm rounded-lg overflow-hidden group transition-all duration-500 ease-in-out`}
             >
               {/* Card background with gradient overlay */}
-              <div className="absolute inset-0 bg-white opacity-50"></div>
+              <div className="absolute inset-0 bg-white opacity-1 0"></div>
               <div className="absolute inset-0 border border-gray-700 rounded-lg group-hover:border-primary-green transition-colors duration-300"></div>
               
               {/* Accent corner */}

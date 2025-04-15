@@ -475,13 +475,13 @@ const ApplicationForm = () => {
     <div className="max-w-6xl mx-auto px-4 py-8 font-nizar">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Job Header */}
-        <div className="bg-secondary-blue p-6 text-light-gray">
-          <h1 className="text-2xl font-bold">{jobDetails?.titleEn || 'Job Application'}</h1>
-          <p className="text-blue-100">{jobDetails?.jobType} • {jobDetails?.location}</p>
+        <div className="bg-gray-100 shadow-lg p-6">
+          <h1 className="text-2xl"><span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{jobDetails?.titleEn || 'Job Application'}</span></h1>
+          <p><span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{jobDetails?.jobType} • {jobDetails?.location}</span></p>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-100">
           <nav className="flex overflow-x-auto">
             <button
               onClick={() => setActiveTab('personal')}
@@ -542,7 +542,7 @@ const ApplicationForm = () => {
         </div>
 
         {/* Form Content */}
-        <div className="p-6">
+        <div className="p-6 bg-gray-100 shadow-lg">
           {/* Personal Information Tab */}
           {activeTab === 'personal' && (
             <div>
@@ -557,7 +557,7 @@ const ApplicationForm = () => {
                     id="firstName"
                     value={formData.personal.firstName}
                     onChange={(e) => handleInputChange('personal', 'firstName', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     required
                   />
                 </div>
@@ -570,7 +570,7 @@ const ApplicationForm = () => {
                     id="lastName"
                     value={formData.personal.lastName}
                     onChange={(e) => handleInputChange('personal', 'lastName', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     required
                   />
                 </div>
@@ -583,7 +583,7 @@ const ApplicationForm = () => {
                     id="email"
                     value={formData.personal.email}
                     onChange={(e) => handleInputChange('personal', 'email', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     required
                   />
                 </div>
@@ -596,7 +596,7 @@ const ApplicationForm = () => {
                     id="phone"
                     value={formData.personal.phone}
                     onChange={(e) => handleInputChange('personal', 'phone', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     required
                   />
                 </div>
@@ -609,7 +609,7 @@ const ApplicationForm = () => {
                     id="address"
                     value={formData.personal.address}
                     onChange={(e) => handleInputChange('personal', 'address', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   />
                 </div>
                 <div>
@@ -621,7 +621,7 @@ const ApplicationForm = () => {
                     id="city"
                     value={formData.personal.city}
                     onChange={(e) => handleInputChange('personal', 'city', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   />
                 </div>
                 <div>
@@ -633,7 +633,7 @@ const ApplicationForm = () => {
                     id="state"
                     value={formData.personal.state}
                     onChange={(e) => handleInputChange('personal', 'state', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   />
                 </div>
                 <div>
@@ -645,7 +645,7 @@ const ApplicationForm = () => {
                     id="zipCode"
                     value={formData.personal.zipCode}
                     onChange={(e) => handleInputChange('personal', 'zipCode', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   />
                 </div>
                 <div>
@@ -657,7 +657,7 @@ const ApplicationForm = () => {
                     id="country"
                     value={formData.personal.country}
                     onChange={(e) => handleInputChange('personal', 'country', e.target.value)}
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -669,7 +669,7 @@ const ApplicationForm = () => {
                     value={formData.personal.coverLetter}
                     onChange={(e) => handleInputChange('personal', 'coverLetter', e.target.value)}
                     rows="5"
-                    className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                     placeholder="You can write a brief cover letter here"
                   ></textarea>
                 </div>
@@ -694,7 +694,7 @@ const ApplicationForm = () => {
               {formData.education.map((edu, index) => (
                 <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <div className="flex justify-between">
-                    <h3 className="text-lg font-medium mb-3">Education #{index + 1}</h3>
+                    <h3 className="text-lg font-medium mb-3 text-secondary-dark-gray">Education #{index + 1}</h3>
                     {formData.education.length > 1 && (
                       <button
                         type="button"
@@ -714,7 +714,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.institution}
                         onChange={(e) => handleArrayInputChange('education', index, 'institution', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         required
                       />
                     </div>
@@ -726,7 +726,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.degree}
                         onChange={(e) => handleArrayInputChange('education', index, 'degree', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         required
                       />
                     </div>
@@ -738,7 +738,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={edu.fieldOfStudy}
                         onChange={(e) => handleArrayInputChange('education', index, 'fieldOfStudy', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         required
                       />
                     </div>
@@ -750,7 +750,7 @@ const ApplicationForm = () => {
                         type="date"
                         value={edu.startDate}
                         onChange={(e) => handleArrayInputChange('education', index, 'startDate', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                       />
                     </div>
                     <div>
@@ -775,7 +775,7 @@ const ApplicationForm = () => {
                             type="date"
                             value={edu.endDate}
                             onChange={(e) => handleArrayInputChange('education', index, 'endDate', e.target.value)}
-                            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                             required={!edu.currentlyStudying}
                           />
                         </div>
@@ -789,7 +789,7 @@ const ApplicationForm = () => {
                         value={edu.description}
                         onChange={(e) => handleArrayInputChange('education', index, 'description', e.target.value)}
                         rows="3"
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         placeholder="Describe your studies, achievements, etc."
                       ></textarea>
                     </div>
@@ -816,7 +816,7 @@ const ApplicationForm = () => {
               {formData.experience.map((exp, index) => (
                 <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <div className="flex justify-between">
-                    <h3 className="text-lg font-medium mb-3">Experience #{index + 1}</h3>
+                    <h3 className="text-secondary-dark-gray text-lg font-medium mb-3">Experience #{index + 1}</h3>
                     {formData.experience.length > 1 && (<button
                         type="button"
                         onClick={() => removeExperience(index)}
@@ -835,7 +835,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.company}
                         onChange={(e) => handleArrayInputChange('experience', index, 'company', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         required
                       />
                     </div>
@@ -847,7 +847,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.position}
                         onChange={(e) => handleArrayInputChange('experience', index, 'position', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         required
                       />
                     </div>
@@ -859,7 +859,7 @@ const ApplicationForm = () => {
                         type="text"
                         value={exp.location}
                         onChange={(e) => handleArrayInputChange('experience', index, 'location', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                       />
                     </div>
                     <div>
@@ -870,7 +870,7 @@ const ApplicationForm = () => {
                         type="date"
                         value={exp.startDate}
                         onChange={(e) => handleArrayInputChange('experience', index, 'startDate', e.target.value)}
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                       />
                     </div>
                     <div>
@@ -895,7 +895,7 @@ const ApplicationForm = () => {
                             type="date"
                             value={exp.endDate}
                             onChange={(e) => handleArrayInputChange('experience', index, 'endDate', e.target.value)}
-                            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                             required={!exp.currentlyWorking}
                           />
                         </div>
@@ -909,7 +909,7 @@ const ApplicationForm = () => {
                         value={exp.description}
                         onChange={(e) => handleArrayInputChange('experience', index, 'description', e.target.value)}
                         rows="3"
-                        className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         placeholder="Describe your responsibilities, achievements, etc."
                       ></textarea>
                     </div>
@@ -945,7 +945,7 @@ const ApplicationForm = () => {
                           type="text"
                           value={skill}
                           onChange={(e) => handleSkillChange(index, e.target.value)}
-                          className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                           placeholder="e.g., JavaScript, Project Management, etc."
                         />
                         {formData.skills.skillList.length > 1 && (
@@ -969,7 +969,7 @@ const ApplicationForm = () => {
                         <select
                           value={formData.skills.proficiencyLevels[skill] || 'Intermediate'}
                           onChange={(e) => handleProficiencyChange(skill, e.target.value)}
-                          className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                         >
                           <option value="Beginner">Beginner</option>
                           <option value="Intermediate">Intermediate</option>
@@ -985,137 +985,137 @@ const ApplicationForm = () => {
           )}
 
             {/* Links Tab */}
-  {activeTab === 'links' && (
-    <div>
-      <h2 className="text-xl font-semibold mb-4 text-dark-gray">Links</h2>
-      <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            LinkedIn Profile
-          </label>
-          <input
-            type="url"
-            value={formData.links.linkedin}
-            onChange={(e) => handleInputChange('links', 'linkedin', e.target.value)}
-            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://www.linkedin.com/in/your-profile"
-          />
-        </div>
+        {activeTab === 'links' && (
+          <div>
+            <h2 className="text-xl font-semibold mb-4 text-dark-gray">Links</h2>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  LinkedIn Profile
+                </label>
+                <input
+                  type="url"
+                  value={formData.links.linkedin}
+                  onChange={(e) => handleInputChange('links', 'linkedin', e.target.value)}
+                  className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  placeholder="https://www.linkedin.com/in/your-profile"
+                />
+              </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Portfolio
-          </label>
-          <input
-            type="url"
-            value={formData.links.portfolio}
-            onChange={(e) => handleInputChange('links', 'portfolio', e.target.value)}
-            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://www.yourportfolio.com"
-          />
-        </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Portfolio
+                </label>
+                <input
+                  type="url"
+                  value={formData.links.portfolio}
+                  onChange={(e) => handleInputChange('links', 'portfolio', e.target.value)}
+                  className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  placeholder="https://www.yourportfolio.com"
+                />
+              </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            GitHub Profile
-          </label>
-          <input
-            type="url"
-            value={formData.links.github}
-            onChange={(e) => handleInputChange('links', 'github', e.target.value)}
-            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://github.com/yourusername"
-          />
-        </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  GitHub Profile
+                </label>
+                <input
+                  type="url"
+                  value={formData.links.github}
+                  onChange={(e) => handleInputChange('links', 'github', e.target.value)}
+                  className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  placeholder="https://github.com/yourusername"
+                />
+              </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Other
-          </label>
-          <input
-            type="url"
-            value={formData.links.other}
-            onChange={(e) => handleInputChange('links', 'other', e.target.value)}
-            className="w-full rounded-md border text-dark-gray px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://www.otherlink.com"
-          />
-        </div>
-      </div>
-    </div>
-  )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Other
+                </label>
+                <input
+                  type="url"
+                  value={formData.links.other}
+                  onChange={(e) => handleInputChange('links', 'other', e.target.value)}
+                  className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                  placeholder="https://www.otherlink.com"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
           {/* Form Controls */}
           <div className="mt-8 flex justify-between border-t pt-6">
-  <div>
-    <button
-      type="button"
-      onClick={saveDraft}
-      disabled={saving}
-      className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      {saving ? (
-        <>
-          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          Saving...
-        </>
-      ) : (
-        'Save Draft'
-      )}
-    </button>
-    {draftSaved && (
-      <span className="ml-3 text-sm text-green-600">
-        Draft saved successfully!
-      </span>
-    )}
-  </div>
-  <div className="flex gap-4">
-    { !isFirstTab && (
-    <button
-      type="button"
-      onClick={() => setActiveTab(previousTab)}
-      className="inline-flex items-center px-4 py-2 border text-dark-gray shadow-sm text-sm font-medium rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      Back
-    </button>)
-}
-    
-    {isLastTab ? (
-      <button
-        type="button"
-        onClick={submitApplication}
-        disabled={submitting || !formCompleted}
-        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-          formCompleted 
-            ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500' 
-            : 'bg-green-300 cursor-not-allowed'
-        }`}
-      >
-        {submitting ? (
-          <>
-            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Submitting...
-          </>
-        ) : (
-          'Submit Application'
-        )}
-      </button>
-    ) : (
-      <button 
-        type="button"
-        onClick={() => setActiveTab(nextTab)}
-        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        Next
-      </button>
-    )}
-  </div>
-</div>
+            <div>
+              <button
+                type="button"
+                onClick={saveDraft}
+                disabled={saving}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
+              >
+                {saving ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">Save Draft</span>
+                )}
+              </button>
+              {draftSaved && (
+                <span className="ml-3 text-sm text-primary-green">
+                  Draft saved successfully!
+                </span>
+              )}
+            </div>
+            <div className="flex gap-4">
+              { !isFirstTab && (
+              <button
+                type="button"
+                onClick={() => setActiveTab(previousTab)}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
+              >
+                <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">Back</span>
+              </button>)
+              }
+              
+              {isLastTab ? (
+                <button
+                  type="button"
+                  onClick={submitApplication}
+                  disabled={submitting || !formCompleted}
+                  className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
+                    formCompleted 
+                      ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500' 
+                      : 'bg-green-300 cursor-not-allowed'
+                  }`}
+                >
+                  {submitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Application'
+                  )}
+                </button>
+              ) : (
+                <button 
+                  type="button"
+                  onClick={() => setActiveTab(nextTab)}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
+                >
+                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">Next</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

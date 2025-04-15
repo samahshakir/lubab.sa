@@ -188,9 +188,9 @@ function BlogNews() {
       ref={sectionRef}
       className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
     >
-      <div className="absolute inset-0 opacity-5 pointer-events-none" 
+      {/* <div className="absolute inset-0 opacity-5 pointer-events-none" 
         style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="1" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="1"/%3E%3Ccircle cx="13" cy="13" r="1"/%3E%3C/g%3E%3C/svg%3E")',
-               backgroundSize: '20px 20px'}}></div>
+               backgroundSize: '20px 20px'}}></div> */}
       
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 
@@ -213,7 +213,7 @@ function BlogNews() {
             className={`blog-card p-6 rounded-xl shadow-lg transition-all duration-300 
               ${darkMode 
                 ? 'bg-white hover:bg-gray-100 text-dark-gray' 
-                : 'bg-dark-gray hover:bg-dark-mode text-white'}
+                : 'bg-white/10 backdrop-blur-md text-white'}
             `}
           >
             {article.mainImage && (

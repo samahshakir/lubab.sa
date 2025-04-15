@@ -158,7 +158,7 @@ const Careers = () => {
         <div className="absolute top-6 right-6 text-2xl text-gray-600 hover:text-primary-blue transition flex items-center space-x-4">
           {isAuthenticated() ? (
             <>
-              <span className={`text-sm font-medium ${darkMode ? 'text-gray-700' : 'text-black'}`}>
+              <span className={`text-sm font-medium ${darkMode ? 'text-gray-700' : 'text-white'}`}>
                 {username}
               </span>
               <button onClick={handleLogout} title="Logout">
@@ -181,7 +181,7 @@ const Careers = () => {
           <h2 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-secondary-blue">
             {isArabic ? "التوظيف – انضم إلى فريق لُباب" : "Careers at Lubab"}
           </h2>
-          <p ref={subheadingRef} className="text-lg text-gray-500 max-w-3xl mx-auto">
+          <p ref={subheadingRef} className={`text-lg ${ darkMode ? 'text-dark-gray' : 'text-white'} max-w-3xl mx-auto`}>
             {isArabic
               ? "فرصة للابتكار والانضمام إلى رحلة التحول الرقمي"
               : "A Chance to Innovate and Join the Digital Transformation Journey"
@@ -215,7 +215,7 @@ const Careers = () => {
                     className={`p-6 rounded-xl transition-all flex flex-col justify-between ${
                       darkMode
                         ? "bg-gray-100 shadow-[8px_8px_16px_#d1d1d1,_-8px_-8px_16px_#ffffff] hover:shadow-[12px_12px_20px_#d1d1d1,_-12px_-12px_20px_#ffffff]"
-                        : "bg-dark-gray shadow-[8px_8px_16px_#1a1a1a,_-8px_-8px_16px_#3a3a3a] hover:shadow-[12px_12px_20px_#1a1a1a,_-12px_-12px_20px_#3a3a3a]"
+                        : "bg-white/10 hover:bg-white/5"
                     } transform hover:-translate-y-2 duration-300`}
                     style={{
                       opacity: 0,
@@ -246,19 +246,11 @@ const Careers = () => {
 
                     {/* Apply Button Section */}
                     <div className="mt-auto pt-4 flex justify-between items-center">
-                       {/* Optional: Link to full job details page */}
-                       {/* <Link
-                            to={`/careers/${job.slug?.current || job._id}`} // Link to a details page if you have one
-                            className="text-sm text-blue-600 hover:text-blue-800"
-                        >
-                            {isArabic ? 'عرض التفاصيل' : 'View Details'}
-                        </Link> */}
-
                         <button
                             onClick={() => handleApplyClick(job.slug?.current || job._id)} // Pass slug or ID
                             className={`px-5 py-2 rounded-lg font-medium transition-all duration-200 text-base ${
                               !darkMode
-                              ? "bg-dark-mode shadow-[3px_3px_6px_#1a1a1a,_-3px_-3px_6px_#3a3a3a] hover:shadow-[inset_3px_3px_6px_#1a1a1a,_inset_-3px_-3px_6px_#3a3a3a]"
+                              ? "bg-dark-mode shadow-[1px_1px_1px_#1a1a1a,_-1px_-1px_1px_#3a3a3a] hover:shadow-[inset_1px_1px_3px_#1a1a1a,_inset_-1px_-1px_3px_#3a3a3a]"
                               : "bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
                             } border-none relative overflow-hidden`}
                         >
@@ -283,11 +275,11 @@ const Careers = () => {
               <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
                 {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-18 max-w-5xl mx-auto mt-10">
                 {whyJoin.map((item, index) => (
                   <div
                     key={index}
-                    className={`p-5 rounded-lg transition-all ${darkMode ? "bg-green-50" : "bg-dark-gray"} transform hover:scale-105 duration-300`}
+                    className={`p-5 rounded-lg transition-all ${darkMode ? "bg-gray-100 shadow-[8px_8px_16px_#d1d1d1,_-8px_-8px_16px_#ffffff] hover:shadow-[12px_12px_20px_#d1d1d1,_-12px_-12px_20px_#ffffff]" : "bg-white/10 backdrop-blur-xl"} transform hover:scale-105 duration-300`}
                     style={{ opacity: 0, animation: `fadeIn 0.5s ease-out forwards ${0.5 + index * 0.1}s` }}
                   >
                     <h4 className={`text-lg font-medium mb-2 ${darkMode ? "text-gray-800" : "text-white"}`}>
