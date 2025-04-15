@@ -16,6 +16,7 @@ import BlogNews from './BlogNews';
 import { Element,Link } from "react-scroll";
 import { initGA, trackPageView } from "../utils/analytics";
 import CookieConsent from "react-cookie-consent";
+import CookieBanner from '../components/CookieBanner';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,7 +77,7 @@ function Home() {
   >
       <Navbar />
       <Element name='#'>
-  
+      <CookieBanner/>
       {/* --- First Section (Hero) --- */}
       <main className={`container min-h-screen mx-auto px-6 ${isArabic ? 'pt-28 md:pt-35' : 'pt-22'} pb-20 relative font-nizar`}>
         {/* <div className="absolute inset-0 opacity-5 pointer-events-none" 

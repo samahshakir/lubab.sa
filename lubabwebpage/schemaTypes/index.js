@@ -8,6 +8,7 @@ import teamMember from './schemas/teamMember'
 import blog from './schemas/blog'
 import career, {whyJoinSchema} from './schemas/career'
 import job from './schemas/job'
+import footer from './schemas/footer'
 
 export const schemaTypes = [
   heroSection,
@@ -20,4 +21,5 @@ export const schemaTypes = [
   career,
   whyJoinSchema,
   job,
+  footer
 ]

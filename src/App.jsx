@@ -15,6 +15,7 @@ import ArticlePage from './pages/ArticlePage';
 import AuthPage from './pages/AuthPage';
 import ApplicationForm from './pages/ApplicationForm';
 import JobApplicationSuccess from './components/JobApplicationSuccess';
+import Unauthorized from './components/Unauthorized';
 import ApplicationsList from './components/ApplicationList';
 import ApplicationDetail from './components/ApplicationDetail';
 import ProtectedRoute from './components/protectedRoute';
@@ -36,6 +37,7 @@ function App() {
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
             <Route path='/auth' element={<AuthPage/>}/>
+            <Route path='/unauthorized' element={<Unauthorized/>}/>
             {/* <Route path='/applications' element={<ApplicationsPage/>}/> */}
             <Route path="/applications" element={ <AdminRoute>
               <ApplicationsList /> </AdminRoute>} />

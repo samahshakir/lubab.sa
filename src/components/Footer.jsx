@@ -4,28 +4,32 @@ import linkedinIcon from '../assets/linkedin.png';
 import xIcon from '../assets/twitter.png';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
+import {useState,useEffect} from 'react'
+import client from '../sanityClient';
 
 function Footer() {
   const { darkMode } = useDarkMode();
   const { isArabic } = useLanguage();
+  const [footerData, setFooterData] = useState(null);
+
+  useEffect(() => {
+    client.fetch(`*[_type == "footer"][0]`).then(setFooterData);
+  }, []);
+
+  if (!footerData) return null;
+
+  const {
+    description,
+    navLinks,
+    services,
+    socialLinks,
+    policies,
+  } = footerData;
 
   const iconMap = {
     linkedin: linkedinIcon,
     twitter: xIcon,
   };
-
-  const linkMap = {
-    linkedin: 'https://www.linkedin.com/company/lubab/posts/?feedView=all',
-    twitter: '#', // Replace with actual Twitter/X link
-  };
-
-  const navLinks = [
-    { name: isArabic ? "الوظائف" : "Careers", to: "/career", isExternal: true },
-    { name: isArabic ? "الفريق" : "Team", to: "team", isExternal: false },
-    { name: isArabic ? "الأسئلة الشائعة" : "FAQ", to: "/faq", isExternal: true },
-    { name: isArabic ? "المدونة" : "Blog", to: "blog", isExternal: false },
-    { name: isArabic ? "اتصل بنا" : "Contact", to: "contact", isExternal: false },
-  ];
 
   return (
     <footer
@@ -60,24 +64,18 @@ function Footer() {
                 darkMode ? 'text-[#374151]' : 'text-gray-400'
               } mb-6`}
             >
-              {isArabic
-                ? 'تحويل الأفكار إلى تجارب رقمية تُلهم وتُبهر.'
-                : 'Transforming ideas into digital experiences that captivate and inspire.'}
+              {isArabic ? description.ar : description.en}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3
-              className={`${
-                darkMode ? 'text-[#101828]' : 'text-white'
-              } font-semibold mb-4`}
-            >
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
               {isArabic ? 'روابط سريعة' : 'Quick Links'}
             </h3>
             <ul className="space-y-2">
               {navLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.name[isArabic ? 'ar' : 'en']}>
                   {link.isExternal ? (
                     <RouterLink
                       to={link.to}
@@ -87,7 +85,7 @@ function Footer() {
                           : 'text-gray-400 hover:text-blue-400'
                       } transition-colors duration-300`}
                     >
-                      {link.name}
+                      {link.name[isArabic ? 'ar' : 'en']}
                     </RouterLink>
                   ) : (
                     <ScrollLink
@@ -100,7 +98,7 @@ function Footer() {
                           : 'text-gray-400 hover:text-blue-400'
                       } transition-colors duration-300`}
                     >
-                      {link.name}
+                      {link.name[isArabic ? 'ar' : 'en']}
                     </ScrollLink>
                   )}
                 </li>
@@ -109,64 +107,39 @@ function Footer() {
           </div>
 
           {/* Services */}
-          
           <div>
-            <h3
-              className={`${
-                darkMode ? 'text-[#101828]' : 'text-white'
-              } font-semibold mb-4`}
-            >
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
               {isArabic ? 'خدماتنا' : 'Our Services'}
             </h3>
             <ScrollLink to="services" smooth={true} duration={500}>
-              <ul className="space-y-2">
-                {(isArabic
-                  ? [
-                      'حلول البرمجيات كخدمة (SaaS)',
-                      'بناء الشراكات',
-                      'الاستشارات',
-                      'حلول مخصصة',
-                      'حلول الذكاء الاصطناعي',
-                    ]
-                  : [
-                      'SaaS Solutions',
-                      'Partnership Building',
-                      'Consultations',
-                      'Custom Solutions',
-                      'AI Solutions',
-                    ]
-                ).map((service) => (
-                  <li key={service}>
-                    <span
-                      className={`${
-                        darkMode
-                          ? 'text-[#374151] hover:text-[#101828]'
-                          : 'text-gray-400 hover:text-green-400'
-                      } transition-colors duration-300`}
-                    >
-                      {service}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+            <ul className="space-y-2 cursor-pointer">
+              {(isArabic ? services.ar : services.en).map((service) => (
+                <li key={service}>
+                  <span
+                    className={`${
+                      darkMode
+                        ? 'text-[#374151] hover:text-[#101828]'
+                        : 'text-gray-400 hover:text-green-400'
+                    } transition-colors duration-300`}
+                  >
+                    {service}
+                  </span>
+                </li>
+              ))}
+            </ul>
             </ScrollLink>
-
           </div>
 
           {/* Connect With Us */}
           <div>
-            <h3
-              className={`${
-                darkMode ? 'text-[#101828]' : 'text-white'
-              } font-semibold mb-4`}
-            >
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
               {isArabic ? 'تواصل معنا' : 'Connect With Us'}
             </h3>
             <div className="space-y-3">
-              {['linkedin', 'twitter'].map((platform) => (
+              {socialLinks.map(({ platform, url }) => (
                 <a
                   key={platform}
-                  href={linkMap[platform]}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start hover:opacity-80 transition-opacity duration-200"
@@ -176,28 +149,23 @@ function Footer() {
                     alt={platform}
                     className="h-5 w-5 mt-1 mx-3"
                   />
-                  <span
-                    className={`${
-                      darkMode ? 'text-[#374151]' : 'text-gray-400'
-                    } pt-1`}
-                  >
+                  <span className={`${darkMode ? 'text-[#374151]' : 'text-gray-400'} pt-1`}>
                     {isArabic && platform === 'linkedin'
-                      ? 'لينكدإن' 
+                      ? 'لينكدإن'
                       : platform === 'linkedin'
-                      ? 'LinkedIn' 
+                      ? 'LinkedIn'
                       : isArabic
-                      ? 'إكس' 
+                      ? 'إكس'
                       : 'Twitter'}
                   </span>
                 </a>
               ))}
             </div>
-
           </div>
         </div>
 
-        {/* Copyright & Policies */}
-        <div
+         {/* Copyright & Policies */}
+         <div
           className={`mt-8 pt-8 border-t ${
             darkMode ? 'border-gray-300' : 'border-gray-800'
           } text-center`}

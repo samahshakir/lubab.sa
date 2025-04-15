@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDarkMode } from '../context/DarkModeContext';
 import client from "../sanityClient"; 
+import { useLanguage } from '../context/LanguageContext';
+ 
+
 
 
 const ApplicationForm = () => {
@@ -16,6 +19,60 @@ const ApplicationForm = () => {
   const [formCompleted, setFormCompleted] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
   const darkMode  = useDarkMode();
+  const { isArabic } = useLanguage();
+  
+
+  const contentAr = {
+    personal: {
+      personalInformation : 'معلومات شخصية',
+      firstName: '* الاسم الأول',
+      lastName: '* اسم العائلة',
+      email: '* البريد الإلكتروني',
+      phone: '* رقم الهاتف*',
+      address: 'العنوان',
+      city: 'المدينة',
+      state: 'الولاية',
+      zipCode: 'الرمز البريدي',
+      country: 'الدولة',
+      coverLetter: 'خطاب التقديم',
+    },
+    education: {
+      education: 'تعليم',
+      addEducation: 'إضافة التعليم',
+      institution: '* المؤسسة التعليمية',
+      degree: '* الدرجة العلمية',
+      fieldOfStudy: '* مجال الدراسة',
+      startDate: 'تاريخ البدء',
+      endDate: 'تاريخ الانتهاء',
+      currentlyStudying: 'ما زلت أدرس',
+      description: 'الوصف',
+    },
+    experience: {
+      experience: 'خبرة في العمل',
+      company: 'الشركة',
+      position: 'المنصب',
+      location: 'الموقع',
+      startDate: 'تاريخ البدء',
+      endDate: 'تاريخ الانتهاء',
+      currentlyWorking: 'ما زلت أعمل',
+      description: 'الوصف',
+    },
+    skills: {
+      skills: 'مهارات',
+      skillList: 'المهارات',
+      proficiencyLevels: 'مستوى الإتقان',
+    },
+    links: {
+      links: 'الروابط',
+      linkedin: 'لينكدإن',
+      portfolio: 'المعرض',
+      github: 'جيت هاب',
+      other: 'أخرى',
+    },
+    questions: {
+      answers: 'إجاباتك',
+    },
+  };  
   
   // Form data state
   const [formData, setFormData] = useState({
@@ -202,21 +259,12 @@ const ApplicationForm = () => {
       };
 
 
-    // const checkQuestionsCompletion = () => {
-    //   if (!jobDetails || !jobDetails.questions || jobDetails.questions.length === 0) {
-    //     return true;
-    //   }
-      
-    //   return Object.values(formData.questions.answers).every(answer => answer.trim());
-    // };
-
     const updatedTabCompletion = {
       personal: checkPersonalCompletion(),
       education: checkEducationCompletion(),
       experience: checkExperienceCompletion(),
       skills: checkSkillsCompletion(),
       links: checkLinksCompletion(),
-    //   questions: checkQuestionsCompletion()
     };
 
     setTabCompletion(updatedTabCompletion);
@@ -475,13 +523,13 @@ const ApplicationForm = () => {
     <div className="max-w-6xl mx-auto px-4 py-8 font-nizar">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Job Header */}
-        <div className="bg-gray-100 shadow-lg p-6">
-          <h1 className="text-2xl"><span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{jobDetails?.titleEn || 'Job Application'}</span></h1>
+        <div className="bg-gray-100 shadow-lg p-6" dir={isArabic ? 'rtl' : 'ltr'}>
+          <h1 className="text-2xl"><span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{isArabic ? jobDetails?.titleAr : jobDetails?.titleEn || 'Job Application'}</span></h1>
           <p><span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{jobDetails?.jobType} • {jobDetails?.location}</span></p>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-100">
+        <div className="border-b border-gray-100" dir={isArabic ? 'rtl' : 'ltr'}>
           <nav className="flex overflow-x-auto">
             <button
               onClick={() => setActiveTab('personal')}
@@ -491,7 +539,7 @@ const ApplicationForm = () => {
                   : 'text-gray-500 hover:text-gray-700'
               } flex items-center space-x-2`}
             >
-              <span>Personal Information</span>
+              <span>{isArabic ? contentAr.personal.personalInformation : 'Personal Information'}</span>
               {tabCompletion.personal && <span className="text-green-500">✓</span>}
             </button>
             <button
@@ -502,7 +550,7 @@ const ApplicationForm = () => {
                   : 'text-gray-500 hover:text-gray-700'
               } flex items-center space-x-2`}
             >
-              <span>Education</span>
+              <span>{isArabic ? contentAr.education.education : 'Education'}</span>
               {tabCompletion.education && <span className="text-green-500">✓</span>}
             </button>
             <button
@@ -513,7 +561,7 @@ const ApplicationForm = () => {
                   : 'text-gray-500 hover:text-gray-700'
               } flex items-center space-x-2`}
             >
-              <span>Experience</span>
+              <span>{isArabic ? contentAr.experience.experience : 'Experience'}</span>
               {tabCompletion.experience && <span className="text-green-500">✓</span>}
             </button>
             <button
@@ -524,7 +572,7 @@ const ApplicationForm = () => {
                   : 'text-gray-500 hover:text-gray-700'
               } flex items-center space-x-2`}
             >
-              <span>Skills</span>
+              <span>{isArabic ? contentAr.skills.skills : 'Skills' }</span>
               {tabCompletion.skills && <span className="text-green-500">✓</span>}
             </button>
             <button
@@ -535,7 +583,7 @@ const ApplicationForm = () => {
                   : 'text-gray-500 hover:text-gray-700'
               } flex items-center space-x-2`}
             >
-              <span>Links</span>
+              <span>{isArabic ? contentAr.links.links : 'Links'}</span>
               {tabCompletion.links && <span className="text-green-500">✓</span>}
             </button>
           </nav>
@@ -547,10 +595,10 @@ const ApplicationForm = () => {
           {activeTab === 'personal' && (
             <div>
               <h2 className="text-xl font-semibold mb-4 text-dark-gray">Personal Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6" dir={isArabic ? 'rtl' : 'ltr'}>
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                    First Name *
+                  <label htmlFor="firstName" className={`block text-sm font-medium text-gray-700 mb-1 ${isArabic ? "text-right" : "text-left"}`}>
+                    {isArabic ? contentAr.personal.firstName : 'First Name *'} 
                   </label>
                   <input
                     type="text"
@@ -563,7 +611,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                    Last Name *
+                  {isArabic ? contentAr.personal.lastName :'Last Name *'}
                   </label>
                   <input
                     type="text"
@@ -576,7 +624,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
+                  {isArabic ? contentAr.personal.email : 'Email *'}
                   </label>
                   <input
                     type="email"
@@ -589,20 +637,20 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number *
+                  {isArabic ? contentAr.personal.phone : 'Phone Number *'}
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     value={formData.personal.phone}
                     onChange={(e) => handleInputChange('personal', 'phone', e.target.value)}
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300" dir={isArabic ? 'rtl' : 'ltr'}
                     required
                   />
                 </div>
                 <div className="md:col-span-2">
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                    Address
+                  {isArabic ? contentAr.personal.address : 'Address'}
                   </label>
                   <input
                     type="text"
@@ -614,7 +662,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                    City
+                  {isArabic ? contentAr.personal.city : 'City'}
                   </label>
                   <input
                     type="text"
@@ -626,7 +674,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                    State/Province
+                  {isArabic ? contentAr.personal.state : 'State/Province'}
                   </label>
                   <input
                     type="text"
@@ -638,7 +686,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
-                    Zip/Postal Code
+                  {isArabic ? contentAr.personal.zipCode : 'Zip/Postal Code'}
                   </label>
                   <input
                     type="text"
@@ -650,7 +698,7 @@ const ApplicationForm = () => {
                 </div>
                 <div>
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                    Country
+                  {isArabic ? contentAr.personal.country : 'Country'}
                   </label>
                   <input
                     type="text"
@@ -662,7 +710,7 @@ const ApplicationForm = () => {
                 </div>
                 <div className="md:col-span-2">
                   <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700 mb-1">
-                    Cover Letter Preview
+                  {isArabic ? contentAr.personal.coverLetter : 'Cover Letter Preview'}
                   </label>
                   <textarea
                     id="coverLetter"
@@ -680,21 +728,21 @@ const ApplicationForm = () => {
           {/* Education Tab */}
           {activeTab === 'education' && (
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-dark-gray">Education</h2>
+              <div className="flex justify-between items-center mb-4" dir={isArabic ? 'rtl' : 'ltr'}>
+                <h2 className="text-xl font-semibold text-dark-gray">{isArabic ? contentAr.education.education : 'Education' }</h2>
                 <button
                   type="button"
                   onClick={addEducation}
                   className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Add Education
+                  {isArabic ? contentAr.education.addEducation : 'Add Education'}
                 </button>
               </div>
 
               {formData.education.map((edu, index) => (
-                <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200" dir={isArabic ? 'rtl' : 'ltr'}>
                   <div className="flex justify-between">
-                    <h3 className="text-lg font-medium mb-3 text-secondary-dark-gray">Education #{index + 1}</h3>
+                    <h3 className="text-lg font-medium mb-3 text-secondary-dark-gray">{isArabic ? contentAr.education.education : 'Education'} #{index + 1}</h3>
                     {formData.education.length > 1 && (
                       <button
                         type="button"
@@ -708,7 +756,7 @@ const ApplicationForm = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Institution *
+                      {isArabic ? contentAr.education.institution : 'Institution *'}
                       </label>
                       <input
                         type="text"
@@ -720,7 +768,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Degree *
+                      {isArabic ? contentAr.education.degree : 'Degree *'}
                       </label>
                       <input
                         type="text"
@@ -732,7 +780,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Field of Study *
+                      {isArabic ? contentAr.education.fieldOfStudy : 'Field of Study *'}
                       </label>
                       <input
                         type="text"
@@ -744,7 +792,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Start Date
+                      {isArabic ? contentAr.education.startDate : 'Start Date'}
                       </label>
                       <input
                         type="date"
@@ -762,14 +810,14 @@ const ApplicationForm = () => {
                           onChange={(e) => handleArrayInputChange('education', index, 'currentlyStudying', e.target.checked)}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 text-dark-gray rounded"
                         />
-                        <label htmlFor={`currentlyStudying-${index}`} className="ml-2 block text-sm text-gray-700">
-                          Currently Studying
+                        <label htmlFor={`currentlyStudying-${index}`} className="mx-2 block text-sm text-gray-700">
+                        {isArabic ? contentAr.education.currentlyStudying : 'Currently Studying'}
                         </label>
                       </div>
                       {!edu.currentlyStudying && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            End Date *
+                            {isArabic ? contentAr.education.endDate : 'End Date *'}
                           </label>
                           <input
                             type="date"
@@ -783,7 +831,7 @@ const ApplicationForm = () => {
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
+                        {isArabic ? contentAr.education.description : 'Description'}
                       </label>
                       <textarea
                         value={edu.description}
@@ -802,8 +850,8 @@ const ApplicationForm = () => {
           {/* Experience Tab */}
           {activeTab === 'experience' && (
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-dark-gray">Work Experience</h2>
+              <div className="flex justify-between items-center mb-4" dir={isArabic ? 'rtl' : 'ltr'}>
+                <h2 className="text-xl font-semibold text-dark-gray">{isArabic ? contentAr.experience.experience : 'Work Experience'}</h2>
                 <button
                   type="button"
                   onClick={addExperience}
@@ -814,9 +862,9 @@ const ApplicationForm = () => {
               </div>
 
               {formData.experience.map((exp, index) => (
-                <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div key={index} className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200" dir={isArabic ? 'rtl' : 'ltr'}>
                   <div className="flex justify-between">
-                    <h3 className="text-secondary-dark-gray text-lg font-medium mb-3">Experience #{index + 1}</h3>
+                    <h3 className="text-secondary-dark-gray text-lg font-medium mb-3">{isArabic ? contentAr.experience.experience : 'Experience'} #{index + 1}</h3>
                     {formData.experience.length > 1 && (<button
                         type="button"
                         onClick={() => removeExperience(index)}
@@ -829,7 +877,7 @@ const ApplicationForm = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Company *
+                        {isArabic ? contentAr.experience.company : 'Company *'}
                       </label>
                       <input
                         type="text"
@@ -841,7 +889,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Position *
+                        {isArabic ? contentAr.experience.position : 'Position *'}
                       </label>
                       <input
                         type="text"
@@ -853,7 +901,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Location
+                        {isArabic ? contentAr.experience.location : 'Location'}
                       </label>
                       <input
                         type="text"
@@ -864,7 +912,7 @@ const ApplicationForm = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Start Date
+                        {isArabic ? contentAr.experience.startDate : 'Start Date'}
                       </label>
                       <input
                         type="date"
@@ -883,13 +931,13 @@ const ApplicationForm = () => {
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 text-dark-gray rounded"
                         />
                         <label htmlFor={`currentlyWorking-${index}`} className="ml-2 block text-sm text-gray-700">
-                          Currently Working Here
+                          {isArabic ? contentAr.experience.currentlyWorking : 'Currently Working Here'}
                         </label>
                       </div>
                       {!exp.currentlyWorking && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            End Date *
+                          {isArabic ? contentAr.experience.endDate : 'End Date *'}
                           </label>
                           <input
                             type="date"
@@ -903,7 +951,7 @@ const ApplicationForm = () => {
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
+                        {isArabic ? contentAr.experience.description : 'Description'}
                       </label>
                       <textarea
                         value={exp.description}
@@ -922,23 +970,23 @@ const ApplicationForm = () => {
           {/* Skills Tab */}
           {activeTab === 'skills' && (
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-dark-gray">Skills</h2>
+              <div className="flex justify-between items-center mb-4" dir={isArabic ? 'rtl' : 'ltr'}>
+                <h2 className="text-xl font-semibold text-dark-gray">{isArabic ? contentAr.skills.skills : 'Skills' }</h2>
                 <button
                   type="button"
                   onClick={addSkill}
                   className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Add Skill
+                  {isArabic ? 'إضافة مهارة' : 'Add Skill'}
                 </button>
               </div>
 
               <div className="space-y-4">
                 {formData.skills.skillList.map((skill, index) => (
-                  <div key={index} className="flex flex-col md:flex-row md:items-center gap-4">
+                  <div key={index} className="flex flex-col md:flex-row md:items-center gap-4" dir={isArabic ? 'rtl' : 'ltr'}>
                     <div className="flex-grow">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Skill {index + 1}
+                        {isArabic ? contentAr.skills.skills : 'Skill'} {index + 1}
                       </label>
                       <div className="flex items-center">
                         <input
@@ -964,7 +1012,7 @@ const ApplicationForm = () => {
                     {skill.trim() && (
                       <div className="md:w-64">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Proficiency Level
+                          {isArabic ? contentAr.skills.proficiencyLevels : 'Proficiency Level' }
                         </label>
                         <select
                           value={formData.skills.proficiencyLevels[skill] || 'Intermediate'}
@@ -987,11 +1035,11 @@ const ApplicationForm = () => {
             {/* Links Tab */}
         {activeTab === 'links' && (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-dark-gray">Links</h2>
-            <div className="space-y-6">
+            <h2 className="text-xl font-semibold mb-4 text-dark-gray" dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? contentAr.links.links : 'Links'}</h2>
+            <div className="space-y-6" dir={isArabic ? 'rtl' : 'ltr'}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  LinkedIn Profile
+                {isArabic ? contentAr.links.linkedin : 'LinkedIn Profile' }
                 </label>
                 <input
                   type="url"
@@ -1004,7 +1052,7 @@ const ApplicationForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Portfolio
+                  {isArabic ? contentAr.links.portfolio : 'Portfolio' }
                 </label>
                 <input
                   type="url"
@@ -1017,7 +1065,7 @@ const ApplicationForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  GitHub Profile
+                  {isArabic ? contentAr.links.github : 'GitHub Profile' }
                 </label>
                 <input
                   type="url"
@@ -1030,7 +1078,7 @@ const ApplicationForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Other
+                {isArabic ? contentAr.links.other : 'Other' } 
                 </label>
                 <input
                   type="url"
@@ -1062,12 +1110,12 @@ const ApplicationForm = () => {
                     Saving...
                   </>
                 ) : (
-                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">Save Draft</span>
+                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{isArabic ? 'حفظ المسودة' : 'Save Draft'}</span>
                 )}
               </button>
               {draftSaved && (
                 <span className="ml-3 text-sm text-primary-green">
-                  Draft saved successfully!
+                  {isArabic ? 'تم حفظ المسودة بنجاح': 'Draft saved successfully!' } 
                 </span>
               )}
             </div>
@@ -1078,7 +1126,7 @@ const ApplicationForm = () => {
                 onClick={() => setActiveTab(previousTab)}
                 className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
               >
-                <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">Back</span>
+                <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">{isArabic ? 'عُد' : 'Back' }</span>
               </button>)
               }
               
@@ -1102,7 +1150,7 @@ const ApplicationForm = () => {
                       Submitting...
                     </>
                   ) : (
-                    'Submit Application'
+                    isArabic ? 'تقديم الطلب' :'Submit Application'
                   )}
                 </button>
               ) : (

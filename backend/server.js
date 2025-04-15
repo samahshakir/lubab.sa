@@ -26,17 +26,17 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-const ApplicationSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phone: String,
-  position: String,
-  experience: String,
-  message: String,
-  dateSubmitted: { type: Date, default: Date.now },
-});
+// const ApplicationSchema = new mongoose.Schema({
+//   name: String,
+//   email: String,
+//   phone: String,
+//   position: String,
+//   experience: String,
+//   message: String,
+//   dateSubmitted: { type: Date, default: Date.now },
+// });
 
-const Application = mongoose.model("Application", ApplicationSchema);
+// const Application = mongoose.model("Application", ApplicationSchema);
 
 // Updated User schema to remove isAdmin default and add email field
 const UserSchema = new mongoose.Schema({

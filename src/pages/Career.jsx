@@ -167,8 +167,8 @@ const Careers = () => {
             </>
           ) : (
 
-            <Link to="/auth"  className='flex justify-center items-center gap-2 bg-secondary-blue rounded-2xl px-2 py-2' title="Login / Sign Up">
-            <p className='text-[15px] text-white hover:text-dark-gray'>Log in</p>
+            <Link to="/auth"  className='flex justify-center items-center gap-2 bg-secondary-blue hover:bg-blue-600 rounded-2xl px-2 py-2' title="Login / Sign Up">
+            <p className='text-[15px] text-white'>Log in</p>
               {/* <img src="./src/assets/user.png" alt="Login/Sign Up" className="h-6 w-auto" /> */}
             </Link>
 

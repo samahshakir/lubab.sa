@@ -78,7 +78,7 @@ const AboutUs = () => {
     <main className="container min-h-screen mx-auto px-4 py-24 relative font-nizar">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary-green opacity-5 blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary-green opacity-10 blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-secondary-blue opacity-5 blur-3xl"></div>
       </div>
   
