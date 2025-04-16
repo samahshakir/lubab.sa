@@ -167,6 +167,14 @@ function Home() {
                 style={{ width: "100%", height: "100%" }}
               />
             </div>
+
+            <div className="w-full flex justify-center items-center lg:hidden">
+              <img 
+                src="./public/lubab-b.png" 
+                alt="3D Visual" 
+                className="max-w-[70%] h-auto"
+              />
+            </div>
           </div>
         </div>
       </main>

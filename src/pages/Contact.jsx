@@ -16,6 +16,8 @@ const Contact = () => {
 
   const language = isArabic ? "ar" : "en";
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const content = {
     en: {
       title: "Get in Touch",
@@ -85,7 +87,7 @@ const Contact = () => {
     setSuccess(null);
 
     try {
-      const response = await fetch("http://localhost:5000/send-message", {
+      const response = await fetch(`${apiUrl}/send-message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -13,7 +13,6 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
   const cardRef = useRef(null);
   const { darkMode } = useDarkMode();
   const cardAnimationRef = useRef(null);
-  const {isArabic} = useLanguage();
 
   useEffect(() => {
     gsap.set(cardRef.current, {
@@ -83,8 +82,6 @@ const Services = () => {
   const { darkMode } = useDarkMode();
   const { isArabic } = useLanguage();
   const [services, setServices] = useState([]);
-  const headingAnimationRef = useRef(null);
-  const backgroundAnimationRef = useRef(null);
 
   // Fetch services from Sanity
   useEffect(() => {

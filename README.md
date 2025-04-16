@@ -23,3 +23,15 @@ Accent #00BC78 (Vibrant Green), #EAB308 (Gold), #3B82F6 (Bright Blue)
 2. Change the about us part user interface 
 3. Make the current login page inputs and buttons smaller
 4. BlogPost to sanity is left 
+
+db.createUser({
+  user: "myUsername",
+  pwd: "myPassword",
+  roles: [{ role: "readWrite", db: "myDatabase" }]
+})
+
+db.getUsers()
+
+show databases
+
+mongodb://<username>:<password>@localhost:27017/myDatabase

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate,useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL;;
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -85,7 +85,7 @@ const AuthPage = () => {
           <button
             className={`flex-1 py-3 rounded-lg font-medium text-gray-700 transition mr-4 ${
               activeTab === 'login'
-                ? 'bg-white shadow-[inset_2px_2px_10px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
+                ? 'bg-white shadow-[inset_2px_2px_10px_#bebebe,inset_-3px_-3px_8px_#ffffff] text-primary-green'
                 : 'bg-gray-100 shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
             }`}
             onClick={() => setActiveTab('login')}
@@ -95,7 +95,7 @@ const AuthPage = () => {
           <button
             className={`flex-1 py-3 rounded-lg font-medium text-gray-700 transition ${
               activeTab === 'signup'
-                ? 'bg-white shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff]'
+                ? 'bg-white shadow-[inset_2px_2px_8px_#bebebe,inset_-3px_-3px_8px_#ffffff] text-secondary-blue'
                 : 'bg-gray-100 shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
             }`}
             onClick={() => setActiveTab('signup')}
@@ -127,7 +127,7 @@ const AuthPage = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your username"
                 required
               />
@@ -141,7 +141,7 @@ const AuthPage = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
                 required
               />
@@ -169,7 +169,7 @@ const AuthPage = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Choose a username"
                 required
               />
@@ -183,7 +183,7 @@ const AuthPage = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email"
                 required
               />
@@ -197,7 +197,7 @@ const AuthPage = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-4 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
                 required
               />
@@ -217,11 +217,14 @@ const AuthPage = () => {
         )}
         
         <div className="mt-6 text-center">
-          <p className="text-gray-600">
+          <Link
+            to="/forgot-password"
+            className="text-gray-600 hover:text-secondary-blue cursor-pointer"
+          >
             {activeTab === 'login' 
-              ? <a href='/' className='hover:text-secondary-blue'>Forgot password ?</a> 
+              ? 'Forgot password' 
               : "Already have an account? Switch to Login."}
-          </p>
+          </Link>
           <p className="text-gray-600">
             {activeTab === 'login' 
               ? "Don't have an account? Switch to Sign Up." : ""}

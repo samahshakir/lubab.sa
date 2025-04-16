@@ -4,22 +4,34 @@ export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Check if user has already accepted cookies
+    // Check if user has already accepted or declined cookies
     const cookiesAccepted = localStorage.getItem('cookiesAccepted');
     if (cookiesAccepted !== 'true') {
       setShowBanner(true);
     }
   }, []);
 
+  const loadMatomoTagManager = () => {
+    // Dynamically load Matomo Tag Manager script using the environment variable
+    var _mtm = window._mtm = window._mtm || [];
+    _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = import.meta.env.VITE_MATOMO_TAG_MANAGER_URL;// Using the environment variable
+    document.getElementsByTagName('script')[0].parentNode.insertBefore(script, document.getElementsByTagName('script')[0]);
+  };
+
   const acceptCookies = () => {
     localStorage.setItem('cookiesAccepted', 'true');
     setShowBanner(false);
+    loadMatomoTagManager(); // Load Matomo Tag Manager after accepting cookies
   };
 
   const declineCookies = () => {
-    // Handle declining cookies - you might want to set minimal cookies only
     localStorage.setItem('cookiesAccepted', 'false');
     setShowBanner(false);
+    // Handle declining cookies - you might want to set minimal cookies only
   };
 
   if (!showBanner) return null;
@@ -36,15 +48,13 @@ export default function CookieBanner() {
         <div className="flex flex-row gap-2">
           <button 
             onClick={declineCookies}
-            className="px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
-          >
-             <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">Decline</span>
+            className="px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]">
+            <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">Decline</span>
           </button>
           <button 
             onClick={acceptCookies}
-            className="px-4 py-2 bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] rounded text-sm font-medium transition-colors"
-          >
-             <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">Accept All</span>
+            className="px-4 py-2 bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] rounded text-sm font-medium transition-colors">
+            <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">Accept All</span>
           </button>
         </div>
       </div>

@@ -12,6 +12,8 @@ import { PortableText } from '@portabletext/react';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Careers = () => {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
@@ -86,7 +88,7 @@ const Careers = () => {
         const user = JSON.parse(localStorage.getItem('user'));
         const userId = user?.id;
         console.log(userId)
-        const response = await fetch(`http://localhost:5000/api/username/by-id/${userId}`);
+        const response = await fetch(`${apiUrl}/api/username/by-id/${userId}`);
         const data = await response.json();
         console.log(data)
   

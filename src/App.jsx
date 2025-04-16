@@ -20,6 +20,7 @@ import ApplicationsList from './components/ApplicationList';
 import ApplicationDetail from './components/ApplicationDetail';
 import ProtectedRoute from './components/protectedRoute';
 import AdminRoute from './components/adminRoute';
+import ForgotPassword from './pages/ForgotPassword';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
             <Route path='/auth' element={<AuthPage/>}/>
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path='/unauthorized' element={<Unauthorized/>}/>
             {/* <Route path='/applications' element={<ApplicationsPage/>}/> */}
             <Route path="/applications" element={ <AdminRoute>

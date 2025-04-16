@@ -1,7 +1,7 @@
 // auth.js - Place this file in your frontend src/utils folder
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;;
 
 // Configure axios with authentication header
 export const authAxios = () => {
@@ -37,5 +37,4 @@ export const verifyToken = async () => {
 export const logout = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("user");
-  // window.location.href = "/career";
 };

@@ -5,8 +5,7 @@ import { useDarkMode } from '../context/DarkModeContext';
 import client from "../sanityClient"; 
 import { useLanguage } from '../context/LanguageContext';
  
-
-
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const ApplicationForm = () => {
   const { jobId } = useParams();
@@ -155,7 +154,7 @@ const ApplicationForm = () => {
       }
     
       try {
-        const response = await axios.post("http://localhost:5000/api/applications/userId", {
+        const response = await axios.post(`${apiUrl}/api/applications/userId`, {
           userId,
         });
         console.log(response)
@@ -209,7 +208,7 @@ const ApplicationForm = () => {
 
     const fetchDraftApplication = async () => {
        try {
-      const response = await axios.post("http://localhost:5000/api/check-drafts", {
+      const response = await axios.post(`${apiUrl}/api/check-drafts`, {
         userId,
         jobSlug,
       });
@@ -440,7 +439,7 @@ const ApplicationForm = () => {
     const userId = user?.id;
     try {
       setSaving(true);
-      const response = await fetch('http://localhost:5000/api/applications/draft', {
+      const response = await fetch(`${apiUrl}/api/applications/draft`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -491,7 +490,7 @@ const ApplicationForm = () => {
       };
   
       // Send the application data as JSON
-      await axios.post('http://localhost:5000/api/applications/submit', applicationData, {
+      await axios.post(`${apiUrl}/api/applications/submit`, applicationData, {
         headers: {
           'Content-Type': 'application/json', // Set the content type to JSON
         },

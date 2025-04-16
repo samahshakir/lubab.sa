@@ -26,24 +26,14 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-// const ApplicationSchema = new mongoose.Schema({
-//   name: String,
-//   email: String,
-//   phone: String,
-//   position: String,
-//   experience: String,
-//   message: String,
-//   dateSubmitted: { type: Date, default: Date.now },
-// });
-
-// const Application = mongoose.model("Application", ApplicationSchema);
-
 // Updated User schema to remove isAdmin default and add email field
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
+  otp: { type: String },
+  otpExpiresAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -110,6 +100,113 @@ const authMiddleware = async (req, res, next) => {
     console.error("Error initializing admin user:", err);
   }
 })();
+
+app.post("/send-message", async (req, res) => {
+  const { name, email, phone, subject, message } = req.body;
+  // Create the email content
+  const mailOptions = {
+    from: "samah-s@lubab.sa", // Your Zoho email
+    to: "samah.lubab@gmail.com", // Your Zoho email
+    replyTo: email, // Reply to the user's email
+    subject: subject || "New Message from Contact Form",
+    text: `You have received a new message from your website contact form:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`,
+  };
+
+  // Send the email
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully");
+    res.status(200).json({ message: "Message sent successfully!" });
+  } catch (err) {
+    console.error("Error sending email:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to send message", error: err.message });
+  }
+});
+
+app.post('/api/reset-password', async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  
+  try {
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Verify OTP first
+    const now = new Date();
+    if (user.otp !== otp || user.otpExpiresAt < now) {
+      return res.status(400).json({ error: 'Invalid or expired OTP' });
+    }
+    
+    // Hash the new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    
+    // Update user's password and clear OTP fields
+    user.password = hashedPassword;
+    user.otp = null;
+    user.otpExpiresAt = null;
+    
+    await user.save();
+    
+    return res.status(200).json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    return res.status(500).json({ error: 'Failed to reset password' });
+  }
+});
+
+async function sendOtpToEmail(email) {
+  const user = await User.findOne({ email });
+  if (!user) throw new Error('User not found');
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+  const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins from now
+
+  // Store in DB
+  user.otp = otp;
+  user.otpExpiresAt = otpExpiresAt;
+  await user.save();
+
+  // Send mail
+  await transporter.sendMail({
+    from: 'samah-s@lubab.sa',
+    to: email,
+    subject: 'Your OTP for Password Reset',
+    text: `Username: ${user.username},\n\nYour OTP is: ${otp}.\nIt will expire in 10 minutes.\n\nIf you didn’t request this, feel free to ignore this email.`,
+  });
+
+  return true;
+}
+
+app.post('/api/send-otp', async (req, res) => {
+  const { email } = req.body;
+  try {
+    await sendOtpToEmail(email);
+    res.status(200).json({ message: 'OTP sent to email' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/verify-otp', async (req, res) => {
+  const { email, otp } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const now = new Date();
+  if (user.otp !== otp || user.otpExpiresAt < now) {
+    return res.status(400).json({ error: 'Invalid or expired OTP' });
+  }
+
+  // OTP verified
+  // You can now allow user to reset password
+  return res.status(200).json({ message: 'OTP verified' });
+});
 
 // New registration route for all users
 app.post("/auth/register", async (req, res) => {
@@ -444,28 +541,5 @@ app.get("/auth/verify", authMiddleware, (req, res) => {
   });
 });
 
-app.post("/send-message", async (req, res) => {
-  const { name, email, phone, subject, message } = req.body;
-  // Create the email content
-  const mailOptions = {
-    from: "samah-s@lubab.sa", // Your Zoho email
-    to: "samah.lubab@gmail.com", // Your Zoho email
-    replyTo: email, // Reply to the user's email
-    subject: subject || "New Message from Contact Form",
-    text: `You have received a new message from your website contact form:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`,
-  };
-
-  // Send the email
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-    res.status(200).json({ message: "Message sent successfully!" });
-  } catch (err) {
-    console.error("Error sending email:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to send message", error: err.message });
-  }
-});
 
 app.listen(5000, () => console.log("Server running on port 5000"));
