@@ -43,7 +43,7 @@ function App() {
             {/* <Route path='/applications' element={<ApplicationsPage/>}/> */}
             <Route path="/applications" element={ <AdminRoute>
               <ApplicationsList /> </AdminRoute>} />
-            <Route path="/application/:slug" element={<ProtectedRoute><ApplicationDetail /> </ProtectedRoute>} />
+            <Route path="/application/:slug/:userId" element={<ProtectedRoute><ApplicationDetail /> </ProtectedRoute>} />
             <Route path="/apply/:jobIdOrSlug" element={<ProtectedRoute><ApplicationForm /> </ProtectedRoute>} />
             <Route path="/applications/success" element={<JobApplicationSuccess/>} />
           </Routes>

@@ -135,6 +135,7 @@ const ApplicationForm = () => {
     questions: false
   });
 
+  const token = localStorage.getItem('authToken')
   
   const jobSlug = sessionStorage.getItem("jobSlug");
 
@@ -205,12 +206,16 @@ const ApplicationForm = () => {
     }
     };
 
-
     const fetchDraftApplication = async () => {
        try {
-      const response = await axios.post(`${apiUrl}/api/check-drafts`, {
+      const response = await axios.post(`${apiUrl}/api/applications/check-drafts`, {
         userId,
         jobSlug,
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.status === 200) {
@@ -492,6 +497,7 @@ const ApplicationForm = () => {
       // Send the application data as JSON
       await axios.post(`${apiUrl}/api/applications/submit`, applicationData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json', // Set the content type to JSON
         },
       });

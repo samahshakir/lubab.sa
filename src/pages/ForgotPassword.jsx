@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     setLoading(true);
     
     try {
-      await axios.post(`${apiUrl}/api/send-otp`, { email });
+      await axios.post(`${apiUrl}/auth/send-otp`, { email });
       setSuccess('OTP has been sent to your email.');
       setStep(2);
     } catch (err) {
@@ -42,7 +42,7 @@ const ForgotPassword = () => {
     const otpString = otp.join('');
     
     try {
-      await axios.post(`${apiUrl}/api/verify-otp`, { email, otp: otpString });
+      await axios.post(`${apiUrl}/auth/verify-otp`, { email, otp: otpString });
       setSuccess('OTP verified successfully.');
       setStep(3);
     } catch (err) {
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
     setLoading(true);
     
     try {
-      await axios.post(`${apiUrl}/api/reset-password`, { 
+      await axios.post(`${apiUrl}/auth/reset-password`, { 
         email, 
         otp: otp.join(''), 
         newPassword: password 

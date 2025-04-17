@@ -88,7 +88,7 @@ const Careers = () => {
         const user = JSON.parse(localStorage.getItem('user'));
         const userId = user?.id;
         console.log(userId)
-        const response = await fetch(`${apiUrl}/api/username/by-id/${userId}`);
+        const response = await fetch(`${apiUrl}/api/applications/username/by-id/${userId}`);
         const data = await response.json();
         console.log(data)
   

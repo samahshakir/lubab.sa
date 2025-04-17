@@ -87,7 +87,7 @@ const Contact = () => {
     setSuccess(null);
 
     try {
-      const response = await fetch(`${apiUrl}/send-message`, {
+      const response = await fetch(`${apiUrl}/auth/send-message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

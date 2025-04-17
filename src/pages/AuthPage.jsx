@@ -24,7 +24,8 @@ const AuthPage = () => {
       const response = await axios.post(`${API_URL}/auth/login`, {
         username,
         password
-      });
+      },
+    );
   
       // Store token and user info
       localStorage.setItem('authToken', response.data.token);

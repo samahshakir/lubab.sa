@@ -8,7 +8,7 @@ import Skills from './details/Skills';
 import Links from './details/Links';
 
 function ApplicationDetail() {
-  const { slug } = useParams();
+  const { slug,userId } = useParams();
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,7 +17,7 @@ function ApplicationDetail() {
     const fetchApplication = async () => {
       try {
         setLoading(true);
-        const data = await getApplicationBySlug(slug);
+        const data = await getApplicationBySlug(slug,userId);
         setApplication(data);
       } catch (err) {
         setError('Failed to fetch application details');
@@ -43,7 +43,6 @@ function ApplicationDetail() {
   }
 
   const { personal, education, experience, skills, links, status, createdAt } = application;
-
   const statusColors = {
     draft: 'bg-gray-200 text-gray-800',
     submitted: 'bg-blue-200 text-blue-800',

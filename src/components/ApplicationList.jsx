@@ -15,7 +15,7 @@ function ApplicationsList() {
       try {
         setLoading(true);
         const data = await getApplications();
-        
+        console.log(data)
         // Filter only submitted applications
         const submittedApplications = data.filter(app => app.status === "submitted");;
         setApplications(submittedApplications);
@@ -103,7 +103,7 @@ function ApplicationsList() {
                 // Card View
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {groupedApplications[jobSlug].map(app => (
-                    <Link to={`/application/${app.jobSlug}`} key={app._id}>
+                    <Link to={`/application/${app.jobSlug}/${app._id}`} key={app._id}>
                       <ApplicationCard application={app} />
                     </Link>
                   ))}

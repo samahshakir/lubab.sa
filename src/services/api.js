@@ -1,11 +1,21 @@
 const API_URL = `${import.meta.env.VITE_API_URL}/api`
 
+const token = localStorage.getItem("authToken"); 
+
+
 export async function getApplications() {
   try {
-    const response = await fetch(`${API_URL}/applications`);
+    const response = await fetch(`${API_URL}/applications`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
+
     return await response.json();
   } catch (error) {
     console.error("Error fetching applications:", error);
@@ -13,22 +23,35 @@ export async function getApplications() {
   }
 }
 
-export async function getApplicationBySlug(slug) {
+
+export async function getApplicationBySlug(slug, userId) {
   try {
-    const response = await fetch(`${API_URL}/applications/${slug}`);
+    const response = await fetch(`${API_URL}/applications/${slug}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
+
     return await response.json();
   } catch (error) {
-    console.error(`Error fetching application with slug ${slug}:`, error);
+    console.error(`Error fetching application with slug ${slug} and userId ${userId}:`, error);
     throw error;
   }
 }
 
 export async function handleCheck(userId) {
     try {
-      const response = await fetch(`${API_URL}/user/${userId}/is-admin`);
+      const response = await fetch(`${API_URL}/user/${userId}/is-admin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch admin status");
       }
