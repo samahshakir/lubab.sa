@@ -60,14 +60,14 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
       className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105"
     >
       <div className="flex flex-col h-full">
-        <div className="mb-4 text-4xl">
+        <div className="mb-4">
           <i className={icon}></i>
         </div>
-        <h3 className={`text-2xl font-bold mb-4 ${darkMode ? "text-black" : "text-white"}`}>
+        <h3 className={`text-md md:text-2xl font-bold mb-4 ${darkMode ? "text-black" : "text-white"}`}>
           {title}
         </h3>
-        <p className="text-gray-400 mb-6 flex-grow">{description}</p>
-        <span className="inline-block text-gray-500 text-md font-semibold">
+        <p className="text-gray-400 mb-6 flex-grow text-[12px] md:text-md">{description}</p>
+        <span className="text-sm inline-block text-gray-500 text-md font-semibold">
           {status}
         </span>
       </div>
@@ -131,7 +131,7 @@ const Services = () => {
   return (
     <div
       ref={sectionRef}
-      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-screen py-20 overflow-hidden`}
+      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-[90%] py-15 overflow-hidden`}
       id="services-section" // Add a unique ID
     >
       <div className="services-bg-gradient absolute inset-0 z-0 opacity-20"></div>
@@ -139,11 +139,11 @@ const Services = () => {
         <div className="text-center mb-16">
           <h2
             ref={headingRef}
-            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-green-500 bg-clip-text text-transparent"
+            className="text-2xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-green-500 bg-clip-text text-transparent mt-10"
           >
             {isArabic ? "خدماتنا" : "Our Services"}
           </h2>
-          <p ref={subheadingRef} className="text-lg text-gray-500 max-w-3xl mx-auto">
+          <p ref={subheadingRef} className="text-sm md:text-lg text-gray-500 max-w-3xl mx-auto">
             {isArabic ? "حلول تقنية متكاملة لأعمال متطورة" : "Comprehensive Digital Solutions for Evolving Businesses"}
           </p>
         </div>

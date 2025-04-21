@@ -23,6 +23,10 @@
   --color-dark-mode: #2D3F3B;
 }
 
+* {
+  user-select: none;
+}
+
 .rtl {
   direction: rtl;
   text-align: right;
@@ -81,6 +85,7 @@
 .bg-secondary-light-shade-b {
   background-color: var(--color-secondary-light-shade-b);
 }
+
 
 .text-secondary-light-shade {
   color: var(--color-secondary-light-shade-b);

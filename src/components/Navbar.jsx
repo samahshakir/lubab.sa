@@ -40,6 +40,7 @@ const Navbar = () => {
       );
     }
   }, [darkMode]);
+  
 
   // Animation for menu toggle
   useEffect(() => {
@@ -73,9 +74,10 @@ const Navbar = () => {
 
   const navLinks = [
     { name: isArabic ? "الرئيسية" : "HOME", to: "#", isExternal: false },
-    { name: isArabic ? "فريق العمل" : "TEAM", to: "team", isExternal: false },
-    { name: isArabic ? "خدماتنا" : "SERVICES", to: "services", isExternal: false },
     { name: isArabic ? "من نحن" : "ABOUT US", to: "about", isExternal: false },
+    { name: isArabic ? "خدماتنا" : "SERVICES", to: "services", isExternal: false },
+    { name: isArabic ? "فريق العمل" : "BLOG", to: "blog", isExternal: false },
+    { name: isArabic ? "فريق العمل" : "TEAM", to: "team", isExternal: false },
     { name: isArabic ? "تواصل معنا" : "CONTACT US", to: "contact", isExternal: false },
     { name: isArabic ? "انضم إلى فريق لباب" : "CAREER", to: "/career", isExternal: true },
   ];
@@ -97,7 +99,7 @@ const Navbar = () => {
         <div className={isArabic ? "order-last" : "order-first"}>
           <div className="h-11">
             <img 
-              src="src/assets/lubab-b.png" 
+              src="/lubab-b.png" 
               alt="LUBAB" 
               className="h-full w-auto"
             />
@@ -176,7 +178,7 @@ const Navbar = () => {
       {/* Mobile Menu (only visible on small screens) */}
       <div 
         ref={menuRef} 
-        className={`lg:hidden ${isMenuOpen ? 'flex' : 'hidden'} flex-col items-center gap-4 mt-4 ${hasScrolled ? 'backdrop-blur-md' : ''}`}
+        className={`lg:hidden ${isMenuOpen ? 'flex' : 'hidden'} flex-col items-center gap-4 mt-4 backdrop-blur-md`}
       >
         {navLinks.map((link) => (
           <React.Fragment key={link.name}>

@@ -14,6 +14,15 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const [validations, setValidations] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+  });
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
   
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -49,10 +58,23 @@ const AuthPage = () => {
       setIsLoading(false);
     }
   };
+
+  function ValidationItem({ isValid, label }) {
+    return (
+      <div className="flex items-center space-x-2 text-xs">
+        <span className={`h-1 w-1 rounded-full ${isValid ? "bg-green-500" : "bg-gray-400"}`} />
+        <span className={`${isValid ? "text-green-600" : "text-gray-500"}`}>{label}</span>
+      </div>
+    );
+  }
   
+  const isFormValid = Object.values(validations).every(Boolean);
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    if (!isFormValid) return;
+
     setIsLoading(true);
     setError('');
     setSuccess('');
@@ -77,7 +99,14 @@ const AuthPage = () => {
 
   useEffect(() => {
     console.log("AuthPage location state:", location.state);
-  }, [location]);
+    setValidations({
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      specialChar: /[^A-Za-z0-9]/.test(password),
+    });
+  }, [location,password]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 font-nizar">
@@ -160,61 +189,76 @@ const AuthPage = () => {
           </div>
           </form>
         ) : (
-          <form onSubmit={handleSignup}>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="signup-username">
-                Username
-              </label>
-              <input
-                id="signup-username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Choose a username"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="signup-email">
-                Email
-              </label>
-              <input
-                id="signup-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block text-gray-700 mb-2" htmlFor="signup-password">
-                Password
-              </label>
-              <input
-                id="signup-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div className="flex justify-center items-center">
-            <button 
-                type="submit" 
-                disabled={isLoading}
-                className="w-[30%] text-primary-green hover:text-secondary-blue font-medium py-2 px-4 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_2px_2px_8px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
-              >
-                <span className='bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent'>
-                  {isLoading ? 'Signing up...' : 'Sign up'}
-                </span>
-              </button>
-              </div>
-          </form>
+         <form onSubmit={handleSignup}>
+      <div className="mb-4">
+        <label className="block text-gray-700 mb-2" htmlFor="signup-username">
+          Username
+        </label>
+        <input
+          id="signup-username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Choose a username"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 mb-2" htmlFor="signup-email">
+          Email
+        </label>
+        <input
+          id="signup-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-gray-700 mb-2" htmlFor="signup-password">
+          Password
+        </label>
+        <input
+          id="signup-password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onFocus={() => setIsPasswordFocused(true)}
+          onBlur={() => setIsPasswordFocused(false)}
+          className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_2px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="••••••••"
+          required
+        />
+        {isPasswordFocused && (
+  <div className="mt-2 text-sm space-y-1">
+    <ValidationItem isValid={validations.length} label="At least 8 characters" />
+    <ValidationItem isValid={validations.uppercase} label="At least 1 uppercase letter" />
+    <ValidationItem isValid={validations.lowercase} label="At least 1 lowercase letter" />
+    <ValidationItem isValid={validations.number} label="At least 1 number" />
+    <ValidationItem isValid={validations.specialChar} label="At least 1 special character" />
+  </div>
+)}
+
+      </div>
+
+      <div className="flex justify-center items-center">
+        <button
+          type="submit"
+          disabled={isLoading || !isFormValid}
+          className="w-[30%] text-primary-green hover:text-secondary-blue font-medium py-2 px-4 rounded-xl bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_2px_2px_8px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+        >
+          <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">
+            {isLoading ? "Signing up..." : "Sign up"}
+          </span>
+        </button>
+      </div>
+    </form>
         )}
         
         <div className="mt-6 text-center">

@@ -153,7 +153,7 @@ const Careers = () => {
 
   return (
     <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen py-20 overflow-hidden`}>
-
+      
       <div className="container mx-auto px-6">
 
         {/* --- Updated User Icon/Link --- */}
@@ -179,11 +179,11 @@ const Careers = () => {
         </div>
 
         {/* Section Title */}
-        <div className="text-center mb-16">
-          <h2 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-secondary-blue">
+        <div className="text-center mb-5 md:mb-16">
+          <h2 ref={headingRef} className="text-2xl md:text-5xl font-bold mb-3 md:mb-6 text-transparent bg-clip-text bg-secondary-blue">
             {isArabic ? "التوظيف – انضم إلى فريق لُباب" : "Careers at Lubab"}
           </h2>
-          <p ref={subheadingRef} className={`text-lg ${ darkMode ? 'text-dark-gray' : 'text-white'} max-w-3xl mx-auto`}>
+          <p ref={subheadingRef} className={`text-sm md:text-lg ${ darkMode ? 'text-dark-gray' : 'text-white'} max-w-3xl mx-auto`}>
             {isArabic
               ? "فرصة للابتكار والانضمام إلى رحلة التحول الرقمي"
               : "A Chance to Innovate and Join the Digital Transformation Journey"
@@ -193,7 +193,7 @@ const Careers = () => {
 
         {/* Introduction Text */}
          <div className="max-w-3xl mx-auto text-center mb-12">
-              <p className={`mb-8 text-lg ${darkMode ? "text-gray-700" : "text-gray-300"}`}>
+              <p className={`md:mb-8 text-xs md:text-lg ${darkMode ? "text-gray-700" : "text-gray-300"}`}>
                 {isArabic
                   ? "نبحث دائمًا عن مواهب للانضمام إلى فريقنا. استعرض الوظائف المتاحة أدناه وقم بالتقديم إذا وجدت ما يناسبك."
                   : "We are always looking for talented individuals to join our team. Browse the open positions below and apply if you find a suitable match."

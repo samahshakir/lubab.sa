@@ -8,7 +8,7 @@ function ApplicationsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [groupedApplications, setGroupedApplications] = useState({});
-  const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
+  const [viewMode, setViewMode] = useState('table'); // 'card' or 'table'
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -153,7 +153,7 @@ function ApplicationsList() {
                             {new Date(app.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                            <Link to={`/application/${app.jobSlug}`} className="text-blue-600 hover:text-blue-900">
+                            <Link to={`/application/${app.jobSlug}/${app._id}`} className="text-blue-600 hover:text-blue-900">
                               View details
                             </Link>
                           </td>

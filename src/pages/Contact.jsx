@@ -70,6 +70,7 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,10 +78,24 @@ const Contact = () => {
       ...formData,
       [name]: value,
     });
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value.trim() ? "" : prevErrors[name],
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "Name is required";
+    if (!formData.email.trim()) errors.email = "Email is required";
+    if (!formData.subject.trim()) errors.subject = "Subject is required";
+    if (!formData.message.trim()) errors.message = "Message is required";
+
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
     setError(null);
@@ -127,20 +142,19 @@ const Contact = () => {
       <section className="relative z-10 min-h-screen flex items-start justify-start pt-35 pb-20">
         <div ref={containerRef} className="container mx-auto px-6">
           <div
-            className={`text-left mb-16 ml-8 ${
+            className={`text-left mb-10 ml-8 ${
               isArabic ? "text-right mr-8" : ""
             }`}
           >
             <h2
               ref={headingRef}
-              className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r 
-              from-blue-500 to-blue-600"
+              className="text-xl md:text-5xl font-bold mb-4 text-secondary-blue"
             >
               {content[language].title}
             </h2>
             <p
               ref={textRef}
-              className={`text-lg md:text-xl ${
+              className={`text-sm md:text-xl ${
                 darkMode ? "text-gray-800" : "text-white"
               } max-3xl`}
             >
@@ -168,12 +182,14 @@ const Contact = () => {
                 <div className="group">
                   <label
                     htmlFor="name"
-                    className={`block text-sm font-medium mb-2
-                  ${darkMode ? "text-gray-700" : "text-gray-300"} 
-                  ${isArabic ? "text-right" : "text-left"}`}
+                    className={`block text-xs md:text-sm font-medium mb-2 
+                    ${darkMode ? "text-gray-700" : "text-gray-300"} 
+                    ${isArabic ? "text-right" : "text-left"} `}
                   >
                     {content[language].formLabels.name}
+                    {formErrors.name && <span className="ml-1">*</span>}
                   </label>
+
                   <div
                     className={`relative ${
                       darkMode ? "bg-gray-100" : "bg-white/5"
@@ -186,21 +202,26 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`w-full py-3 px-4 rounded-lg
+                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
                       ${
                         darkMode
                           ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                           : "bg-dark-mode text-gray-200"
                       }
-                      focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                       placeholder={content[language].formLabels.name}
                     />
+                    {formErrors.name && (
+                      <p className="text-xs text-red-500 mt-2">
+                        {formErrors.name}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="group">
                   <label
                     htmlFor="email"
-                    className={`block text-sm font-medium 
+                    className={`block text-xs md:text-sm font-medium 
                     ${darkMode ? "text-gray-700" : "text-gray-300"} mb-2`}
                   >
                     {content[language].formLabels.email}
@@ -217,15 +238,21 @@ const Contact = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full py-3 px-4 rounded-lg
+                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
+                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                       placeholder="your@email.com"
                     />
+
+                    {formErrors.email && (
+                      <p className="text-xs text-red-500 mt-2">
+                        {formErrors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -250,13 +277,13 @@ const Contact = () => {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleChange}
-                    className={`w-full py-3 px-4 rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
+                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="+9664567890"
                   />
                 </div>
@@ -282,17 +309,22 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full py-3 px-4 rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
+                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder={
                       isArabic ? "ما هو موضوع رسالتك؟" : "What's this about?"
                     }
                   />
+                  {formErrors.subject && (
+                    <p className="text-xs text-red-500 mt-2">
+                      {formErrors.name}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -316,45 +348,50 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows="5"
-                    className={`w-full py-3 px-4 rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
+                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder={
                       isArabic
                         ? "أخبرنا عن مشروعك..."
                         : "Tell us about your project..."
                     }
                   ></textarea>
+                  {formErrors.message && (
+                    <p className="text-xs text-red-500 mt-2">
+                      {formErrors.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              {error && <p className="text-red-600">{error}</p>}
-              {success && <p className="text-green-600">{success}</p>}
+              {error && <p className="text-red-600 text-xs">{error}</p>}
+              {success && <p className="text-green-600 text-xs">{success}</p>}
 
               <div>
-              <button
-              ref={buttonRef}
-              type="submit"
-              className={`w-full font-medium py-3 px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
-                !darkMode 
-                  ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]" 
-                  : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
-              }`}
-              disabled={loading}
-            >
-              <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">
-                {loading ? "Sending..." : content[language].buttonText}
-              </span>
-            </button>
+                <button
+                  ref={buttonRef}
+                  type="submit"
+                  className={`w-[35%] md:w-[20%] font-medium text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
+                    !darkMode
+                      ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
+                      : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
+                  }`}
+                  disabled={loading}
+                >
+                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent">
+                    {loading ? "Sending..." : content[language].buttonText}
+                  </span>
+                </button>
               </div>
             </form>
           </div>
 
-          <div className={`max-w-2xl ${isArabic ? "mr-1" : "ml-1"} mt-8`}>
+          {/* <div className={`max-w-2xl ${isArabic ? "mr-1" : "ml-1"} mt-8`}>
             <div
               className={`p-6 rounded-xl ${
                 darkMode ? "bg-gray-100" : "bg-white/10"
@@ -392,7 +429,7 @@ const Contact = () => {
                 </a>
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

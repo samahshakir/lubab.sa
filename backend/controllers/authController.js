@@ -121,7 +121,7 @@ async function sendOtpToEmail(email) {
   
     // Send mail
     sendEmail({
-      from: 'samah-s@lubab.sa',
+      from: process.env.ZOHO_EMAIL,
       to: email,
       subject: 'Your OTP for Password Reset',
       text: `Username: ${user.username},\n\nYour OTP is: ${otp}.\nIt will expire in 10 minutes.\n\nIf you didn’t request this, feel free to ignore this email.`,
@@ -204,8 +204,8 @@ exports.sendMessage = async (req, res) => {
     const { name, email, mobile, subject, message } = req.body;
     // Create the email content
     const mailOptions = {
-      from: "samah-s@lubab.sa", // Your Zoho email
-      to: "samah.lubab@gmail.com", // Your Zoho email
+      from: process.env.ZOHO_EMAIL, // Your Zoho email
+      to: "info@lubab.sa", // Your Zoho email
       replyTo: email, // Reply to the user's email
       subject: subject || "New Message from Contact Form",
       text: `You have received a new message from your website contact form:\n\nName: ${name}\nEmail: ${email}\nPhone: ${mobile}\n\nMessage:\n${message}`,

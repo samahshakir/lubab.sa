@@ -23,7 +23,6 @@ function Footer() {
     navLinks,
     services,
     socialLinks,
-    policies,
   } = footerData;
 
   const iconMap = {
@@ -39,21 +38,21 @@ function Footer() {
           : 'bg-gradient-to-r from-[#2D3F3B] to-[#1E2927]'
       } border-t`}
     >
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="container mx-auto px-6 py-6 md:py-12 ">
+        <div className="grid grid-cols-1 md:grid-cols-4 gaps-4 md:gap-12">
           {/* Company Info */}
           <div className="md:col-span-1">
-            <div className="flex items-center mb-6">
+            <div className="flex items-center mb-3 md:mb-6">
               <img
-                src="./src/assets/lubab-b.png"
+                src="/lubab-b.png"
                 alt="Lubab"
                 className="h-8 w-auto mr-3"
               />
               <span
                 className={`text-xl font-bold bg-clip-text text-transparent ${
                   darkMode
-                    ? 'bg-gradient-to-r from-blue-500 to-green-600'
-                    : 'bg-gradient-to-r from-blue-400 to-green-500'
+                    ? 'bg-gradient-to-r from-[#3F73B7] via-[#00BC78] to-[#3F73B7]'
+                    : 'bg-gradient-to-r from-[#3F73B7] via-[#00BC78] to-[#3F73B7]'
                 }`}
               >
                 Lubab
@@ -62,18 +61,25 @@ function Footer() {
             <p
               className={`${
                 darkMode ? 'text-[#374151]' : 'text-gray-400'
-              } mb-6`}
+              } mb-6 text-sm md:text-md`}
             >
               {isArabic ? description.ar : description.en}
+            </p>
+            <p
+              className={`${
+                darkMode ? 'text-[#374151]' : 'text-gray-400'
+              } mb-6 text-xs md:text-md`}
+            >
+              National Address
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold md:mb-4 text-sm md:text-md`}>
               {isArabic ? 'روابط سريعة' : 'Quick Links'}
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-1 md:space-y-2 text-xs md:text-sm mb-2">
               {navLinks.map((link) => (
                 <li key={link.name[isArabic ? 'ar' : 'en']}>
                   {link.isExternal ? (
@@ -108,11 +114,11 @@ function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold md:mb-4 text-sm md:text-sm`}>
               {isArabic ? 'خدماتنا' : 'Our Services'}
             </h3>
             <ScrollLink to="services" smooth={true} duration={500}>
-            <ul className="space-y-2 cursor-pointer">
+            <ul className="space-y-1 md:space-y-2 text-xs md:text-sm mb-2 cursor-pointer">
               {(isArabic ? services.ar : services.en).map((service) => (
                 <li key={service}>
                   <span
@@ -132,10 +138,10 @@ function Footer() {
 
           {/* Connect With Us */}
           <div>
-            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold mb-4`}>
+            <h3 className={`${darkMode ? 'text-[#101828]' : 'text-white'} font-semibold md:mb-4 text-sm md:text-sm`}>
               {isArabic ? 'تواصل معنا' : 'Connect With Us'}
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-3 text-sm">
               {socialLinks.map(({ platform, url }) => (
                 <a
                   key={platform}
@@ -147,9 +153,9 @@ function Footer() {
                   <img
                     src={iconMap[platform]}
                     alt={platform}
-                    className="h-5 w-5 mt-1 mx-3"
+                    className="h-4 w-4 md:h-5 md:w-5 mt-1 mx-1 md:mx-3"
                   />
-                  <span className={`${darkMode ? 'text-[#374151]' : 'text-gray-400'} pt-1`}>
+                  <span className={`${darkMode ? 'text-[#374151]' : 'text-gray-400'} pt-2 text-xs md:text-sm`}>
                     {isArabic && platform === 'linkedin'
                       ? 'لينكدإن'
                       : platform === 'linkedin'
@@ -183,9 +189,7 @@ function Footer() {
             {[
               {
                 label: isArabic ? 'سياسة الخصوصية' : 'Privacy Policy',
-                href: isArabic
-                  ? '/policies/privacy-policy-ar.pdf'
-                  : '/policies/privacy-policy-en.pdf',
+                href: '/privacy-policy',
               },
               {
                 label: isArabic ? 'شروط الاستخدام' : 'Terms of Service',
@@ -193,12 +197,12 @@ function Footer() {
                   ? '/policies/terms-of-use-ar.pdf'
                   : '/policies/terms-of-use-en.pdf',
               },
-              {
-                label: isArabic
-                  ? 'سياسة ملفات تعريف الارتباط'
-                  : 'Cookies Policy',
-                href: '#',
-              },
+              // {
+              //   label: isArabic
+              //     ? 'سياسة ملفات تعريف الارتباط'
+              //     : 'Cookies Policy',
+              //   href: '#',
+              // },
             ].map((item) => (
               <a
                 key={item.label}

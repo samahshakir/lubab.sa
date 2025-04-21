@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "../context/LanguageContext";
 import client from "../sanityClient";
-import { DarkModeProvider, useDarkMode } from "../context/DarkModeContext";
+import { useDarkMode } from "../context/DarkModeContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +15,24 @@ const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const { darkMode } = useDarkMode();
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartRef = useRef(0);
+  const touchEndRef = useRef(0);
+  const scrollTriggerRef = useRef(null);
 
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Fetch team members data
   useEffect(() => {
     client
       .fetch(
@@ -27,6 +44,7 @@ const Team = () => {
       .catch(console.error);
   }, []);
 
+  // Handle scroll and animation
   useLayoutEffect(() => {
     if (teamMembers.length === 0) return;
 
@@ -34,84 +52,153 @@ const Team = () => {
       const sections = sectionRefs.current;
       const cards = cardsRef.current;
 
-      gsap.set(cards[0], {
-        autoAlpha: 1,
-        x: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        zIndex: 10,
+      // Initial setup for all cards
+      cards.forEach((card, index) => {
+        if (index === 0) {
+          gsap.set(card, {
+            autoAlpha: 1,
+            x: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            zIndex: 10,
+          });
+        } else if (index === 1) {
+          gsap.set(card, {
+            autoAlpha: 0.6,
+            x: "60%",
+            scale: 0.9,
+            filter: "blur(8px)",
+            zIndex: 5,
+          });
+        } else {
+          gsap.set(card, {
+            autoAlpha: 0,
+            x: "100%",
+            scale: 0.9,
+            filter: "blur(8px)",
+            zIndex: 1,
+          });
+        }
       });
-
-      if (cards[1]) {
-        gsap.set(cards[1], {
-          autoAlpha: 0.6,
-          x: "60%",
-          scale: 0.9,
-          filter: "blur(8px)",
-          zIndex: 5,
+      
+      // Only setup ScrollTrigger for non-mobile
+      if (!isMobile) {
+        scrollTriggerRef.current = ScrollTrigger.create({
+          id: "team-scroll",
+          trigger: sections,
+          pin: true,
+          start: "top top",
+          end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
+          scrub: 1,
+          onUpdate: (self) => {
+            const newIndex = Math.min(
+              Math.floor(self.progress * teamMembers.length),
+              teamMembers.length - 1
+            );
+            if (newIndex !== activeIndexRef.current) {
+              navigateToMember(newIndex);
+            }
+          },
         });
       }
-
-      gsap.set(cards.slice(2), {
-        autoAlpha: 0,
-        x: "100%",
-        scale: 0.9,
-        filter: "blur(8px)",
-        zIndex: 1,
-      });
-
-      ScrollTrigger.create({
-        id: "team-scroll",
-        trigger: sections,
-        pin: true,
-        start: "top top",
-        end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
-        scrub: 1,
-        onUpdate: (self) => {
-          const newIndex = Math.min(
-            Math.floor(self.progress * teamMembers.length),
-            teamMembers.length - 1
-          );
-          if (newIndex !== activeIndexRef.current) {
-            gsap.to(cards[activeIndexRef.current], {
-              autoAlpha: 0.6,
-              x: "-60%",
-              scale: 0.9,
-              filter: "blur(4px)",
-              zIndex: 5,
-              duration: 0.7,
-            });
-            gsap.to(cards[newIndex], {
-              autoAlpha: 1,
-              x: 0,
-              scale: 1,
-              filter: "blur(0px)",
-              zIndex: 10,
-              duration: 0.7,
-            });
-
-            if (cards[newIndex + 1]) {
-              gsap.to(cards[newIndex + 1], {
-                autoAlpha: 0.6,
-                x: "60%",
-                scale: 0.9,
-                filter: "blur(4px)",
-                zIndex: 5,
-                duration: 0.7,
-              });
-            }
-
-            activeIndexRef.current = newIndex;
-            setActiveIndex(newIndex);
-          }
-        },
-      });
 
       ScrollTrigger.refresh();
     }, sectionRefs);
 
-    return () => ctx.revert();
-  }, [teamMembers]);
+    return () => {
+      ctx.revert();
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
+    };
+  }, [teamMembers, isMobile]);
+
+  // Navigate to specific team member
+  const navigateToMember = (index) => {
+    if (index < 0 || index >= teamMembers.length || index === activeIndexRef.current) return;
+
+    const cards = cardsRef.current;
+    
+    // Current card moves left
+    gsap.to(cards[activeIndexRef.current], {
+      autoAlpha: 0.6,
+      x: index > activeIndexRef.current ? "-60%" : "60%",
+      scale: 0.9,
+      filter: "blur(4px)",
+      zIndex: 5,
+      duration: 0.7,
+    });
+    
+    // New card becomes active
+    gsap.to(cards[index], {
+      autoAlpha: 1,
+      x: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      zIndex: 10,
+      duration: 0.7,
+    });
+
+    // Setup next card if available
+    if (cards[index + 1]) {
+      gsap.to(cards[index + 1], {
+        autoAlpha: 0.6,
+        x: "60%",
+        scale: 0.9,
+        filter: "blur(4px)",
+        zIndex: 5,
+        duration: 0.7,
+      });
+    }
+    
+    // Setup previous card if available
+    if (cards[index - 1]) {
+      gsap.to(cards[index - 1], {
+        autoAlpha: 0.6,
+        x: "-60%",
+        scale: 0.9,
+        filter: "blur(4px)",
+        zIndex: 5,
+        duration: 0.7,
+      });
+    }
+
+    activeIndexRef.current = index;
+    setActiveIndex(index);
+  };
+
+  // Touch handlers for swipe functionality
+  const handleTouchStart = (e) => {
+    touchStartRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartRef.current - touchEndRef.current > 75) {
+      // Swipe left - next card
+      navigateToMember(Math.min(activeIndex + 1, teamMembers.length - 1));
+    } else if (touchEndRef.current - touchStartRef.current > 75) {
+      // Swipe right - previous card
+      navigateToMember(Math.max(activeIndex - 1, 0));
+    }
+  };
+
+  // Click handler for dots
+  const handleDotClick = (index) => {
+    navigateToMember(index);
+    
+    // If on desktop with ScrollTrigger active, sync the scroll position
+    if (!isMobile && scrollTriggerRef.current) {
+      const progress = index / (teamMembers.length - 1);
+      scrollTriggerRef.current.scroll(
+        scrollTriggerRef.current.start + 
+        (scrollTriggerRef.current.end - scrollTriggerRef.current.start) * progress
+      );
+    }
+  };
 
   return (
     <div
@@ -126,12 +213,20 @@ const Team = () => {
         <h2
           className={`text-4xl md:text-6xl font-bold ${
             darkMode ? "text-dark-gray" : "text-light-gray"
-          } mt-3 mb-16 text-center`}
+          } mt-15 text-center`}
         >
           {isArabic ? "فريقنا" : "Our Team"}
         </h2>
+        <p className="text-sm md:text-xl text-primary-green max-w-3xl mx-auto text-center">
+          {isArabic ? "قيادة ترتقي بمستقبل التقنية ونخبة من الخبراء " : "Leadership shaping the future of technology, backed by expert talent."}
+        </p>
 
-        <div className="relative h-[600px] w-[80%] mx-auto">
+        <div 
+          className="relative h-[600px] w-[80%] mx-auto touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {teamMembers.map((member, index) => (
             <div
               key={index}
@@ -160,7 +255,7 @@ const Team = () => {
                     <h3 className="text-3xl md:text-5xl font-bold mb-3">
                       {member.name[isArabic ? "ar" : "en"]}
                     </h3>
-                    <h4 className="text-xl md:text-2xl font-light text-gray-400 mb-6">
+                    <h4 className="text-xl md:text-2xl text-black mb-6">
                       {member.role[isArabic ? "ar" : "en"]}
                     </h4>
                     <p className="text-lg leading-relaxed">
@@ -173,14 +268,17 @@ const Team = () => {
                 <div className="flex flex-col items-center justify-center h-full text-center max-w-xl mx-auto">
                   <div className="bg-dark-gray/5 p-8 md:p-12 rounded-xl shadow-lg">
                     <h3
-                      className={`text-3xl md:text-5xl font-bold mb-6 ${
+                      className={`text-xl md:text-3xl font-bold mb-2 ${
                         darkMode ? "text-dark-gray" : "text-light-gray"
                       }`}
                     >
                       {member.name[isArabic ? "ar" : "en"]}
                     </h3>
+                    <h4 className="text-md md:text-2xl text-gray-400 mb-2">
+                      {member.role[isArabic ? "ar" : "en"]}
+                    </h4>
                     <p
-                      className={`text-xl leading-relaxed ${
+                      className={`text-sm md:text-xl leading-relaxed ${
                         darkMode ? "text-dark-gray" : "text-gray-400"
                       }`}
                     >
@@ -193,17 +291,33 @@ const Team = () => {
           ))}
         </div>
 
-        {/* Dots for visual navigation */}
+        {/* Interactive dots for navigation */}
         <div className="flex justify-center mt-12">
           {teamMembers.map((_, index) => (
-            <div
+            <button
               key={index}
-              className={`w-3 h-3 mx-2 rounded-full ${
-                index === activeIndex ? "bg-white" : "bg-gray-600"
+              onClick={() => handleDotClick(index)}
+              className={`w-3 h-3 mx-2 rounded-full transition-all duration-300 ${
+                index === activeIndex 
+                ? "bg-white scale-125" 
+                : "bg-gray-600 hover:bg-gray-400"
               }`}
+              aria-label={`Go to team member ${index + 1}`}
             />
           ))}
         </div>
+
+        {/* Mobile navigation indicators (only visible on mobile) */}
+        {isMobile && teamMembers.length > 0 && (
+          <div className="md:hidden flex justify-between items-center w-full max-w-md mx-auto mt-8 px-4">
+            <div className="text-gray-400 text-sm">
+              {isArabic ? "اسحب للتنقل" : "Swipe to navigate"}
+            </div>
+            <div className="text-gray-400 text-sm">
+              {activeIndex + 1}/{teamMembers.length}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

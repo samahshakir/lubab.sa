@@ -21,6 +21,8 @@ import ApplicationDetail from './components/ApplicationDetail';
 import ProtectedRoute from './components/protectedRoute';
 import AdminRoute from './components/adminRoute';
 import ForgotPassword from './pages/ForgotPassword';
+import PrivacyPolicyA4 from './components/PrivacyPolicyA4';
+import FullBlogNews from './pages/FullBlogNews';
 
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
             {/* <Route path="/blog" element={<BlogNews/>} /> */}
             {/* <Route path="/contact" element={<Contact />} /> */}
             <Route path="/blog" element={<BlogNews />} />
+            <Route path="/blogposts" element={<FullBlogNews />} />
             <Route path="/blog/article/:slug" element={<ArticlePage />} />
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
@@ -46,6 +49,7 @@ function App() {
             <Route path="/application/:slug/:userId" element={<ProtectedRoute><ApplicationDetail /> </ProtectedRoute>} />
             <Route path="/apply/:jobIdOrSlug" element={<ProtectedRoute><ApplicationForm /> </ProtectedRoute>} />
             <Route path="/applications/success" element={<JobApplicationSuccess/>} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyA4/>}/>
           </Routes>
         </Router>
       </LanguageProvider>

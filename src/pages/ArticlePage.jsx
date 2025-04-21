@@ -64,7 +64,7 @@ const ArticlePage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className={`min-h-screen ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`min-h-screen ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 font-nizar ${isArabic ? 'rtl' : 'ltr'}`}
     >
       <div className="container mx-auto px-6 py-16 max-w-4xl">
         <button

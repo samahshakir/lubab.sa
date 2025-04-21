@@ -127,7 +127,14 @@ export default {
             ]
           }
         ]
-      }
+      },
+      {
+        name: 'active',
+        title: 'Is Active?',
+        type: 'boolean',
+        description: 'Active blogs will be highlighted.',
+        initialValue: true,
+      },
     ],
     preview: {
       select: {

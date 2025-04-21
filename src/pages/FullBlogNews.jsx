@@ -8,7 +8,7 @@ import sanityClient from '../sanityClient';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function BlogNews() {
+function FullBlogNews() {
   const { isArabic } = useLanguage();
   const { darkMode } = useDarkMode();
   const sectionRef = useRef(null);
@@ -56,7 +56,6 @@ function BlogNews() {
             publishedAt,
             tags,
             tagsAr,
-            active,
             mainImage {
               asset->{
                 _id,
@@ -65,27 +64,16 @@ function BlogNews() {
             }
           }`
         );
-  
-        // Prioritize active post first
-        const activePost = data.find(post => post.active);
-        const remainingPosts = data.filter(post => !post._id || (activePost ? post._id !== activePost._id : true));
-        
-        const selectedPosts = [
-          ...(activePost ? [activePost] : []),
-          ...remainingPosts.slice(0, activePost ? 4 : 5)
-        ];
-  
-        setBlogPosts(selectedPosts);
+        setBlogPosts(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching blog posts:", error);
         setLoading(false);
       }
     };
-  
+
     fetchBlogPosts();
   }, []);
-  
 
   const handleReadMore = (article) => {
     // Navigate to the article page using the slug
@@ -198,7 +186,7 @@ function BlogNews() {
   return (
     <section 
       ref={sectionRef}
-      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
     > 
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 
@@ -279,34 +267,9 @@ function BlogNews() {
         </button>
       </div>
     </div>
-  ))}
-  
-</div>
-<div className="flex justify-center mt-12">
-    <button 
-      onClick={() =>  navigate('/blogposts')}
-      className={`px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 flex items-center
-        ${darkMode 
-          ? 'bg-primary-green text-white hover:bg-blue-700' 
-          : 'bg-secondary-blue text-white hover:bg-blue-600'
-        }`}
-    >
-      {isArabic ? 'عرض جميع المقالات' : 'View All Blog Posts'}
-      <span className="ml-2">
-        {isArabic ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5"></path>
-            <polyline points="12 5 5 12 12 19"></polyline>
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14"></path>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        )}
-      </span>
-    </button>
-  </div>
+        ))}
+      </div>
+
       {/* Display message if no blog posts */}
       {blogPosts.length === 0 && !loading && (
         <div className="text-center py-12">
@@ -319,4 +282,4 @@ function BlogNews() {
   );
 }
 
-export default BlogNews;
+export default FullBlogNews;
