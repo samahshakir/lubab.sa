@@ -41,6 +41,7 @@ function App() {
             <Route path='/career' element={<Career/>}/>
             <Route path='/faq' element={<FAQ/>}/>
             <Route path='/auth' element={<AuthPage/>}/>
+            <Route path='/applications/profile' element={<ApplicationForm/>}/>
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path='/unauthorized' element={<Unauthorized/>}/>
             {/* <Route path='/applications' element={<ApplicationsPage/>}/> */}

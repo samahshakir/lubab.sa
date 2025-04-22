@@ -23,6 +23,13 @@
   --color-dark-mode: #2D3F3B;
 }
 
+/* Target the specific component with your classes */
+.phone-input-no-border.PhoneInput .PhoneInputInput {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 * {
   user-select: none;
 }

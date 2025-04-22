@@ -16,6 +16,8 @@ import BlogNews from "./BlogNews";
 import { Element } from "react-scroll";
 import CookieBanner from "../components/CookieBanner";
 import Hero from "./Hero";
+import JoinTheTeam from "./JoinTheTeam";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,6 +71,8 @@ function Home() {
       <Element name="team" className="section-container">
         <Team />
       </Element>
+
+      <JoinTheTeam/>
 
       <Element name="contact">
         <Contact />

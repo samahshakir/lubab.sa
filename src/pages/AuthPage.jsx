@@ -40,15 +40,15 @@ const AuthPage = () => {
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
   
-      const fromPath = location.state?.from || sessionStorage.getItem("redirectAfterLogin") || '/career';
+      const fromPath = location.state?.from  || '/career'; //|| sessionStorage.getItem("redirectAfterLogin")
       console.log(fromPath)
   
       if (response.data.user.isAdmin) {
         navigate('/applications');
       } else if (fromPath && fromPath.startsWith('/apply/')) {
-        navigate(fromPath); // Just use the full path
+        navigate(fromPath);
       } else {
-        navigate('/career'); // Fallback for non-admins
+        navigate('/applications/profile'); // Fallback for non-admins
       }
   
     } catch (err) {

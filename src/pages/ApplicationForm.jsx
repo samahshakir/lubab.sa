@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDarkMode } from "../context/DarkModeContext";
 import client from "../sanityClient";
 import { useLanguage } from "../context/LanguageContext";
+import { Pencil } from "lucide-react"; 
+import PhoneInput from "react-phone-number-input";
+import 'react-phone-number-input/style.css'
+import GoBackButton from "../components/GoBackButton";
+import { PortableText } from "@portabletext/react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const ApplicationForm = () => {
+  const jobSlug = sessionStorage.getItem("jobSlug");
   const { jobId } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState(jobSlug ? "jobDescription" : "personal");
   const [jobDetails, setJobDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -19,6 +25,15 @@ const ApplicationForm = () => {
   const [draftSaved, setDraftSaved] = useState(false);
   const darkMode = useDarkMode();
   const { isArabic } = useLanguage();
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const emailInputRef = useRef(null);
+  const [isValid, setIsValid] = useState(null);
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [hasConfirmed, setHasConfirmed] = useState(false);
+
 
   const contentAr = {
     personal: {
@@ -135,9 +150,6 @@ const ApplicationForm = () => {
   });
 
   const token = localStorage.getItem("authToken");
-
-  const jobSlug = sessionStorage.getItem("jobSlug");
-
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user?.id;
@@ -156,10 +168,18 @@ const ApplicationForm = () => {
         const response = await axios.post(`${apiUrl}/api/applications/userId`, {
           userId,
         });
-        console.log(response);
         if (response.status === 200) {
           setFormData(response.data);
-        } else if (response.status === 404) {
+        }else if(response.status == 201){
+          setFormData(prev => ({
+            ...prev,
+            personal: {
+              ...prev.personal,
+              email: response.data,
+            },
+          }));
+        }
+         else if (response.status === 404) {
           console.log("No application found for this user.");
         } else {
           console.error("Failed to fetch application:", response.statusText);
@@ -171,7 +191,8 @@ const ApplicationForm = () => {
 
     const fetchJobDetails = async () => {
       if (!jobSlug) {
-        console.error("No job slug found in sessionStorage.");
+        setJobDetails(null); // Explicitly set to null to show fallback UI
+        setLoading(false);
         return;
       }
 
@@ -190,6 +211,7 @@ const ApplicationForm = () => {
         }`;
 
         const job = await client.fetch(query, { slug: jobSlug });
+        console.log(job)
 
         if (job) {
           setJobDetails(job);
@@ -231,7 +253,11 @@ const ApplicationForm = () => {
 
     // fetchUserData();
     fetchJobDetails();
+    if(jobSlug){
     fetchDraftApplication();
+    }else{
+     loadApplicationData();
+    }
   }, [jobSlug]);
 
   // Check form completion status
@@ -274,7 +300,7 @@ const ApplicationForm = () => {
       education: checkEducationCompletion(),
       experience: checkExperienceCompletion(),
       skills: checkSkillsCompletion(),
-      links: checkLinksCompletion(),
+      links: checkLinksCompletion()
     };
 
     setTabCompletion(updatedTabCompletion);
@@ -284,17 +310,76 @@ const ApplicationForm = () => {
   }, [formData, jobDetails]);
 
   const handleInputChange = (section, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value,
-      },
-    }));
+    // Regex for letters and spaces (for name-related fields)
+    const onlyLetters = /^[a-zA-Z\s]*$/;
+  
+    // Regex for only numbers (for phone-related fields)
+    const onlyNumbers = /^[0-9]*$/;
+    if(section === "links"){
+      if (value === "") {
+        setIsValid(null); // Don't show error when input is empty
+      }else{
+      try {
+        new URL(value); // This will throw an error if the URL is invalid
+        setIsValid(true);
+      } catch (e) {
+        setIsValid(false);
+      }
+    }
+  }
+    // Handle email input (allow anything)
+    if (["email", "address","coverLetter","description","linkedin","portfolio","github","other"].includes(field))
+      {
+      setFormData((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [field]: value,
+        },
+      }));
+    }else if (field === "phone") {
+      setFormData((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [field]: value,
+        },
+      }));
+    }else if (["zipCode"].includes(field)) {
+      if (value === '' || onlyNumbers.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: value,
+          },
+        }));
+      }
+    } else {
+      // Allow only letters and spaces for other fields (like name)
+      if (value === '' || onlyLetters.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: value,
+          },
+        }));
+      }
+    }
   };
+  
 
   // Define the tab order
-  const tabOrder = ["personal", "education", "experience", "skills", "links"];
+  const tabOrder = [
+    ...(jobSlug ? ["jobDescription"] : []),
+    "personal", 
+    "education", 
+    "experience", 
+    "skills", 
+    "links", 
+    "acknowledgment"
+  ];
 
   // Get current tab index
   const currentTabIndex = tabOrder.indexOf(activeTab);
@@ -308,13 +393,19 @@ const ApplicationForm = () => {
   const nextTab = isLastTab ? activeTab : tabOrder[currentTabIndex + 1];
 
   const previousTab = isFirstTab ? activeTab : tabOrder[currentTabIndex - 1];
-
   const handleArrayInputChange = (section, index, field, value) => {
+    let updatedValue = value;
+  
+    if (["degree","fieldOfStudy","position","location"].includes(field)) {
+      // Keep only letters, spaces, and basic punctuation
+      updatedValue = value.replace(/[^a-zA-Z\s]/g, "");
+    }
+  
     setFormData((prev) => {
       const newArray = [...prev[section]];
       newArray[index] = {
         ...newArray[index],
-        [field]: value,
+        [field]: updatedValue,
       };
       return {
         ...prev,
@@ -322,11 +413,15 @@ const ApplicationForm = () => {
       };
     });
   };
+  
 
   const handleSkillChange = (index, value) => {
+    // Allow only letters and spaces
+    const textOnly = value.replace(/[^a-zA-Z\s]/g, "");
+  
     setFormData((prev) => {
       const newSkillList = [...prev.skills.skillList];
-      newSkillList[index] = value;
+      newSkillList[index] = textOnly;
       return {
         ...prev,
         skills: {
@@ -336,6 +431,7 @@ const ApplicationForm = () => {
       };
     });
   };
+  
 
   const handleProficiencyChange = (skill, level) => {
     setFormData((prev) => ({
@@ -446,6 +542,26 @@ const ApplicationForm = () => {
     }
   };
 
+  const handleEnableEdit = () => {
+    setIsEditingEmail(true);
+    setTimeout(() => {
+      emailInputRef.current?.focus();
+    }, 50);
+  };
+  
+  // Disable editing on blur or Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsEditingEmail(false);
+      emailInputRef.current?.blur();
+    }
+  };
+  
+  const handleBlur = () => {
+    setIsEditingEmail(false);
+  };
+
   const saveDraft = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user?.id;
@@ -483,7 +599,6 @@ const ApplicationForm = () => {
       alert("Please complete all required sections before submitting");
       return;
     }
-
     setSubmitting(true);
 
     try {
@@ -493,14 +608,14 @@ const ApplicationForm = () => {
       const applicationData = {
         userId: user.id,
         jobSlug: jobSlug,
-        status: "submitted",
+        status: jobSlug ? "submitted" : "personal",
         personal: formData.personal,
         education: formData.education,
         experience: formData.experience,
         skills: formData.skills,
         links: formData.links,
       };
-
+      
       // Send the application data as JSON
       await axios.post(`${apiUrl}/api/applications/submit`, applicationData, {
         headers: {
@@ -508,6 +623,11 @@ const ApplicationForm = () => {
           "Content-Type": "application/json", // Set the content type to JSON
         },
       });
+
+      if (!jobSlug) {
+        navigate("/career")
+        return;
+      }
 
       navigate("/applications/success", {
         state: { jobId, jobTitle: jobDetails?.title },
@@ -548,8 +668,55 @@ const ApplicationForm = () => {
     );
   }
 
+  const handleDeleteAccount = async () => {
+    // Reset states
+    setError('');
+    setSuccess('');
+    
+    // Validate form
+    if (!hasConfirmed) {
+      setError('Please confirm that you understand this action cannot be undone');
+      return;
+    }
+    
+    try {
+      setIsLoading(true);
+      const user = localStorage.getItem("user");
+      const token = localStorage.getItem("authToken")
+      console.log(user)
+      // Call backend API to delete account
+      const response = await axios.post(`${apiUrl}/api/users/delete-account`, {
+        userId: user._id,
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (response.data.success) {
+        setSuccess('Your account has been successfully deleted');
+        
+        // Clear user data from localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('authToken');
+        
+        // Wait briefly to show success message before redirecting
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete account. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 font-nizar">
+    <div>
+      <GoBackButton/>
+    <div className="max-w-5xl mx-auto px-4 py-8 font-nizar">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Job Header */}
         <div
@@ -560,12 +727,12 @@ const ApplicationForm = () => {
             <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
               {isArabic
                 ? jobDetails?.titleAr
-                : jobDetails?.titleEn || "Job Application"}
+                : jobDetails?.titleEn || "Complete your profile"}
             </span>
           </h1>
           <p>
             <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
-              {jobDetails?.jobType} • {jobDetails?.location}
+              {jobDetails?.jobType}  {jobDetails?.location}  
             </span>
           </p>
         </div>
@@ -576,6 +743,18 @@ const ApplicationForm = () => {
           dir={isArabic ? "rtl" : "ltr"}
         >
           <nav className="flex overflow-x-auto">
+          {jobSlug && (
+          <button
+            onClick={() => setActiveTab("jobDescription")}
+            className={`py-4 px-6 font-medium text-sm whitespace-nowrap ${
+              activeTab === "jobDescription"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            } flex items-center space-x-2`}
+          >
+            <span>{isArabic ? "" : "Job Description"}</span>
+          </button>
+        )}
             <button
               onClick={() => setActiveTab("personal")}
               className={`py-4 px-6 font-medium text-sm whitespace-nowrap ${
@@ -647,11 +826,52 @@ const ApplicationForm = () => {
               <span>{isArabic ? contentAr.links.links : "Links"}</span>
               {tabCompletion.links && <span className="text-green-500">✓</span>}
             </button>
+            <button
+              onClick={() => setActiveTab("acknowledgment")}
+              className={`py-4 px-6 font-medium text-sm whitespace-nowrap ${
+                activeTab === "acknowledgment"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              } flex items-center space-x-2`}
+            >
+              <span>{isArabic ? contentAr.acknowledgment.acknowledgment : "Acknowledgment"}</span>
+              {tabCompletion.acknowledgment && <span className="text-green-500">✓</span>}
+            </button>
+            {!jobSlug && (
+          <button
+            onClick={() => setActiveTab("deleteAccount")}
+            className={`py-4 px-6 font-medium text-sm whitespace-nowrap ${
+              activeTab === "jobDescription"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            } flex items-center space-x-2`}
+          >
+            <span>{isArabic ? "" : "Delete Account"}</span>
+          </button>
+        )}
           </nav>
         </div>
 
         {/* Form Content */}
         <div className="p-6 bg-gray-100 shadow-lg">
+
+          {/* Job Description */}
+          {activeTab === "jobDescription" && (
+           <div className="py-4 px-6">
+
+             <div className="text-secondary-dark-gray text-justify">
+                 <PortableText
+                      value={isArabic ? jobDetails.descriptionAr : jobDetails.descriptionEn}
+                            components={{block: ({ children }) => <p>{children}</p> }} />
+             </div>
+             <div className="text-secondary-dark-gray">
+                 <PortableText
+                      value={isArabic ? jobDetails.requirementsAr : jobDetails.requirementsEn }
+                            components={{block: ({ children }) => <p>{children}</p> }} />
+             </div>
+         </div>
+         
+          )}
           {/* Personal Information Tab */}
           {activeTab === "personal" && (
             <div>
@@ -707,33 +927,53 @@ const ApplicationForm = () => {
                   >
                     {isArabic ? contentAr.personal.email : "Email *"}
                   </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.personal.email}
-                    onChange={(e) =>
-                      handleInputChange("personal", "email", e.target.value)
-                    }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
-                    required
-                  />
+                  <div className="relative">
+              <input
+                ref={emailInputRef}
+                type="email"
+                id="email"
+                value={formData.personal.email}
+                onChange={(e) =>
+                  handleInputChange("personal", "email", e.target.value)
+                }
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+                className={`w-full rounded-lg px-3 py-2 text-secondary-dark-gray transition-all duration-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                  jobSlug || (!jobSlug && !isEditingEmail)
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                }`}
+                disabled={jobSlug || (!jobSlug && !isEditingEmail)}
+                required
+              />
+
+              {!jobSlug && !isEditingEmail && (
+                <button
+                  type="button"
+                  onClick={handleEnableEdit}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500"
+                  aria-label="Edit Email"
+                >
+                  <Pencil size={18} />
+                </button>
+              )}
+            </div>
                 </div>
-                <div>
+                <div className="custom-phone-wrapper">
                   <label
                     htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
                     {isArabic ? contentAr.personal.phone : "Phone Number *"}
                   </label>
-                  <input
-                    type="tel"
+                  <PhoneInput
                     id="phone"
+                    defaultCountry="SA"
+                    international
                     value={formData.personal.phone}
-                    onChange={(e) =>
-                      handleInputChange("personal", "phone", e.target.value)
-                    }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
-                    dir={isArabic ? "rtl" : "ltr"}
+                    onChange={(value) => handleInputChange("personal", "phone", value)}
+                    className="phone-input-no-border w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    style={{ direction: isArabic ? "rtl" : "ltr" }}
                     required
                   />
                 </div>
@@ -1366,7 +1606,6 @@ const ApplicationForm = () => {
                     placeholder="https://www.linkedin.com/in/your-profile"
                   />
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {isArabic ? contentAr.links.portfolio : "Portfolio"}
@@ -1411,9 +1650,120 @@ const ApplicationForm = () => {
                     placeholder="https://www.otherlink.com"
                   />
                 </div>
+                {isValid === false && <p style={{ color: "red" }}>Invalid URL!</p>}
+
               </div>
             </div>
           )}
+
+          {/* Acknowledgment Tab */}
+          {activeTab === "acknowledgment" && (
+           <div className="py-4 px-6">
+           <label className="flex items-center space-x-2">
+             <input
+               type="checkbox"
+               checked={acknowledged}
+               onChange={() => setAcknowledged(!acknowledged)}
+               className="h-5 w-5 text-blue-600 border-gray-300 rounded"
+             />
+             <span className="text-secondary-dark-gray">
+               {isArabic
+                 ? "أقر بأن جميع المعلومات التي قمت بإدخالها صحيحة وللمنشأة الحق في استبعادي من المسابقة الوظيفية في حال كانت المعلومات المدخلة غير صحيحة"
+                 : "I declare that all inserted information is correct and the organization has the right to withdraw my application from any competition if the information I inserted is incorrect."}
+             </span>
+           </label>
+         </div>
+         
+          )}
+{activeTab === "deleteAccount" && (
+  <form>
+ <div className="py-4 px-6">
+ <div className="max-w-2xl mx-auto">
+   <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+     <h2 className="text-xl font-bold text-red-600 mb-4">Delete Your Account</h2>
+     
+     {/* Success message */}
+     {success && (
+       <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+         {success}
+       </div>
+     )}
+     
+     {/* Error message */}
+     {error && (
+       <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+         {error}
+       </div>
+     )}
+     
+     <div className="mb-6">
+       
+       <ul className="list-disc pl-5 space-y-2 text-gray-700">
+         <li>Permanently removes all your personal data</li>
+         <li>Deletes all your job applications and application history</li>
+         <li>Cannot be undone - this action is irreversible</li>
+       </ul>
+     </div>
+     
+     <div className="bg-white border border-red-200 rounded-lg p-4 mb-6">
+       <div className="flex items-start mb-4">
+         <div className="flex-shrink-0">
+           <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+             <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+           </svg>
+         </div>
+         <div className="ml-3">
+           <h3 className="text-sm font-medium text-red-800">
+             Are you sure you want to proceed?
+           </h3>
+         </div>
+       </div>
+       
+       <div className="mb-4">
+         <div className="flex items-start">
+           <div className="flex items-center h-5">
+             <input
+               id="confirm-delete"
+               name="confirm-delete"
+               type="checkbox"
+               checked={hasConfirmed}
+               onChange={(e) => setHasConfirmed(e.target.checked)}
+               className="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
+             />
+           </div>
+           <div className="ml-3 text-sm">
+             <label htmlFor="confirm-delete" className="font-medium text-gray-700">
+               I understand that this action cannot be undone
+             </label>
+           </div>
+         </div>
+       </div>
+       
+     </div>
+     
+     <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+       <button
+         type="button"
+         onClick={handleDeleteAccount}
+         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+         disabled={isLoading}
+       >
+         {isLoading ? (
+           <>
+             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+             </svg>
+             Processing...
+           </>
+         ) : "Delete Account Permanently"}
+       </button>
+     </div>
+   </div>
+ </div>
+ </div>
+ </form>
+)}
 
           {/* Form Controls */}
           <div className="mt-8 flex justify-between border-t pt-6">
@@ -1479,9 +1829,9 @@ const ApplicationForm = () => {
                 <button
                   type="button"
                   onClick={submitApplication}
-                  disabled={submitting || !formCompleted}
+                  disabled={submitting || !formCompleted || isValid === false || acknowledged === false}
                   className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                    formCompleted
+                    formCompleted,isValid,acknowledged
                       ? "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       : "bg-green-300 cursor-not-allowed"
                   }`}
@@ -1513,7 +1863,7 @@ const ApplicationForm = () => {
                   ) : isArabic ? (
                     "تقديم الطلب"
                   ) : (
-                    "Submit Application"
+                    !jobSlug ? "Save" : "Submit Application"
                   )}
                 </button>
               ) : (
@@ -1531,6 +1881,7 @@ const ApplicationForm = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

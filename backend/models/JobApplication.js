@@ -73,7 +73,7 @@ const jobApplicationSchema = new mongoose.Schema({
   links: linksSchema,
   status: {
     type: String,
-    enum: ["draft", "submitted", "reviewed", "rejected", "accepted"],
+    enum: ["draft", "submitted", "reviewed", "rejected", "accepted","personal"],
     default: "draft",
   },
   jobSlug: {

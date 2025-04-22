@@ -190,10 +190,6 @@ function BlogNews() {
     );
   }
 
-  // If no blog section data yet, show a placeholder
-  // if (!blogSection) {
-  //   return null;
-  // }
 
   return (
     <section 
@@ -205,12 +201,20 @@ function BlogNews() {
         ref={titleRef}
         className={`text-md md:text-5xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-primary-green' : 'text-white'}`}
       >
-        {formatTitle(isArabic ? blogPosts.titleAr : blogSection.title)}
+      {blogPosts && blogSection ? (
+        formatTitle(isArabic ? blogSection.titleAr : blogSection.title)
+      ) : (
+        <span>Loading...</span>
+      )}
       </h2>
       <p 
         className={`text-sm md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-200'} mb-12`}
       >
-        {isArabic ? blogSection.descriptionAr : blogSection.description}
+       {blogPosts && blogSection ? (
+        formatTitle(isArabic ? blogSection.descriptionAr: blogSection.description)
+      ) : (
+        <span>Loading...</span>
+      )}
       </p>
     </div>
   

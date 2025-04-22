@@ -67,14 +67,17 @@ exports.getApplicationByUserId = async (req, res) => {
       console.log(objectId)
 
       let application = await JobApplication.findOne({ 
-        userId: objectId, 
-        status: "submitted" 
-      });
+        userId: objectId,
+        status: "personal" 
+      }).lean();
   
       // If no submitted one, fallback to any application by userId
       if (!application) {
-        console.log("No submitted application found, looking for any...");
-        application = await JobApplication.findOne({ userId: objectId });
+        console.log("No personal application found, looking for any...");
+        const user = await User.findById(objectId).select("email");
+        const email = user?.email || null;
+        console.log(email)
+        return res.status(201).json(email)
       }
   
       if (!application) {
@@ -191,38 +194,60 @@ exports.saveDraft = async (req, res) => {
 
 // Submit application
 exports.submitApplication = async (req, res) => {
-  // Your submit application logic here
-    try {
-      // Destructure the data from req.body (not req.fields)
-      const { userId, personal, education, experience, skills, links, jobSlug } = req.body;
-  
-      // Validate that userId exists
-      if (!userId) {
-        return res.status(400).json({ message: "Missing userId. Try logging in again" });
-      }
-  
-      // No need to parse the data since it was sent as JSON
-      const application = new JobApplication({
-        userId: new mongoose.Types.ObjectId(userId),
-        personal,
-        education,
-        experience,
-        skills,
-        links,
+  try {
+    const { userId, personal, education, experience, skills, links, jobSlug } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "Missing userId. Try logging in again" });
+    }
+
+    const applicationData = {
+      userId: new mongoose.Types.ObjectId(userId),
+      personal,
+      education,
+      experience,
+      skills,
+      links,
+    };
+
+    let application;
+
+    if (jobSlug) {
+      // Create a new application with status "submitted"
+      application = new JobApplication({
+        ...applicationData,
         jobSlug,
         status: "submitted",
       });
-  
-      // Save the application to the database
       await application.save();
-  
-      res.status(201).json({
-        message: "Application submitted successfully",
-        application,
+    } else {
+      // Check if a "personal" draft exists
+      application = await JobApplication.findOne({
+        userId: applicationData.userId,
+        status: "personal",
       });
-    } catch (error) {
-      console.error("Error submitting job application:", error);
-      res.status(500).json({ message: "Server error", error });
+
+      if (application) {
+        // Update the existing draft
+        Object.assign(application, applicationData);
+        await application.save();
+      } else {
+        // Create a new draft
+        application = new JobApplication({
+          ...applicationData,
+          status: "personal",
+        });
+        await application.save();
+      }
     }
-  
+
+    res.status(201).json({
+      message: jobSlug ? "Application submitted successfully" : "Draft saved successfully",
+      application,
+    });
+
+  } catch (error) {
+    console.error("Error submitting job application:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
 };

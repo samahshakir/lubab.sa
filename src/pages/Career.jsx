@@ -7,6 +7,7 @@ import client from "../sanityClient"; // Your configured Sanity client
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { isAuthenticated,logout, verifyToken } from '../utils/auth'; // Import useAuth
 import { PortableText } from '@portabletext/react';
+import Footer from '../components/Footer'
 
 
 // Register ScrollTrigger plugin
@@ -136,6 +137,10 @@ const Careers = () => {
     logout();
     navigate('/career'); // Redirect to home or login page after logout
   }
+  const handleProfile = () => {
+    sessionStorage.removeItem("jobSlug")
+    navigate('/applications/profile')
+  }
 
   const LoadingScreen = () => (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
@@ -152,7 +157,7 @@ const Careers = () => {
    }
 
   return (
-    <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen py-20 overflow-hidden`}>
+    <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen pt-20 overflow-hidden`}>
       
       <div className="container mx-auto px-6">
 
@@ -163,8 +168,11 @@ const Careers = () => {
               <span className={`text-sm font-medium ${darkMode ? 'text-gray-700' : 'text-white'}`}>
                 {username}
               </span>
+              <button onClick={handleProfile} title="Logout">
+              <img src="/src/assets/user.png" alt="Profile" className="h-6 w-auto hover:cursor-pointer" />
+              </button>
               <button onClick={handleLogout} title="Logout">
-                 <img src="/src/assets/logout.png" alt="Logout" className="h-6 w-auto" /> {/* Replace with actual logout icon */}
+                 <img src="/src/assets/logout.png" alt="Logout" className="h-6 w-auto hover:cursor-pointer" /> {/* Replace with actual logout icon */}
               </button>
             </>
           ) : (
@@ -273,7 +281,7 @@ const Careers = () => {
 
         {/* Why Join Section (Keep as is if needed) */}
         {whyJoin.length > 0 && (
-            <div className="mt-20 text-center">
+            <div className="my-20 text-center">
               <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
                 {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
               </h3>
@@ -297,6 +305,7 @@ const Careers = () => {
         )}
 
       </div>
+      <Footer/>
     </div>
   );
 };
