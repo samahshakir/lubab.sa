@@ -8,6 +8,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { isAuthenticated,logout, verifyToken } from '../utils/auth'; // Import useAuth
 import { PortableText } from '@portabletext/react';
 import Footer from '../components/Footer'
+import Navbar from '../components/Navbar';
+import ThemeLangToggle from '../components/ThemLangToggle';
 
 
 // Register ScrollTrigger plugin
@@ -158,11 +160,11 @@ const Careers = () => {
 
   return (
     <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen pt-20 overflow-hidden`}>
-      
       <div className="container mx-auto px-6">
-
         {/* --- Updated User Icon/Link --- */}
-        <div className="absolute top-6 right-6 text-2xl text-gray-600 hover:text-primary-blue transition flex items-center space-x-4">
+        <div className="absolute top-6 right-6 text-sm text-gray-600 hover:text-primary-blue transition flex items-center space-x-4">
+        <ThemeLangToggle/>
+
           {isAuthenticated() ? (
             <>
               <span className={`text-sm font-medium ${darkMode ? 'text-gray-700' : 'text-white'}`}>
@@ -185,6 +187,7 @@ const Careers = () => {
             
           )}
         </div>
+          
 
         {/* Section Title */}
         <div className="text-center mb-5 md:mb-16">

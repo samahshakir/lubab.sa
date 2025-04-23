@@ -45,73 +45,118 @@ const Team = () => {
   }, []);
 
   // Handle scroll and animation
-  useLayoutEffect(() => {
-    if (teamMembers.length === 0) return;
+  // useLayoutEffect(() => {
+  //   if (teamMembers.length === 0) return;
 
-    let ctx = gsap.context(() => {
-      const sections = sectionRefs.current;
-      const cards = cardsRef.current;
+  //   let ctx = gsap.context(() => {
+  //     const sections = sectionRefs.current;
+  //     const cards = cardsRef.current;
 
-      // Initial setup for all cards
-      cards.forEach((card, index) => {
-        if (index === 0) {
-          gsap.set(card, {
-            autoAlpha: 1,
-            x: 0,
-            scale: 1,
-            filter: "blur(0px)",
-            zIndex: 10,
-          });
-        } else if (index === 1) {
-          gsap.set(card, {
-            autoAlpha: 0.6,
-            x: "60%",
-            scale: 0.9,
-            filter: "blur(8px)",
-            zIndex: 5,
-          });
-        } else {
-          gsap.set(card, {
-            autoAlpha: 0,
-            x: "100%",
-            scale: 0.9,
-            filter: "blur(8px)",
-            zIndex: 1,
-          });
-        }
-      });
+  //     // Initial setup for all cards
+  //     cards.forEach((card, index) => {
+  //       if (index === 0) {
+  //         gsap.set(card, {
+  //           autoAlpha: 1,
+  //           x: 0,
+  //           scale: 1,
+  //           filter: "blur(0px)",
+  //           zIndex: 10,
+  //         });
+  //       } else if (index === 1) {
+  //         gsap.set(card, {
+  //           autoAlpha: 0.6,
+  //           x: "60%",
+  //           scale: 0.9,
+  //           filter: "blur(8px)",
+  //           zIndex: 5,
+  //         });
+  //       } else {
+  //         gsap.set(card, {
+  //           autoAlpha: 0,
+  //           x: "100%",
+  //           scale: 0.9,
+  //           filter: "blur(8px)",
+  //           zIndex: 1,
+  //         });
+  //       }
+  //     });
       
-      // Only setup ScrollTrigger for non-mobile
-      if (!isMobile) {
-        scrollTriggerRef.current = ScrollTrigger.create({
-          id: "team-scroll",
-          trigger: sections,
-          pin: true,
-          start: "top top",
-          end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
-          scrub: 1,
-          onUpdate: (self) => {
-            const newIndex = Math.min(
-              Math.floor(self.progress * teamMembers.length),
-              teamMembers.length - 1
-            );
-            if (newIndex !== activeIndexRef.current) {
-              navigateToMember(newIndex);
-            }
-          },
-        });
-      }
+  //     // Only setup ScrollTrigger for non-mobile
+  //     if (!isMobile) {
+  //       scrollTriggerRef.current = ScrollTrigger.create({
+  //         id: "team-scroll",
+  //         trigger: sections,
+  //         start: "top top",
+  //         end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
+  //         scrub: 1,
+  //         pin: false,
+  //         onUpdate: (self) => {
+  //           const newIndex = Math.min(
+  //             Math.floor(self.progress * teamMembers.length),
+  //             teamMembers.length - 1
+  //           );
+  //           if (newIndex !== activeIndexRef.current) {
+  //             navigateToMember(newIndex);
+  //           }
+  //         },
+  //       });
+  //     }
 
-      ScrollTrigger.refresh();
-    }, sectionRefs);
+  //     ScrollTrigger.refresh();
+  //   }, sectionRefs);
 
-    return () => {
-      ctx.revert();
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill();
+  //   return () => {
+  //     ctx.revert();
+  //     if (scrollTriggerRef.current) {
+  //       scrollTriggerRef.current.kill();
+  //     }
+  //   };
+  // }, [teamMembers, isMobile]);
+
+  useEffect(() => {
+    if (isMobile || !cardsRef.current.length) return;
+  
+    const handleWheel = (e) => {
+      const currentIndex = activeIndexRef.current;
+  
+      if (e.deltaY > 0) {
+        // Scroll down
+        if (currentIndex < teamMembers.length - 1) {
+          e.preventDefault(); // Only prevent when not at last member
+          navigateToMember(currentIndex + 1);
+        }
+      } else if (e.deltaY < 0) {
+        // Scroll up
+        if (currentIndex > 0) {
+          e.preventDefault(); // Only prevent when not at first member
+          navigateToMember(currentIndex - 1);
+        }
       }
     };
-  }, [teamMembers, isMobile]);
+  
+    const cards = cardsRef.current;
+  
+    cards.forEach((card) => {
+      const onEnter = () => card.addEventListener("wheel", handleWheel, { passive: false });
+      const onLeave = () => card.removeEventListener("wheel", handleWheel);
+  
+      card.addEventListener("mouseenter", onEnter);
+      card.addEventListener("mouseleave", onLeave);
+  
+      card._onEnter = onEnter;
+      card._onLeave = onLeave;
+    });
+  
+    return () => {
+      cards.forEach((card) => {
+        card.removeEventListener("mouseenter", card._onEnter);
+        card.removeEventListener("mouseleave", card._onLeave);
+        card.removeEventListener("wheel", handleWheel);
+      });
+    };
+  }, [isMobile, teamMembers]);
+  
+  
 
   // Navigate to specific team member
   const navigateToMember = (index) => {

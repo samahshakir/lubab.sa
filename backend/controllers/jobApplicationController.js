@@ -59,38 +59,40 @@ exports.getUsernameById = async (req, res) => {
 // Fetch application by user ID
 exports.getApplicationByUserId = async (req, res) => {
   // Your fetch application by user ID logic here
-    const { userId } = req.body;
-    console.log(userId)
-  
-    try {
-      const objectId = new mongoose.Types.ObjectId(userId); // Convert to ObjectId
-      console.log(objectId)
+  const { userId } = req.body;
+  console.log(userId);
 
-      let application = await JobApplication.findOne({ 
-        userId: objectId,
-        status: "personal" 
-      }).lean();
-  
-      // If no submitted one, fallback to any application by userId
-      if (!application) {
-        console.log("No personal application found, looking for any...");
-        const user = await User.findById(objectId).select("email");
-        const email = user?.email || null;
-        console.log(email)
-        return res.status(201).json(email)
-      }
-  
-      if (!application) {
-        console.log("not found")
-        return res.status(201).json({ message: "No application found for this user" });
-      }
-  
-      return res.status(200).json(application);
-    } catch (error) {
-      console.error("Error fetching application:", error);
-      return res.status(500).json({ message: "Internal server error" });
+  try {
+    const objectId = new mongoose.Types.ObjectId(userId); // Convert to ObjectId
+    console.log(objectId);
+
+    // Fetch the user's email first, since we need it regardless of job application status
+    const user = await User.findById(objectId).select("email");
+    const email = user?.email || null;
+    console.log(email);
+
+    if (!email) {
+      return res.status(404).json({ message: "User not found" });
     }
-  
+
+    let application = await JobApplication.findOne({
+      userId: objectId,
+      status: "personal"
+    }).lean();
+
+    // If no personal application, fallback to any application by userId
+    if (!application) {
+      console.log("No personal application found, looking for any...");
+      return res.status(201).json({ email }); // Send email in the response
+    }
+
+    // If found, send the job application along with the user email
+    return res.status(200).json({ application, email });
+    
+  } catch (error) {
+    console.error("Error fetching application:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Check drafts

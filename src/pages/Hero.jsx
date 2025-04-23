@@ -4,6 +4,7 @@ import { useDarkMode } from "../context/DarkModeContext";
 import client from "../sanityClient";
 import { Link } from "react-scroll";
 import Spline from "@splinetool/react-spline";
+import HeroLogo from '../assets/AssetLogo.webp'
 
 const Hero = () => {
   const { isArabic } = useLanguage();
@@ -58,8 +59,8 @@ const Hero = () => {
       {isLoading && <LoadingScreen />}
 
       <main
-        className={`container min-h-screen mx-auto px-6 ${
-          isArabic ? "pt-28 md:pt-40" : "pt-22"
+        className={`container min-h-1.5 md:min-h-screen mx-auto px-6 ${
+          isArabic ? "pt-5 md:pt-40" : "pt-22"
         } pb-20 relative font-nizar`}
       >
         {/* <div className="absolute inset-0 opacity-5 pointer-events-none" 
@@ -72,6 +73,15 @@ const Hero = () => {
             isArabic ? "lg:flex-row-reverse" : ""
           }`}
         >
+          <div className="absolute inset-0 flex justify-center items-center z-0 opacity-15 pointer-events-none lg:hidden">
+    <img
+      src={HeroLogo}
+      alt="3D Visual"
+      className="max-w-[70%] h-auto"
+    />
+    {/* Or use Spline instead of image */}
+    {/* <Spline scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode" /> */}
+  </div>
           {/* Text Content */}
           <div
             className={`max-w-2xl relative z-20 pr-5 ${
@@ -140,7 +150,7 @@ const Hero = () => {
               isArabic ? "lg:order-first" : "lg:order-last"
             }`}
           >
-            {/* Gradient Backgrounds */}
+            {/* Gradient Backgrounds
             <div
               className={`absolute -bottom-10 -right-10 w-96 h-96 ${
                 darkMode ? "bg-green-500" : "bg-green-600"
@@ -150,7 +160,7 @@ const Hero = () => {
               className={`absolute -top-10 -left-10 w-72 h-72 ${
                 darkMode ? "bg-blue-400" : "bg-blue-500"
               } rounded-full opacity-15 blur-3xl transition-colors duration-300`}
-            ></div>
+            ></div> */}
 
             {/* Spline scene */}
             <div
@@ -167,14 +177,14 @@ const Hero = () => {
               />
             </div>
 
-            <div className="w-full flex justify-center items-center lg:hidden">
+            {/* <div className="w-full flex justify-center items-center lg:hidden opacity-20">
               <img
-                src="./lubab-b.png"
+                src={HeroLogo}
                 alt="3D Visual"
                 className="max-w-[70%] h-auto"
-              />
+              /> */}
               {/* <Spline scene="https://prod.spline.design/WxkEBWD1AULRdO4M/scene.splinecode" /> */}
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </main>

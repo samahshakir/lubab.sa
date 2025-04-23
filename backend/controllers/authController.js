@@ -51,45 +51,45 @@ exports.register = async (req, res) => {
 
 // Login user
 exports.login = async (req, res) => {
-  // Updated login route for all users
-    try {
-      const { username, password } = req.body;
-  
-      // Find the user by username
-      const user = await User.findOne({ username });
-      if (!user) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-      // Verify password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        console.log("Password valid?", isPasswordValid);
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-  
-      // Generate JWT token
-      const token = jwt.sign(
-        { id: user._id, isAdmin: user.isAdmin },
-        process.env.JWT_SECRET,
-        { expiresIn: "24h" }
-      );
-  
-      res.status(200).json({
-        message: "Login successful",
-        token,
-        user: {
-          id: user._id,
-          username: user.username,
-          isAdmin: user.isAdmin,
-        },
-        // Send redirect information based on username
-        redirectTo: username === "admin" ? "/admin-dashboard" : "/applications",
-      });
-    } catch (err) {
-      console.error("Login error:", err);
-      res.status(500).json({ message: "Server error" });
+  try {
+    const { username, password } = req.body;
+
+    // Find the user by username or email
+    const user = await User.findOne({
+      $or: [{ username }, { email: username }]
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        isAdmin: user.isAdmin,
+      },
+      redirectTo: username === "admin" ? "/admin-dashboard" : "/applications",
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
+
 
 // Verify token
 exports.verifyToken = (req, res) => {

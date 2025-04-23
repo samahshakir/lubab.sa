@@ -30,7 +30,7 @@ export default function JobApplicationSuccess() {
           
           <div className="text-gray-600 mb-8">
             <p className="mb-2">Application Reference: <span className="font-medium">JOB-2025-{Math.floor(10000 + Math.random() * 90000)}</span></p>
-            <p>A confirmation email has been sent to your registered email address.</p>
+            {/* <p>A confirmation email has been sent to your registered email address.</p> */}
           </div>
           
           <div className="flex justify-center sm:flex-row gap-4 w-full ">

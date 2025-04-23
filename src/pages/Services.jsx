@@ -1,62 +1,36 @@
-import React, { useEffect, useRef, useState,useLayoutEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useDarkMode } from "../context/DarkModeContext";
 import { useLanguage } from "../context/LanguageContext";
-import sanityClient from "../sanityClient"; // Import your Sanity client
+import sanityClient from "../sanityClient";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+// Framer Motion Variants
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const textVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
 
 // Service card component
-const ServiceCard = ({ icon, title, description, status, index }) => {
-  const cardRef = useRef(null);
+const ServiceCard = ({ icon, title, description, status }) => {
   const { darkMode } = useDarkMode();
-  const cardAnimationRef = useRef(null);
-
-  useEffect(() => {
-    gsap.set(cardRef.current, {
-      opacity: 0,
-      y: 50,
-    });
-
-    // Create a unique identifier for this specific card's ScrollTrigger
-    cardAnimationRef.current = ScrollTrigger.create({
-      trigger: cardRef.current,
-      start: "top 80%", // Start animation when top of the card hits 80% of the viewport height
-      end: "bottom 20%", // End the animation when the bottom of the card is at 20% of the viewport height
-      toggleActions: "play none none reverse", // Play the animation when entering the viewport, reverse it when leaving
-      id: `serviceCard-${index}`,
-      onEnter: () => {
-        gsap.to(cardRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          delay: index * 0.15,
-          ease: "power3.out",
-        });
-      },
-      onLeaveBack: () => {
-        gsap.to(cardRef.current, {
-          opacity: 0,
-          y: 50,
-          duration: 0.6,
-          ease: "power3.out",
-        });
-      },
-    });
-
-    // Cleanup function to kill the ScrollTrigger instance when the component unmounts
-    return () => {
-      if (cardAnimationRef.current) {
-        cardAnimationRef.current.kill();
-      }
-    };
-  }, [index]);
 
   return (
-    <div
-      ref={cardRef}
+    <motion.div
+      variants={cardVariants}
       className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105"
     >
       <div className="flex flex-col h-full">
@@ -71,14 +45,11 @@ const ServiceCard = ({ icon, title, description, status, index }) => {
           {status}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 const Services = () => {
-  const sectionRef = useRef(null);
-  const headingRef = useRef(null);
-  const subheadingRef = useRef(null);
   const { darkMode } = useDarkMode();
   const { isArabic } = useLanguage();
   const [services, setServices] = useState([]);
@@ -98,57 +69,41 @@ const Services = () => {
       .catch(console.error);
   }, []);
 
-  useLayoutEffect(() => {
-    let ctx = gsap.context(() => {
-      gsap.set([headingRef.current, subheadingRef.current], { opacity: 0, y: 30 });
-  
-      const tl = gsap.timeline().to(headingRef.current, { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
-        .to(subheadingRef.current, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.7");
-  
-      ScrollTrigger.create({
-        id: "services-heading",
-        trigger: sectionRef.current,
-        start: "top 70%",
-        onEnter: () => tl.play(),
-        onLeaveBack: () => tl.reverse(),
-      });
-  
-      ScrollTrigger.create({
-        id: "services-bg",
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      });
-  
-      ScrollTrigger.refresh();
-    }, sectionRef);
-  
-    return () => ctx.revert();
-  }, []);
-  
-
   return (
     <div
-      ref={sectionRef}
       className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-[90%] py-15 overflow-hidden`}
-      id="services-section" // Add a unique ID
+      id="services-section"
     >
       <div className="services-bg-gradient absolute inset-0 z-0 opacity-20"></div>
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <h2
-            ref={headingRef}
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={containerVariants}
+        >
+          <motion.h2
             className="text-2xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-green-500 bg-clip-text text-transparent mt-10"
+            variants={textVariants}
           >
             {isArabic ? "خدماتنا" : "Our Services"}
-          </h2>
-          <p ref={subheadingRef} className="text-sm md:text-lg text-gray-500 max-w-3xl mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-sm md:text-lg text-gray-500 max-w-3xl mx-auto"
+            variants={textVariants}
+          >
             {isArabic ? "حلول تقنية متكاملة لأعمال متطورة" : "Comprehensive Digital Solutions for Evolving Businesses"}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           {services.map((service, index) => (
             <ServiceCard
               key={index}
@@ -156,10 +111,9 @@ const Services = () => {
               title={isArabic ? service.title?.ar : service.title?.en}
               description={isArabic ? service.description?.ar : service.description?.en}
               status={service.status}
-              index={index}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

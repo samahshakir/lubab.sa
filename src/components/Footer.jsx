@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
 import {useState,useEffect} from 'react'
 import client from '../sanityClient';
+import logo from '../assets/AssetImage.webp'
 
 function Footer() {
   const { darkMode } = useDarkMode();
@@ -44,11 +45,11 @@ function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center mb-3 md:mb-6">
               <img
-                src="/lubab-b.png"
+                src={logo}
                 alt="Lubab"
-                className="h-8 w-auto mr-3"
+                className="h-10 w-auto mr-3"
               />
-              <span
+              {/* <span
                 className={`text-xl font-bold bg-clip-text text-transparent ${
                   darkMode
                     ? 'bg-gradient-to-r from-[#3F73B7] via-[#00BC78] to-[#3F73B7]'
@@ -56,7 +57,7 @@ function Footer() {
                 }`}
               >
                 Lubab
-              </span>
+              </span> */}
             </div>
             <p
               className={`${

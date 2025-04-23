@@ -9,6 +9,8 @@ import PhoneInput from "react-phone-number-input";
 import 'react-phone-number-input/style.css'
 import GoBackButton from "../components/GoBackButton";
 import { PortableText } from "@portabletext/react";
+import backgroundImage from '../assets/Assetbg.webp';
+
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -33,6 +35,7 @@ const ApplicationForm = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [hasConfirmed, setHasConfirmed] = useState(false);
+  const [previousEmail, setPreviousEmail] = useState('');
 
 
   const contentAr = {
@@ -158,28 +161,41 @@ const ApplicationForm = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?.id;
       console.log(userId);
-
+    
       if (!userId) {
         console.error("User ID not found");
         return;
       }
-
+    
       try {
         const response = await axios.post(`${apiUrl}/api/applications/userId`, {
           userId,
         });
+    
         if (response.status === 200) {
-          setFormData(response.data);
-        }else if(response.status == 201){
-          setFormData(prev => ({
+          // Response contains both application data and email
+          setFormData(response.data.application); // Set application data
+          setPreviousEmail(response.data.email); // Set the user's email
+
+          setFormData((prev) => ({
             ...prev,
             personal: {
               ...prev.personal,
-              email: response.data,
+              email: response.data.email, // Update the email
             },
           }));
-        }
-         else if (response.status === 404) {
+        } else if (response.status === 201) {
+          // No personal application found, but the email is available
+          const newEmail = response.data; // The email is the response data in this case
+          setPreviousEmail(newEmail);
+          setFormData((prev) => ({
+            ...prev,
+            personal: {
+              ...prev.personal,
+              email: newEmail, // Set the email in the form data
+            },
+          }));
+        } else if (response.status === 404) {
           console.log("No application found for this user.");
         } else {
           console.error("Failed to fetch application:", response.statusText);
@@ -188,6 +204,7 @@ const ApplicationForm = () => {
         console.error("Error loading application:", error);
       }
     };
+    
 
     const fetchJobDetails = async () => {
       if (!jobSlug) {
@@ -289,12 +306,14 @@ const ApplicationForm = () => {
         formData.skills.skillList.filter((skill) => skill.trim()).length > 0
       );
     };
-
     const checkLinksCompletion = () => {
       const { linkedin, portfolio, github, other } = formData.links;
-      return linkedin || portfolio || github || other;
+    
+      if (isValid === false) return false;
+    
+      return !!linkedin || !!portfolio || !!github || !!other;
     };
-
+    
     const updatedTabCompletion = {
       personal: checkPersonalCompletion(),
       education: checkEducationCompletion(),
@@ -544,6 +563,7 @@ const ApplicationForm = () => {
 
   const handleEnableEdit = () => {
     setIsEditingEmail(true);
+    alert("Your login email will also be changed on saving this form");
     setTimeout(() => {
       emailInputRef.current?.focus();
     }, 50);
@@ -553,13 +573,31 @@ const ApplicationForm = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      handleEmailValidation();
       setIsEditingEmail(false);
       emailInputRef.current?.blur();
     }
   };
   
   const handleBlur = () => {
+    handleEmailValidation(); 
     setIsEditingEmail(false);
+  };
+
+  const handleEmailValidation = () => {
+    const email = formData.personal.email;
+    // Basic email regex pattern
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+      alert("Enter a valid email");
+      setFormData((prevData) => ({
+        ...prevData,
+        personal: {
+          ...prevData.personal,
+          email: previousEmail, // Reset to previous valid email
+        },
+      }));
+    }
   };
 
   const saveDraft = async () => {
@@ -593,6 +631,8 @@ const ApplicationForm = () => {
       setSaving(false);
     }
   };
+  const isOnboarding = sessionStorage.getItem('Onboarding') === 'true';
+
 
   const submitApplication = async () => {
     if (!formCompleted) {
@@ -600,9 +640,40 @@ const ApplicationForm = () => {
       return;
     }
     setSubmitting(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(formData.personal.email,previousEmail)
+    if (formData.personal.email !== previousEmail) {
+      console.log("updating email...........")
+      const userConfirmed = confirm("Your email has been changed. Do you want to continue?");
+      if (!userConfirmed) {
+        setSubmitting(false);
+        return; // Return early if the user clicked "No"
+      }
+      try {
+        // Call your API to update the email in the database
+        const response = await axios.put(`${apiUrl}/api/users/update-email`, {
+          userId: user.id,
+          newEmail: formData.personal.email,
+        });
+  
+        if (response.status === 200) {
+          // Successfully updated the email
+          console.log("Email updated successfully!");
+          setPreviousEmail(formData.personal.email);  // Update previous email with the new one
+        } else {
+          // Handle any unexpected status
+          console.log("Failed to update email");
+        }
+      } catch (error) {
+        console.error("Error updating email:", error);
+      }
+    } else {
+      // If email hasn't changed, just submit the form or do nothing
+      console.log("Email hasn't changed, no need to update.");
+    }
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      
 
       // Prepare the application data as a JSON object
       const applicationData = {
@@ -639,6 +710,7 @@ const ApplicationForm = () => {
       setSubmitting(false);
     }
   };
+  
 
   if (loading) {
     return (
@@ -715,10 +787,16 @@ const ApplicationForm = () => {
   
 
   return (
-    <div>
+    <div className="relative min-h-screen">
       <GoBackButton/>
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+        }}
+      />
     <div className="max-w-5xl mx-auto px-4 py-8 font-nizar">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
         {/* Job Header */}
         <div
           className="bg-gray-100 shadow-lg p-6"
@@ -838,7 +916,7 @@ const ApplicationForm = () => {
               <span>{isArabic ? contentAr.acknowledgment.acknowledgment : "Acknowledgment"}</span>
               {tabCompletion.acknowledgment && <span className="text-green-500">✓</span>}
             </button>
-            {!jobSlug && (
+            {!jobSlug && !isOnboarding && (
           <button
             onClick={() => setActiveTab("deleteAccount")}
             className={`py-4 px-6 font-medium text-sm whitespace-nowrap ${
@@ -1800,9 +1878,9 @@ const ApplicationForm = () => {
                     Saving...
                   </>
                 ) : (
-                  <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
-                    {isArabic ? "حفظ المسودة" : "Save Draft"}
-                  </span>
+                    <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
+                      {isArabic ? "حفظ المسودة" : "Save Draft"}
+                    </span>
                 )}
               </button>
               {draftSaved && (
@@ -1832,7 +1910,7 @@ const ApplicationForm = () => {
                   onClick={submitApplication}
                   disabled={submitting || !formCompleted || isValid === false || acknowledged === false}
                   className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                    formCompleted,isValid,acknowledged
+                    formCompleted && isValid !== false && acknowledged
                       ? "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       : "bg-green-300 cursor-not-allowed"
                   }`}

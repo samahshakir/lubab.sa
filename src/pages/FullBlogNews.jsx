@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '../context/LanguageContext';
@@ -80,65 +80,6 @@ function FullBlogNews() {
     navigate(`/blog/article/${article.slug.current}`);
   };
 
-  useLayoutEffect(() => {
-    if (loading) return;
-
-    let ctx = gsap.context(() => {
-      // Title animation
-      gsap.fromTo(
-        titleRef.current,
-        { autoAlpha: 0, y: 50, scale: 0.9 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            id: "blog-title",
-            trigger: titleRef.current,
-            start: "top 80%", // Trigger when 80% of the section is visible
-            end: "bottom top",
-            toggleActions: "play none none reverse", // Reverse animation on scroll up
-          },
-        }
-      );
-  
-      // Card animations
-      const cards = gsap.utils.toArray(".blog-card");
-      if (cards.length > 0) {
-        cards.forEach((card, index) => {
-          gsap.fromTo(
-            card,
-            { autoAlpha: 0, y: 50, scale: 0.9 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              duration: 1,
-              delay: index * 0.1,
-              ease: "power3.out",
-              scrollTrigger: {
-                id: `blog-card-${index}`,
-                trigger: card,
-                start: "top 85%", // Animation triggers when each card is in view
-                end: "bottom 20%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        });
-      }
-  
-      // Ensure ScrollTrigger updates after animations are set
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 300);
-    }, sectionRef);
-  
-    return () => ctx.revert(); // Cleanup animations on unmount
-  }, [loading, blogPosts]);
-
   // Format the title to add styling to periods
   const formatTitle = (title) => {
     if (!title) return '';
@@ -169,7 +110,7 @@ function FullBlogNews() {
 
   if (loading) {
     return (
-      <section className={`container min-h-screen mx-auto px-6 pt-25 pb-20 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'}`}>
+      <section className={`min-h-screen mx-auto px-6 pt-25 pb-20 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'}`}>
         <div className="text-center">
           <div className={`w-12 h-12 border-4 border-gray-300 border-t-${darkMode ? 'primary-green' : 'secondary-blue'} rounded-full animate-spin mx-auto mb-4`}></div>
           <p className={darkMode ? 'text-dark-gray' : 'text-white'}>Loading blog content...</p>
@@ -186,7 +127,7 @@ function FullBlogNews() {
   return (
     <section 
       ref={sectionRef}
-      className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
     > 
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 

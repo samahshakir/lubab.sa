@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate,useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
+import GoBackButton from '../components/GoBackButton';
 
 const API_URL = import.meta.env.VITE_API_URL;;
 
@@ -39,7 +40,7 @@ const AuthPage = () => {
       // Store token and user info
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-  
+      const onboarding = sessionStorage.getItem('Onboarding') === 'true';
       const fromPath = location.state?.from  || '/career'; //|| sessionStorage.getItem("redirectAfterLogin")
       console.log(fromPath)
   
@@ -47,8 +48,11 @@ const AuthPage = () => {
         navigate('/applications');
       } else if (fromPath && fromPath.startsWith('/apply/')) {
         navigate(fromPath);
-      } else {
-        navigate('/applications/profile'); // Fallback for non-admins
+      }else if (onboarding) {
+        navigate('/applications/profile')
+      }
+       else {
+        navigate('/career'); // Fallback for non-admins
       }
   
     } catch (err) {
@@ -72,22 +76,36 @@ const AuthPage = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
-    if (!isFormValid) return;
-
+  
+    const currentValidations = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      specialChar: /[^A-Za-z0-9]/.test(password),
+    };
+  
+    const isCurrentlyValid = Object.values(currentValidations).every(Boolean);
+  
+    if (!isCurrentlyValid) {
+      setValidations(currentValidations); // update the UI
+      return;
+    }
+  
     setIsLoading(true);
     setError('');
     setSuccess('');
-    
+  
     try {
-      // Allow any user to sign up
       const response = await axios.post(`${API_URL}/auth/register`, {
         username,
         email,
-        password
+        password,
       });
-      
+  
+      sessionStorage.setItem('Onboarding', 'true');
       setSuccess('Account created successfully! You can now log in.');
+      setPassword('');
       setActiveTab('login');
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
@@ -96,7 +114,7 @@ const AuthPage = () => {
       setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     console.log("AuthPage location state:", location.state);
     setValidations({
@@ -109,7 +127,10 @@ const AuthPage = () => {
   }, [location,password]);
 
   return (
+    <div>
+      <GoBackButton/>
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 font-nizar">
+
       <div className="w-full max-w-md bg-gray-100 rounded-2xl shadow-[20px_20px_60px_#bebebe,-20px_-20px_60px_#ffffff] p-8">
         <div className="flex mb-6">
           <button
@@ -150,7 +171,7 @@ const AuthPage = () => {
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2" htmlFor="username">
-                Username
+                Username or Email
               </label>
               <input
                 id="username"
@@ -158,7 +179,7 @@ const AuthPage = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-3 py-2 bg-gray-100 text-dark-gray rounded-lg shadow-[inset_5px_2px_8px_#bebebe,inset_-5px_-5px_10px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your username"
+                placeholder="Enter your username or email"
                 required
               />
             </div>
@@ -276,6 +297,7 @@ const AuthPage = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

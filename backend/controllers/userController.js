@@ -62,3 +62,31 @@ exports.deleteAccount = async (req, res) => {
     });
   }
 };
+
+exports.updateEmail = async (req, res) => {
+  const { userId, newEmail } = req.body;
+  console.log("Incoming........",userId,newEmail);
+  try {
+    // Check if the new email already exists in the database
+    const existingUser = await User.findOne({ email: newEmail });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already in use." });
+    }
+
+    // Update the user's email
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { email: newEmail },
+      { new: true } // Return the updated user document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(updatedUser); // Send the updated user as response
+  } catch (error) {
+    console.error("Error updating email:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}

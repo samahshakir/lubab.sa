@@ -1,12 +1,10 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import React, { useRef, useEffect, useState } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '../context/LanguageContext';
 import { useDarkMode } from '../context/DarkModeContext';
 import { useNavigate } from 'react-router-dom';
 import sanityClient from '../sanityClient';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from 'framer-motion';
 
 function BlogNews() {
   const { isArabic } = useLanguage();
@@ -14,142 +12,88 @@ function BlogNews() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const navigate = useNavigate();
-  
+  const [isVisible, setIsVisible] = useState(false);
   // State for blog data
   const [blogSection, setBlogSection] = useState(null);
   const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch blog section data
-  useEffect(() => {
-    const fetchBlogSection = async () => {
-      try {
-        const data = await sanityClient.fetch(
-          `*[_type == "blogSection"][0]`
-        );
-        setBlogSection(data);
-      } catch (error) {
-        console.error("Error fetching blog section:", error);
+// 1. Combine related data fetching into a single useEffect
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [sectionData, postsData] = await Promise.all([
+        sanityClient.fetch(`*[_type == "blogSection"][0]`),
+        sanityClient.fetch(`*[_type == "blog"] | order(publishedAt desc) {
+          _id, title, titleAr, slug, excerpt, excerptAr, readTime, readTimeAr,
+          author, authorAr, publishedAt, tags, tagsAr, active,
+          mainImage { asset->{ _id, url } }
+        }`)
+      ]);
+      
+      setBlogSection(sectionData);
+      
+      // Process blog posts
+      const activePost = postsData.find(post => post.active);
+      const remainingPosts = postsData.filter(post => !post._id || 
+        (activePost ? post._id !== activePost._id : true));
+      
+      const selectedPosts = [
+        ...(activePost ? [activePost] : []),
+        ...remainingPosts.slice(0, activePost ? 4 : 5)
+      ];
+      
+      setBlogPosts(selectedPosts);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+
+// 2. Optimize scroll event listener with throttling
+useEffect(() => {
+  if (loading) return;
+  
+  // Throttle function to limit execution frequency
+  const throttle = (func, limit) => {
+    let inThrottle;
+    return function() {
+      const args = arguments;
+      const context = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
       }
     };
-
-    fetchBlogSection();
-  }, []);
-
-  // Fetch blog posts
-  useEffect(() => {
-    const fetchBlogPosts = async () => {
-      try {
-        setLoading(true);
-        const data = await sanityClient.fetch(
-          `*[_type == "blog"] | order(publishedAt desc) {
-            _id,
-            title,
-            titleAr,
-            slug,
-            excerpt,
-            excerptAr,
-            readTime,
-            readTimeAr,
-            author,
-            authorAr,
-            publishedAt,
-            tags,
-            tagsAr,
-            active,
-            mainImage {
-              asset->{
-                _id,
-                url
-              }
-            }
-          }`
-        );
+  };
   
-        // Prioritize active post first
-        const activePost = data.find(post => post.active);
-        const remainingPosts = data.filter(post => !post._id || (activePost ? post._id !== activePost._id : true));
-        
-        const selectedPosts = [
-          ...(activePost ? [activePost] : []),
-          ...remainingPosts.slice(0, activePost ? 4 : 5)
-        ];
+  // Throttled scroll handler
+  const handleScroll = throttle(() => {
+    const section = document.getElementById('blog-section');
+    if (!section) return;
+    
+    const rect = section.getBoundingClientRect();
+    setIsVisible(rect.top <= window.innerHeight * 0.8);
+  }, 100);
   
-        setBlogPosts(selectedPosts);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching blog posts:", error);
-        setLoading(false);
-      }
-    };
+  window.addEventListener('scroll', handleScroll);
+  handleScroll(); // Check initial visibility
   
-    fetchBlogPosts();
-  }, []);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [loading]);
   
 
   const handleReadMore = (article) => {
     // Navigate to the article page using the slug
     navigate(`/blog/article/${article.slug.current}`);
   };
-
-  useLayoutEffect(() => {
-    if (loading) return;
-
-    let ctx = gsap.context(() => {
-      // Title animation
-      gsap.fromTo(
-        titleRef.current,
-        { autoAlpha: 0, y: 50, scale: 0.9 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            id: "blog-title",
-            trigger: titleRef.current,
-            start: "top 80%", // Trigger when 80% of the section is visible
-            end: "bottom top",
-            toggleActions: "play none none reverse", // Reverse animation on scroll up
-          },
-        }
-      );
-  
-      // Card animations
-      const cards = gsap.utils.toArray(".blog-card");
-      if (cards.length > 0) {
-        cards.forEach((card, index) => {
-          gsap.fromTo(
-            card,
-            { autoAlpha: 0, y: 50, scale: 0.9 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              duration: 1,
-              delay: index * 0.1,
-              ease: "power3.out",
-              scrollTrigger: {
-                id: `blog-card-${index}`,
-                trigger: card,
-                start: "top 85%", // Animation triggers when each card is in view
-                end: "bottom 20%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        });
-      }
-  
-      // Ensure ScrollTrigger updates after animations are set
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 300);
-    }, sectionRef);
-  
-    return () => ctx.revert(); // Cleanup animations on unmount
-  }, [loading, blogPosts]);
 
   // Format the title to add styling to periods
   const formatTitle = (title) => {
@@ -192,13 +136,18 @@ function BlogNews() {
 
 
   return (
-    <section 
+    <section id="blog-section"
     ref={sectionRef}
     className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   > 
     <div className="max-w-4xl mx-auto text-center mb-16">
-      <h2 
+    <motion.h2
         ref={titleRef}
+        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50, scale: isVisible ? 1 : 0.9 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.8 }}
         className={`text-md md:text-5xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-primary-green' : 'text-white'}`}
       >
       {blogPosts && blogSection ? (
@@ -206,7 +155,7 @@ function BlogNews() {
       ) : (
         <span>Loading...</span>
       )}
-      </h2>
+      </motion.h2>
       <p 
         className={`text-sm md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-200'} mb-12`}
       >
@@ -224,8 +173,8 @@ function BlogNews() {
         ? 'md:grid-cols-2 max-w-3xl mx-auto' 
         : 'md:grid-cols-2 lg:grid-cols-4'
     } grid-flow-row-dense`}>
-      {blogPosts.map((article) => (
-        <div 
+      {blogPosts.map((article,index) => (
+        <motion.div 
           key={article._id}
           className={`blog-card p-3 rounded-xl shadow-lg transition-all duration-300 flex flex-col
             ${darkMode 
@@ -234,6 +183,11 @@ function BlogNews() {
             ${!article.mainImage ? 'self-start' : ''}
           `}
           style={{height: article.mainImage ? '' : 'fit-content'}}
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50, scale: isVisible ? 1 : 0.9 }}
+          transition={{ duration: 1, delay: index * 0.1, ease: 'easeOut' }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.85 }}
         >
           {article.mainImage && (
             <div className="mb-4 overflow-hidden rounded-lg">
@@ -287,7 +241,7 @@ function BlogNews() {
               {isArabic ? 'اقرأ المزيد' : 'Read More'}
             </button>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
 <div className="flex justify-center mt-12">

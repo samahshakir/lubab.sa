@@ -76,7 +76,7 @@ const Navbar = () => {
     { name: isArabic ? "الرئيسية" : "HOME", to: "#", isExternal: false },
     { name: isArabic ? "من نحن" : "ABOUT US", to: "about", isExternal: false },
     { name: isArabic ? "خدماتنا" : "SERVICES", to: "services", isExternal: false },
-    { name: isArabic ? "المدونة" : "BLOG", to: "blog", isExternal: false },
+    { name: isArabic ? "المدونة" : "BLOG", to: "/blogposts", isExternal: true },
     { name: isArabic ? "فريق العمل" : "TEAM", to: "team", isExternal: false },
     { name: isArabic ? "تواصل معنا" : "CONTACT US", to: "contact", isExternal: false },
     { name: isArabic ? "انضم إلى فريق لباب" : "CAREER", to: "/career", isExternal: true },

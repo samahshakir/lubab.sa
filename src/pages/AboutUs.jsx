@@ -4,6 +4,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useDarkMode } from "../context/DarkModeContext";
 import { useLanguage } from "../context/LanguageContext";
 import client from "../sanityClient"; // Import Sanity client
+import { Sparkles } from 'lucide-react'; // Using Lucide React for icons
+
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -104,7 +106,7 @@ const AboutUs = () => {
       </div>
 
       {/* Main Content with stylized quote marks */}
-      <div className="max-w-3xl mx-auto mb-16 relative">
+      <div className="max-w-3xl mx-auto mb-5 md:mb-16 relative">
         {!isArabic && (
           <span className="absolute -top-10 -left-4 text-8xl text-primary-green opacity-20">
             "
@@ -128,54 +130,40 @@ const AboutUs = () => {
       </div>
 
       {/* Values Section with elegant cards */}
-      <div
-        className={`max-w-5xl mx-auto ${
-          isArabic ? "rtl text-right" : "ltr text-left"
-        }`}
-      >
-        <div className="flex items-center mb-12">
-          <h3
-            className={`text:sm md:text-2xl font-bold ${
+      <div className={`max-w-5xl mx-auto ${isArabic ? "rtl text-right" : "ltr text-left"}`}>
+  <div className="text-center mb-5 md:mb-12">
+    <h3 className={`text-xl md:text-2xl font-semibold text-secondary mb-4 ${darkMode ? "text-dark-gray" : "text-secondary-blue"}`}>
+      {isArabic ? "قيمنا" : "Our Values"}
+    </h3>
+    <div className="section-divider mx-auto"></div>
+  </div>
+
+  <div ref={valuesRef} className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+    {aboutData.values.map((value, index) => (
+      <div key={index} className="flex items-start">
+        <div className="mt-1 me-3">
+        <Sparkles 
+                  className="text-primary-green flex-shrink-0 transition-transform duration-300
+                  size={10}
+                  aria-hidden=" />
+        </div>
+        <div>
+          <h4
+            className={`font-medium mb-1 text-lg ${
               darkMode ? "text-dark-gray" : "text-white"
             }`}
           >
-            {isArabic ? "قيمنا:" : "Our Values"}
-          </h3>
-          <div className="h-px flex-grow ml-6 bg-gray-700"></div>
-        </div>
-
-        <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {aboutData.values.map((value, index) => (
-            <div
-              key={index}
-              className={`relative backdrop-blur-sm rounded-lg overflow-hidden group transition-all duration-500 ease-in-out`}
-            >
-              {/* Card background with gradient overlay */}
-              <div className="absolute inset-0 bg-white opacity-1 0"></div>
-              <div className="absolute inset-0 border border-gray-700 rounded-lg group-hover:border-primary-green transition-colors duration-300"></div>
-
-              {/* Accent corner */}
-              <div className="absolute top-0 left-0 w-12 h-12 overflow-hidden">
-                <div className="absolute transform rotate-45 bg-primary-green -top-8 -left-8 w-16 h-16 group-hover:bg-secondary-blue transition-colors duration-300"></div>
-              </div>
-
-              {/* Content */}
-              <div className="relative p-8 z-10">
-                <h4 className="text-sm md:text-xl font-bold mb-4 text-primary-green group-hover:text-secondary-blue transition-colors duration-300">
-                  {isArabic ? value.title.ar : value.title.en}
-                </h4>
-                <p
-                  className={`${
-                    darkMode ? "text-secondary-dark-gray" : "text-gray-300"
-                  } line-clamp-3 group-hover:line-clamp-none transition-all duration-300 text-sm md:text-md`}
-                >
-                  {isArabic ? value.description.ar : value.description.en}
-                </p>
-              </div>
-            </div>
-          ))}
+            {isArabic ? value.title.ar : value.title.en}
+          </h4>
+          <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            {isArabic ? value.description.ar : value.description.en}
+          </p>
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
     </main>
   );
 };
