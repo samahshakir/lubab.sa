@@ -669,42 +669,42 @@ const ApplicationForm = () => {
   }
 
   const handleDeleteAccount = async () => {
-    // Reset states
     setError('');
     setSuccess('');
-    
-    // Validate form
+  
     if (!hasConfirmed) {
       setError('Please confirm that you understand this action cannot be undone');
       return;
     }
-    
+  
     try {
       setIsLoading(true);
-      const user = localStorage.getItem("user");
-      const token = localStorage.getItem("authToken")
-      console.log(user)
-      // Call backend API to delete account
+      const userString = localStorage.getItem("user");
+      const user = userString ? JSON.parse(userString) : null;
+      const token = localStorage.getItem("authToken");
+  
+      console.log("Parsed user:", user);
+      console.log("Sending userId:", user?.id);
+  
+      if (!user || !user.id) {
+        setError('Invalid user data');
+        return;
+      }
+  
       const response = await axios.post(`${apiUrl}/api/users/delete-account`, {
-        userId: user._id,
-      },{
+        userId: user.id,
+      }, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-      
+  
       if (response.data.success) {
         setSuccess('Your account has been successfully deleted');
-        
-        // Clear user data from localStorage
         localStorage.removeItem('user');
         localStorage.removeItem('authToken');
-        
-        // Wait briefly to show success message before redirecting
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        setTimeout(() => navigate('/'), 2000);
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete account. Please try again.');
@@ -712,6 +712,7 @@ const ApplicationForm = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div>
