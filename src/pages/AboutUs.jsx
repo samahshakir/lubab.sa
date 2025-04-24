@@ -5,6 +5,8 @@ import { useDarkMode } from "../context/DarkModeContext";
 import { useLanguage } from "../context/LanguageContext";
 import client from "../sanityClient"; // Import Sanity client
 import { Sparkles } from 'lucide-react'; // Using Lucide React for icons
+import backgroundImage from '../assets/Assetbg1.webp';
+
 
 
 // Register ScrollTrigger plugin
@@ -77,7 +79,13 @@ const AboutUs = () => {
   }
 
   return (
-    <main className="container min-h-screen mx-auto px-4 py-24 relative font-nizar">
+    <main className="min-h-screen mx-auto px-4 py-24 relative font-nizar">
+       <div 
+              className="absolute inset-0 bg-cover opacity-3 bg-center z-0"
+              style={{
+                backgroundImage: `url(${backgroundImage})`,
+              }}
+            />
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
         <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary-green opacity-10 blur-3xl"></div>
@@ -118,7 +126,7 @@ const AboutUs = () => {
             darkMode ? "text-secondary-dark-gray" : "text-gray-200"
           } ${isArabic ? "rtl text-right" : "ltr text-left"}`}
         >
-          <p className="mb-6 leading-relaxed tracking-wide text-justify">
+          <p className="mb-6 leading-relaxed tracking-wide text-justify font-nizar-regular">
             {isArabic ? aboutData.content.ar : aboutData.content.en}
           </p>
         </div>
@@ -155,7 +163,7 @@ const AboutUs = () => {
           >
             {isArabic ? value.title.ar : value.title.en}
           </h4>
-          <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+          <p className={`font-nizar-regular text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
             {isArabic ? value.description.ar : value.description.en}
           </p>
         </div>

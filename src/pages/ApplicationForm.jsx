@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDarkMode } from "../context/DarkModeContext";
+import { useDarkMode } from '../context/DarkModeContext';
+import { useLanguage } from '../context/LanguageContext';
 import client from "../sanityClient";
-import { useLanguage } from "../context/LanguageContext";
 import { Pencil } from "lucide-react"; 
 import PhoneInput from "react-phone-number-input";
 import 'react-phone-number-input/style.css'
 import GoBackButton from "../components/GoBackButton";
 import { PortableText } from "@portabletext/react";
 import backgroundImage from '../assets/Assetbg.webp';
+import ThemeLangToggle from "../components/ThemLangToggle";
+import LoadScreen from "../components/LoadScreen";
 
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -25,8 +27,8 @@ const ApplicationForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [formCompleted, setFormCompleted] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
-  const darkMode = useDarkMode();
   const { isArabic } = useLanguage();
+    const { darkMode } = useDarkMode();
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const emailInputRef = useRef(null);
   const [isValid, setIsValid] = useState(null);
@@ -36,6 +38,7 @@ const ApplicationForm = () => {
   const [success, setSuccess] = useState('');
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const [previousEmail, setPreviousEmail] = useState('');
+  
 
 
   const contentAr = {
@@ -88,6 +91,9 @@ const ApplicationForm = () => {
     questions: {
       answers: "إجاباتك",
     },
+    acknowledgment: {
+      acknowledgment: "إقرار",
+    }
   };
 
   // Form data state
@@ -714,29 +720,7 @@ const ApplicationForm = () => {
 
   if (loading) {
     return (
-      <div
-        className={`fixed inset-0 z-50 flex items-center justify-center ${
-          darkMode ? "bg-light-gray" : "bg-dark-mode"
-        } transition-opacity duration-500`}
-      >
-        <div className="text-center">
-          <div
-            className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin"
-            style={{
-              borderColor: darkMode
-                ? "#00BC78 transparent #101828 transparent"
-                : "#00BC78 transparent white transparent",
-            }}
-          ></div>
-          <h2
-            className={`text-xl font-bold ${
-              darkMode ? "text-[#101828]" : "text-white"
-            }`}
-          >
-            Loading Content
-          </h2>
-        </div>
-      </div>
+      <LoadScreen/>
     );
   }
 
@@ -787,19 +771,23 @@ const ApplicationForm = () => {
   
 
   return (
-    <div className="relative min-h-screen">
-      <GoBackButton/>
+    <div className={`relative min-h-screen ${darkMode ? "bg-light-gray" : "bg-dark-mode"}`}>
+      <div className="flex justify-between items-center px-6 py-4 z-10 relative">
+        <GoBackButton />
+        <ThemeLangToggle />
+      </div>
+          
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-10 z-0"
+        className="absolute inset-0 bg-cover bg-center opacity-5 z-0"
         style={{
           backgroundImage: `url(${backgroundImage})`,
         }}
       />
     <div className="max-w-5xl mx-auto px-4 py-8 font-nizar">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
+      <div className={`${darkMode ? 'bg-white' : 'bg-dark-mode'} rounded-lg shadow-lg overflow-hidden relative z-10`}>
         {/* Job Header */}
         <div
-          className="bg-gray-100 shadow-lg p-6"
+          className={`bg-gray-100 shadow-lg p-6  ${ darkMode ? "bg-gray-100 shadow-lg" : "bg-white/10 backdrop-blur-md shadow xl" }`}
           dir={isArabic ? "rtl" : "ltr"}
         >
           <h1 className="text-2xl">
@@ -831,7 +819,7 @@ const ApplicationForm = () => {
                 : "text-gray-500 hover:text-gray-700"
             } flex items-center space-x-2`}
           >
-            <span>{isArabic ? "" : "Job Description"}</span>
+            <span>{isArabic ? "وصف الوظيفة" : "Job Description"}</span>
           </button>
         )}
             <button
@@ -932,18 +920,18 @@ const ApplicationForm = () => {
         </div>
 
         {/* Form Content */}
-        <div className="p-6 bg-gray-100 shadow-lg">
+        <div className={`p-6 ${ darkMode ? "bg-gray-100 shadow-lg" : "bg-white/10 backdrop-blur-md shadow xl" }`}>
 
           {/* Job Description */}
           {activeTab === "jobDescription" && (
            <div className="py-4 px-6">
 
-             <div className="text-secondary-dark-gray text-justify">
+             <div className={`${darkMode ?  'text-secondary-dark-gray' : 'text-light-gray'} text-justify`}>
                  <PortableText
                       value={isArabic ? jobDetails.descriptionAr : jobDetails.descriptionEn}
                             components={{block: ({ children }) => <p>{children}</p> }} />
              </div>
-             <div className="text-secondary-dark-gray">
+             <div className={`${darkMode ?  'text-secondary-dark-gray' : 'text-light-gray'} text-justify`}>
                  <PortableText
                       value={isArabic ? jobDetails.requirementsAr : jobDetails.requirementsEn }
                             components={{block: ({ children }) => <p>{children}</p> }} />
@@ -953,9 +941,11 @@ const ApplicationForm = () => {
           )}
           {/* Personal Information Tab */}
           {activeTab === "personal" && (
-            <div>
+            <div dir={isArabic ? "rtl" : "ltr"}>
               <h2 className="text-xl font-semibold mb-4 text-dark-gray">
-                Personal Information
+              {isArabic
+                  ? contentAr.personal.personalInformation
+                  : "Personal Information"}
               </h2>
               <div
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -977,7 +967,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "firstName", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     required
                   />
                 </div>
@@ -995,7 +991,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "lastName", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     required
                   />
                 </div>
@@ -1017,11 +1019,15 @@ const ApplicationForm = () => {
                 }
                 onKeyDown={handleKeyDown}
                 onBlur={handleBlur}
-                className={`w-full rounded-lg px-3 py-2 text-secondary-dark-gray transition-all duration-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-                  jobSlug || (!jobSlug && !isEditingEmail)
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
-                }`}
+                className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-600
+                  ${
+                    jobSlug || (!jobSlug && !isEditingEmail)
+                      ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                      : darkMode
+                      ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                      : "bg-dark-mode text-gray-200"
+                  }`}
+                
                 disabled={jobSlug || (!jobSlug && !isEditingEmail)}
                 required
               />
@@ -1051,7 +1057,7 @@ const ApplicationForm = () => {
                     international
                     value={formData.personal.phone}
                     onChange={(value) => handleInputChange("personal", "phone", value)}
-                    className="phone-input-no-border w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`phone-input-no-border text-sm w-full rounded-lg px-3 py-2 ${!darkMode ? 'bg-dark-mode text-gray-200' : 'text-secondary-dark-gray bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]'}  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300`}
                     style={{ direction: isArabic ? "rtl" : "ltr" }}
                     required
                   />
@@ -1070,7 +1076,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "address", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                   />
                 </div>
                 <div>
@@ -1087,7 +1099,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "city", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                   />
                 </div>
                 <div>
@@ -1104,7 +1122,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "state", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                   />
                 </div>
                 <div>
@@ -1121,7 +1145,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "zipCode", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                   />
                 </div>
                 <div>
@@ -1138,7 +1168,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("personal", "country", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1161,7 +1197,13 @@ const ApplicationForm = () => {
                       )
                     }
                     rows="5"
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="You can write a brief cover letter here"
                   ></textarea>
                 </div>
@@ -1192,10 +1234,15 @@ const ApplicationForm = () => {
 
               {formData.education.map((edu, index) => (
                 <div
-                  key={index}
-                  className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200"
-                  dir={isArabic ? "rtl" : "ltr"}
-                >
+                key={index}
+                dir={isArabic ? "rtl" : "ltr"}
+                className={`mb-8 p-4 rounded-lg border border-gray-200 
+                  ${
+                    darkMode
+                      ? "bg-gray-100 shadow-lg"
+                      : "bg-white/1 backdrop-blur-md shadow-xl"
+                  }`}
+              >
                   <div className="flex justify-between">
                     <h3 className="text-lg font-medium mb-3 text-secondary-dark-gray">
                       {isArabic ? contentAr.education.education : "Education"} #
@@ -1229,7 +1276,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         required
                       />
                     </div>
@@ -1248,7 +1301,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         required
                       />
                     </div>
@@ -1269,7 +1328,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         required
                       />
                     </div>
@@ -1290,7 +1355,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                       />
                     </div>
                     <div>
@@ -1336,7 +1407,13 @@ const ApplicationForm = () => {
                                 e.target.value
                               )
                             }
-                            className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                            className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                             required={!edu.currentlyStudying}
                           />
                         </div>
@@ -1359,7 +1436,13 @@ const ApplicationForm = () => {
                           )
                         }
                         rows="3"
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         placeholder="Describe your studies, achievements, etc."
                       ></textarea>
                     </div>
@@ -1392,10 +1475,15 @@ const ApplicationForm = () => {
 
               {formData.experience.map((exp, index) => (
                 <div
-                  key={index}
-                  className="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200"
-                  dir={isArabic ? "rtl" : "ltr"}
-                >
+                key={index}
+                dir={isArabic ? "rtl" : "ltr"}
+                className={`mb-8 p-4 rounded-lg border border-gray-200 
+                  ${
+                    darkMode
+                      ? "bg-gray-100 shadow-lg"
+                      : "bg-white/1 backdrop-blur-md shadow-xl"
+                  }`}
+              >
                   <div className="flex justify-between">
                     <h3 className="text-secondary-dark-gray text-lg font-medium mb-3">
                       {isArabic
@@ -1429,7 +1517,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         required
                       />
                     </div>
@@ -1450,7 +1544,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         required
                       />
                     </div>
@@ -1469,7 +1569,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                       />
                     </div>
                     <div>
@@ -1489,7 +1595,13 @@ const ApplicationForm = () => {
                             e.target.value
                           )
                         }
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                       />
                     </div>
                     <div>
@@ -1535,7 +1647,13 @@ const ApplicationForm = () => {
                                 e.target.value
                               )
                             }
-                            className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                            className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                             required={!exp.currentlyWorking}
                           />
                         </div>
@@ -1558,7 +1676,13 @@ const ApplicationForm = () => {
                           )
                         }
                         rows="3"
-                        className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         placeholder="Describe your responsibilities, achievements, etc."
                       ></textarea>
                     </div>
@@ -1606,7 +1730,13 @@ const ApplicationForm = () => {
                           onChange={(e) =>
                             handleSkillChange(index, e.target.value)
                           }
-                          className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                          className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                           placeholder="e.g., JavaScript, Project Management, etc."
                         />
                         {formData.skills.skillList.length > 1 && (
@@ -1646,7 +1776,13 @@ const ApplicationForm = () => {
                           onChange={(e) =>
                             handleProficiencyChange(skill, e.target.value)
                           }
-                          className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                          className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                         >
                           <option value="Beginner">Beginner</option>
                           <option value="Intermediate">Intermediate</option>
@@ -1681,7 +1817,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("links", "linkedin", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="https://www.linkedin.com/in/your-profile"
                   />
                 </div>
@@ -1695,7 +1837,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("links", "portfolio", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="https://www.yourportfolio.com"
                   />
                 </div>
@@ -1710,7 +1858,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("links", "github", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="https://github.com/yourusername"
                   />
                 </div>
@@ -1725,7 +1879,13 @@ const ApplicationForm = () => {
                     onChange={(e) =>
                       handleInputChange("links", "other", e.target.value)
                     }
-                    className="w-full rounded-lg text-secondary-dark-gray px-3 py-2 bg-gray-100 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      ${
+                        darkMode
+                          ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
+                          : "bg-dark-mode text-gray-200"
+                      }
+                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
                     placeholder="https://www.otherlink.com"
                   />
                 </div>
@@ -1745,7 +1905,7 @@ const ApplicationForm = () => {
                onChange={() => setAcknowledged(!acknowledged)}
                className="h-5 w-5 text-blue-600 border-gray-300 rounded"
              />
-             <span className="text-secondary-dark-gray">
+             <span className={`${ !darkMode ? 'text-light-gray' : 'text-secondary-dark-gray'}`}>
                {isArabic
                  ? "أقر بأن جميع المعلومات التي قمت بإدخالها صحيحة وللمنشأة الحق في استبعادي من المسابقة الوظيفية في حال كانت المعلومات المدخلة غير صحيحة"
                  : "I declare that all inserted information is correct and the organization has the right to withdraw my application from any competition if the information I inserted is incorrect."}
@@ -1847,12 +2007,15 @@ const ApplicationForm = () => {
           {/* Form Controls */}
           <div className="mt-8 flex justify-between border-t pt-6">
             <div>
-              <button
+              { !isFirstTab && <button
                 type="button"
                 onClick={saveDraft}
                 disabled={saving}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
-              >
+                className={`font-medium text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
+                  !darkMode
+                    ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
+                    : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
+                }`} >
                 {saving ? (
                   <>
                     <svg
@@ -1882,7 +2045,7 @@ const ApplicationForm = () => {
                       {isArabic ? "حفظ المسودة" : "Save Draft"}
                     </span>
                 )}
-              </button>
+              </button>}
               {draftSaved && (
                 <span className="ml-3 text-sm text-primary-green">
                   {isArabic
@@ -1896,8 +2059,11 @@ const ApplicationForm = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(previousTab)}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
-                >
+                  className={`font-medium text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
+                    !darkMode
+                      ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
+                      : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
+                  }`} >
                   <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
                     {isArabic ? "عُد" : "Back"}
                   </span>
@@ -1949,10 +2115,13 @@ const ApplicationForm = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(nextTab)}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
-                >
+                  className={`font-medium text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
+                    !darkMode
+                      ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
+                      : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
+                  }`} >
                   <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent font-semibold">
-                    Next
+                    {isArabic ? 'القادم' : 'Next'}
                   </span>
                 </button>
               )}

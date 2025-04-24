@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getApplications } from '../services/api';
 import ApplicationCard from './ApplicationCard';
+import LoadScreen from './LoadScreen';
 
 function ApplicationsList() {
   const [applications, setApplications] = useState([]);
@@ -62,7 +63,7 @@ function ApplicationsList() {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div></div>;
+    return <LoadScreen/>
   }
 
   if (error) {

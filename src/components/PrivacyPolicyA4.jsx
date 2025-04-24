@@ -466,7 +466,7 @@ export default function PrivacyPolicyA4() {
     ];
 
   return (
-    <div className="flex justify-center bg-gray-100 p-6 font-nizar text-dark-gray text-justify" dir={isArabic ? 'rtl' : 'ltr'}>
+    <div className="flex justify-center bg-gray-100 p-6 font-nizar-regular text-dark-gray text-justify" dir={isArabic ? 'rtl' : 'ltr'}>
       <div className="w-full max-w-[21cm] bg-white shadow-lg min-h-[29.7cm] flex flex-col">
         {/* Document Header */}
         <div className="p-8 border-b border-gray-200">

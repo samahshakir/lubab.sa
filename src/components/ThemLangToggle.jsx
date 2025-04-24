@@ -21,7 +21,20 @@ const ThemeLangToggle = ({ className = "" }) => {
   }, [darkMode]);
 
   return (
-    <div className={`flex items-center gap-4 ${className}`}>
+    <div className={`flex items-center gap-4 ${className} font-nizar`}>
+      {/* Language Toggle */}
+      <button
+        onClick={() => setIsArabic(!isArabic)}
+        className={`flex items-center gap-2 ${
+          darkMode
+            ? "text-secondary-dark-gray hover:text-black"
+            : "text-gray-400 hover:text-white"
+        } transition-colors cursor-pointer`}
+        aria-label="Switch Language"
+      >
+        <span>{isArabic ? "English" : "العربية"}</span>
+        <Globe size={24} />
+      </button>
       {/* Dark Mode */}
       <button
         onClick={toggleDarkMode}
@@ -35,16 +48,6 @@ const ThemeLangToggle = ({ className = "" }) => {
             <Moon size={24} />
           )}
         </div>
-      </button>
-
-      {/* Language Toggle */}
-      <button
-        onClick={() => setIsArabic(!isArabic)}
-        className={`flex items-center gap-2 ${darkMode ? 'text-secondary-dark-gray hover:text-black' : 'text-gray-400 hover:text-white'} transition-colors cursor-pointer`}
-        aria-label="Switch Language"
-      >
-        <span>{isArabic ? "English" : "العربية"}</span>
-        <Globe size={24} />
       </button>
     </div>
   );

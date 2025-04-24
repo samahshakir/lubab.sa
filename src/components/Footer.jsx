@@ -37,7 +37,7 @@ function Footer() {
         darkMode
           ? 'bg-[#F8FAFC] border-gray-200'
           : 'bg-gradient-to-r from-[#2D3F3B] to-[#1E2927]'
-      } border-t`}
+      } border-t font-nizar-regular`}
     >
       <div className="container mx-auto px-6 py-6 md:py-12 ">
         <div className="grid grid-cols-1 md:grid-cols-4 gaps-4 md:gap-12">

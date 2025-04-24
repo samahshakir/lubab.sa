@@ -8,8 +8,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { isAuthenticated,logout, verifyToken } from '../utils/auth'; // Import useAuth
 import { PortableText } from '@portabletext/react';
 import Footer from '../components/Footer'
-import Navbar from '../components/Navbar';
 import ThemeLangToggle from '../components/ThemLangToggle';
+import GoBackButton from '../components/GoBackButton';
+import LoadScreen from '../components/LoadScreen';
 
 
 // Register ScrollTrigger plugin
@@ -144,25 +145,27 @@ const Careers = () => {
     navigate('/applications/profile')
   }
 
-  const LoadingScreen = () => (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-opacity duration-500`}>
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin"
-             style={{borderColor: darkMode ? '#00BC78 transparent #101828 transparent' : '#00BC78 transparent white transparent'}}></div>
-        <h2 className={`text-xl font-bold ${darkMode ? 'text-[#101828]' : 'text-white'}`}>Loading Content</h2>
-      </div>
-    </div>
-  );
-
    if (loading) {
-    return <LoadingScreen />;
+    return <LoadScreen />;
    }
 
   return (
     <div ref={sectionRef} className={`relative ${darkMode ? "bg-light-gray" : "bg-dark-mode"} font-nizar min-h-screen pt-20 overflow-hidden`}>
       <div className="container mx-auto px-6">
         {/* --- Updated User Icon/Link --- */}
+        <div className="absolute top-3 left-6 text-sm text-gray-600 hover:text-primary-blue transition flex items-center space-x-4">
+        <GoBackButton/>
+        </div>
         <div className="absolute top-6 right-6 text-sm text-gray-600 hover:text-primary-blue transition flex items-center space-x-4">
+          
+     
+        <a href='/'>{ isArabic ? "الرئيسية" : "HOME"}</a>
+        {/* <span>About us</span>
+        <span>Services</span>
+        <span>Blog</span>
+        <span>Team</span>
+        <span>Contact us</span>
+        <span>Career</span> */}
         <ThemeLangToggle/>
 
           {isAuthenticated() ? (
@@ -178,8 +181,8 @@ const Careers = () => {
               </button>
             </>
           ) : (
-
-            <Link to="/auth"  className='flex justify-center items-center gap-2 bg-secondary-blue hover:bg-blue-600 rounded-2xl px-2 py-2' title="Login / Sign Up">
+            
+            <Link to="/auth"  className='hidden justify-center items-center gap-2 bg-secondary-blue hover:bg-blue-600 rounded-2xl px-2 py-2' title="Login / Sign Up">
             <p className='text-[15px] text-white'>Log in</p>
               {/* <img src="./src/assets/user.png" alt="Login/Sign Up" className="h-6 w-auto" /> */}
             </Link>
@@ -212,6 +215,30 @@ const Careers = () => {
               </p>
          </div>
 
+             {/* Why Join Section (Keep as is if needed) */}
+             {whyJoin.length > 0 && (
+            <div className="my-20 text-center">
+              <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
+                {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-18 max-w-5xl mx-auto mt-10">
+                {whyJoin.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`p-5 rounded-lg transition-all ${darkMode ? "bg-gray-100 shadow-[8px_8px_16px_#d1d1d1,_-8px_-8px_16px_#ffffff] hover:shadow-[12px_12px_20px_#d1d1d1,_-12px_-12px_20px_#ffffff]" : "bg-white/10 backdrop-blur-xl"} transform hover:scale-105 duration-300`}
+                    style={{ opacity: 0, animation: `fadeIn 0.5s ease-out forwards ${0.5 + index * 0.1}s` }}
+                  >
+                    <h4 className={`text-lg font-medium mb-2 ${darkMode ? "text-gray-800" : "text-white"}`}>
+                      {isArabic ? item.titleAr : item.titleEn}
+                    </h4>
+                    <p className={`${darkMode ? "text-gray-600" : "text-gray-300"}`}>
+                      {isArabic ? item.descriptionAr : item.descriptionEn}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+        )}
 
          {/* --- Display Open Job Positions --- */}
          <h3 className={`text-3xl font-semibold mb-8 text-center ${darkMode ? "text-gray-800" : "text-white"}`}>
@@ -276,36 +303,13 @@ const Careers = () => {
                 ))}
             </div>
          ) : (
-             <p className={`text-center text-lg mt-8 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+             <p className={`text-center text-lg mt-8 mb-20 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
                 {isArabic ? "لا توجد وظائف متاحة في الوقت الحالي. يرجى التحقق مرة أخرى لاحقًا." : "No open positions available at the moment. Please check back later."}
              </p>
          )}
 
 
-        {/* Why Join Section (Keep as is if needed) */}
-        {whyJoin.length > 0 && (
-            <div className="my-20 text-center">
-              <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
-                {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-18 max-w-5xl mx-auto mt-10">
-                {whyJoin.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`p-5 rounded-lg transition-all ${darkMode ? "bg-gray-100 shadow-[8px_8px_16px_#d1d1d1,_-8px_-8px_16px_#ffffff] hover:shadow-[12px_12px_20px_#d1d1d1,_-12px_-12px_20px_#ffffff]" : "bg-white/10 backdrop-blur-xl"} transform hover:scale-105 duration-300`}
-                    style={{ opacity: 0, animation: `fadeIn 0.5s ease-out forwards ${0.5 + index * 0.1}s` }}
-                  >
-                    <h4 className={`text-lg font-medium mb-2 ${darkMode ? "text-gray-800" : "text-white"}`}>
-                      {isArabic ? item.titleAr : item.titleEn}
-                    </h4>
-                    <p className={`${darkMode ? "text-gray-600" : "text-gray-300"}`}>
-                      {isArabic ? item.descriptionAr : item.descriptionEn}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-        )}
+   
 
       </div>
       <Footer/>

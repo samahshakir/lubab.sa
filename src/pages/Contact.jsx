@@ -202,13 +202,13 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg font-nizar-regular
                       ${
                         darkMode
                           ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                           : "bg-dark-mode text-gray-200"
                       }
-                      focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
+                      focus:outline-none   transition-all duration-300`}
                       placeholder={content[language].formLabels.name}
                     />
                     {formErrors.name && (
@@ -238,13 +238,13 @@ const Contact = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                      className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg font-nizar-regular
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
+                        focus:outline-none   transition-all duration-300`}
                       placeholder="your@email.com"
                     />
 
@@ -277,13 +277,13 @@ const Contact = () => {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleChange}
-                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg font-nizar-regular
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
+                        focus:outline-none   transition-all duration-300`}
                     placeholder="+9664567890"
                   />
                 </div>
@@ -309,13 +309,13 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg font-nizar-regular
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
+                        focus:outline-none   transition-all duration-300`}
                     placeholder={
                       isArabic ? "ما هو موضوع رسالتك؟" : "What's this about?"
                     }
@@ -348,13 +348,13 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows="5"
-                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg
+                    className={`w-full px-2 py-2 md:py-3 md:px-4 text-xs rounded-lg font-nizar-regular
                         ${
                           darkMode
                             ? "bg-gray-100 text-gray-800 shadow-[inset_3px_3px_6px_#c8c9cc,inset_-3px_-3px_6px_#ffffff]"
                             : "bg-dark-mode text-gray-200"
                         }
-                        focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-300`}
+                        focus:outline-none   transition-all duration-300`}
                     placeholder={
                       isArabic
                         ? "أخبرنا عن مشروعك..."
@@ -376,7 +376,7 @@ const Contact = () => {
                 <button
                   ref={buttonRef}
                   type="submit"
-                  className={`w-[35%] md:w-[20%] font-medium text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
+                  className={`w-[35%] md:w-[20%] font-nizar-regular text-xs md:text-md py-2 md:py-3 md:px-6 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden ${
                     !darkMode
                       ? "bg-dark-mode hover:shadow-[inset_2px_2px_8px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
                       : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"

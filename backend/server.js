@@ -8,11 +8,12 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: process.env.CORS_URL,
+    origin: true,
     methods: ['GET', 'POST', 'PUT'],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
 app.use(bodyParser.json());
 
 // Database connection

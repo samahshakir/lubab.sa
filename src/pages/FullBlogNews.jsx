@@ -5,6 +5,11 @@ import { useLanguage } from '../context/LanguageContext';
 import { useDarkMode } from '../context/DarkModeContext';
 import { useNavigate } from 'react-router-dom';
 import sanityClient from '../sanityClient';
+import GoBackButton from '../components/GoBackButton';
+import backgroundImage from '../assets/Assetbg1.webp';
+import ThemeLangToggle from '../components/ThemLangToggle';
+import LoadScreen from '../components/LoadScreen';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -110,12 +115,7 @@ function FullBlogNews() {
 
   if (loading) {
     return (
-      <section className={`min-h-screen mx-auto px-6 pt-25 pb-20 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'}`}>
-        <div className="text-center">
-          <div className={`w-12 h-12 border-4 border-gray-300 border-t-${darkMode ? 'primary-green' : 'secondary-blue'} rounded-full animate-spin mx-auto mb-4`}></div>
-          <p className={darkMode ? 'text-dark-gray' : 'text-white'}>Loading blog content...</p>
-        </div>
-      </section>
+      <LoadScreen/>
     );
   }
 
@@ -127,8 +127,20 @@ function FullBlogNews() {
   return (
     <section 
       ref={sectionRef}
-      className={`min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`min-h-screen mx-auto px-6 pt-10 md:pt-5 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
     > 
+           <div 
+                  className="absolute inset-0 bg-cover opacity-3 bg-center z-0"
+                  style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                  }}
+                />
+    <header className="relative w-full">
+  <div className="flex justify-between items-center w-full">
+    <GoBackButton />
+    <ThemeLangToggle />
+  </div>
+</header>
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 
           ref={titleRef}

@@ -5,6 +5,9 @@ import { useDarkMode } from '../context/DarkModeContext';
 import { useNavigate } from 'react-router-dom';
 import sanityClient from '../sanityClient';
 import { motion } from 'framer-motion';
+import backgroundImage from '../assets/Assetbg1.webp';
+import LoadScreen from '../components/LoadScreen';
+
 
 function BlogNews() {
   const { isArabic } = useLanguage();
@@ -125,12 +128,7 @@ useEffect(() => {
 
   if (loading) {
     return (
-      <section className={`container min-h-screen mx-auto px-6 pt-25 pb-20 flex items-center justify-center ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'}`}>
-        <div className="text-center">
-          <div className={`w-12 h-12 border-4 border-gray-300 border-t-${darkMode ? 'primary-green' : 'secondary-blue'} rounded-full animate-spin mx-auto mb-4`}></div>
-          <p className={darkMode ? 'text-dark-gray' : 'text-white'}>Loading blog content...</p>
-        </div>
-      </section>
+      <LoadScreen/>
     );
   }
 
@@ -138,8 +136,14 @@ useEffect(() => {
   return (
     <section id="blog-section"
     ref={sectionRef}
-    className={`container min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
+    className={`min-h-screen mx-auto px-6 pt-25 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
   > 
+           <div 
+                    className="absolute inset-0 bg-cover opacity-3 bg-center z-0 pointer-events-none"
+                    style={{
+                      backgroundImage: `url(${backgroundImage})`,
+                    }}
+                  />
     <div className="max-w-4xl mx-auto text-center mb-16">
     <motion.h2
         ref={titleRef}
@@ -157,7 +161,7 @@ useEffect(() => {
       )}
       </motion.h2>
       <p 
-        className={`text-sm md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-200'} mb-12`}
+        className={`text-sm md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-200'} mb-12 font-nizar-regular`}
       >
        {blogPosts && blogSection ? (
         formatTitle(isArabic ? blogSection.descriptionAr: blogSection.description)
@@ -206,7 +210,7 @@ useEffect(() => {
             </span>
           </div>
           <h3 className="text-md md:text-xl font-bold mb-3">{isArabic ? article.titleAr : article.title}</h3>
-          <p className={`text-xs md:text-sm ${darkMode ? 'text-secondary-dark-gray' : 'text-gray-300'}`}>
+          <p className={`text-xs md:text-sm font-nizar-regular ${darkMode ? 'text-secondary-dark-gray' : 'text-gray-300'}`}>
             {isArabic ? article.excerptAr : article.excerpt}
           </p>
           <div className="flex items-center mt-4 mb-3">
@@ -232,7 +236,7 @@ useEffect(() => {
           <div className="mt-auto">
             <button 
               onClick={() => handleReadMore(article)}
-              className={`mt-1 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 
+              className={`mt-1 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 font-nizar-regular
                 ${darkMode 
                   ? 'bg-primary-green text-white hover:bg-blue-700' 
                   : 'bg-secondary-blue text-white hover:bg-blue-600'
@@ -247,7 +251,7 @@ useEffect(() => {
 <div className="flex justify-center mt-12">
     <button 
       onClick={() =>  navigate('/blogposts')}
-      className={`px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 flex items-center
+      className={`px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 flex items-center font-nizar-regular
         ${darkMode 
           ? 'bg-primary-green text-white hover:bg-blue-700' 
           : 'bg-secondary-blue text-white hover:bg-blue-600'

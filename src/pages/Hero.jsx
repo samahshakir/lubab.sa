@@ -5,6 +5,8 @@ import client from "../sanityClient";
 import { Link } from "react-scroll";
 import Spline from "@splinetool/react-spline";
 import HeroLogo from '../assets/AssetLogo.webp'
+import LoadScreen from "../components/LoadScreen";
+
 
 const Hero = () => {
   const { isArabic } = useLanguage();
@@ -29,29 +31,7 @@ const Hero = () => {
   }, [heroData, isLoading]);
 
   const LoadingScreen = () => (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center ${
-        darkMode ? "bg-light-gray" : "bg-dark-mode"
-      } transition-opacity duration-500`}
-    >
-      <div className="text-center">
-        <div
-          className="w-16 h-16 border-4 border-t-transparent border-b-transparent rounded-full mx-auto mb-4 animate-spin"
-          style={{
-            borderColor: darkMode
-              ? "#00BC78 transparent #101828 transparent"
-              : "#00BC78 transparent white transparent",
-          }}
-        ></div>
-        <h2
-          className={`text-xl font-bold ${
-            darkMode ? "text-[#101828]" : "text-white"
-          }`}
-        >
-          Loading Content
-        </h2>
-      </div>
-    </div>
+    <LoadScreen/>
   );
 
   return (
@@ -106,7 +86,7 @@ const Hero = () => {
             <p
               className={`text-sm lg:text-xl ${
                 darkMode ? "text-secondary-dark-gray" : "text-gray-200"
-              } mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift text-justify`}
+              } mb-5 leading-relaxed transition-colors duration-300 animate-opacityShift text-justify font-nizar-regular`}
             >
               {isArabic
                 ? heroData?.description?.["ar"]
@@ -122,14 +102,14 @@ const Hero = () => {
             } border-none relative overflow-hidden`}
           >
             <Link to="services" smooth={true} duration={500}>
-              <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent hover:text-shadow">
+              <span className="bg-gradient-to-r from-primary-green to-secondary-blue bg-clip-text text-transparent hover:text-shadow font-nizar-regular">
                 {isArabic ? "اكتشف حلولنا" : "Explore our services"}
               </span>
             </Link>
           </button>
 
           <button
-            className={`text-sm sm:text-lg px-4 py-1.5 sm:px-6 sm:py-2 rounded-4xl font-medium mt-5 transition-all duration-200 mx-2 w-[45%] block sm:w-auto ${
+            className={`text-sm sm:text-lg font-nizar-regular px-4 py-1.5 sm:px-6 sm:py-2 rounded-4xl font-medium mt-5 transition-all duration-200 mx-2 w-[45%] block sm:w-auto ${
               !darkMode
                 ? "bg-dark-mode shadow-[5px_5px_10px_#1a1a1a,_-5px_-5px_10px_#3a3a3a] hover:shadow-[inset_5px_5px_10px_#1a1a1a,_inset_-5px_-5px_10px_#3a3a3a]"
                 : "bg-gray-100 shadow-[5px_5px_10px_#d1d1d1,_-5px_-5px_10px_#ffffff] hover:shadow-[inset_5px_5px_10px_#d1d1d1,_inset_-5px_-5px_10px_#ffffff]"
@@ -146,7 +126,7 @@ const Hero = () => {
 
           {/* Spline Container */}
           <div
-            className={`relative h-full flex justify-center items-center lg:ml-25 ${
+            className={`relative h-full flex justify-center items-center lg:ml-25 z-0 ${
               isArabic ? "lg:order-first" : "lg:order-last"
             }`}
           >

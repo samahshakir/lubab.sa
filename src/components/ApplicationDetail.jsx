@@ -6,6 +6,7 @@ import Education from './details/Education';
 import Experience from './details/Experience';
 import Skills from './details/Skills';
 import Links from './details/Links';
+import LoadScreen from './LoadScreen';
 
 function ApplicationDetail() {
   const { slug,userId } = useParams();
@@ -31,7 +32,7 @@ function ApplicationDetail() {
   }, [slug]);
 
   if (loading) {
-    return <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div></div>;
+    return <LoadScreen/>
   }
 
   if (error) {

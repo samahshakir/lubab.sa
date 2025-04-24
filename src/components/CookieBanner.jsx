@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useDarkMode } from "../context/DarkModeContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
+  const { isArabic } = useLanguage();
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     // Check if user has already accepted or declined cookies
@@ -37,12 +41,12 @@ export default function CookieBanner() {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-100 text-black p-4 shadow-lg z-50 border-t border-t-gray-200">
+    <div className={`fixed bottom-0 left-0 right-0 bg-gray-100 text-black p-4 shadow-lg z-50 border-t border-t-gray-200`} >
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="mb-4 md:mb-0 md:mr-4 text-center md:text-left">
-          <h3 className="font-bold text-lg mb-1">We value your privacy</h3>
-          <p className="text-sm text-dark-gray">
-            We use cookies to enhance your browsing experience or content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.
+          <h3 className="font-bold text-lg mb-1">{isArabic ? `نحن نقدر خصوصيتك.` : `We value your privacy.`}</h3>
+          <p className="text-sm text-dark-gray">{isArabic ? `نستخدم ملفات تعريف الارتباط لتحسين تجربة تصفحك أو المحتوى، وتحليل زياراتنا. بالنقر على "قبول الكل"، فإنك توافق على استخدامنا لملفات تعريف الارتباط.`:
+            `We use cookies to enhance your browsing experience or content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.`}
           </p>
         </div>
         <div className="flex flex-row gap-2">

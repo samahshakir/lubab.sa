@@ -40,7 +40,7 @@ const ServiceCard = ({ icon, title, description, status }) => {
         <h3 className={`text-md md:text-2xl font-bold mb-4 ${darkMode ? "text-black" : "text-white"}`}>
           {title}
         </h3>
-        <p className="text-gray-400 mb-6 flex-grow text-[12px] md:text-md">{description}</p>
+        <p className="text-gray-400 mb-6 flex-grow text-[12px] md:text-md font-nizar-regular">{description}</p>
         <span className="text-sm inline-block text-gray-500 text-md font-semibold">
           {status}
         </span>
@@ -80,7 +80,7 @@ const Services = () => {
           className="text-center mb-16"
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
+          viewport={{ once: false, amount: 0.2 }} 
           variants={containerVariants}
         >
           <motion.h2
@@ -90,7 +90,7 @@ const Services = () => {
             {isArabic ? "خدماتنا" : "Our Services"}
           </motion.h2>
           <motion.p
-            className="text-sm md:text-lg text-gray-500 max-w-3xl mx-auto"
+            className="text-sm md:text-lg text-gray-500 max-w-3xl mx-auto font-nizar-regular"
             variants={textVariants}
           >
             {isArabic ? "حلول تقنية متكاملة لأعمال متطورة" : "Comprehensive Digital Solutions for Evolving Businesses"}

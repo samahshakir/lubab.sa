@@ -25,6 +25,7 @@
     "react-dom": "^19.0.0",
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
+    "react-loading-indicators": "^1.0.0",
     "react-phone-number-input": "^3.4.12",
     "react-router-dom": "^7.3.0",
     "react-scroll": "^1.9.3",

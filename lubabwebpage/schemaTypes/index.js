@@ -9,6 +9,7 @@ import blog from './schemas/blog'
 import {whyJoinSchema} from './schemas/career'
 import job from './schemas/job'
 import footer from './schemas/footer'
+import termsOfUse from './schemas/termsOfUse'
 
 export const schemaTypes = [
   heroSection,
@@ -20,5 +21,6 @@ export const schemaTypes = [
   blog,
   whyJoinSchema,
   job,
-  footer
+  footer,
+  termsOfUse
 ]

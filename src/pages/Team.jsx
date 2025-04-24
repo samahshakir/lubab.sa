@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { useLanguage } from "../context/LanguageContext";
 import client from "../sanityClient";
 import { useDarkMode } from "../context/DarkModeContext";
 
-gsap.registerPlugin(ScrollTrigger);
 
 const Team = () => {
   const { isArabic } = useLanguage();
@@ -44,74 +43,6 @@ const Team = () => {
       .catch(console.error);
   }, []);
 
-  // Handle scroll and animation
-  // useLayoutEffect(() => {
-  //   if (teamMembers.length === 0) return;
-
-  //   let ctx = gsap.context(() => {
-  //     const sections = sectionRefs.current;
-  //     const cards = cardsRef.current;
-
-  //     // Initial setup for all cards
-  //     cards.forEach((card, index) => {
-  //       if (index === 0) {
-  //         gsap.set(card, {
-  //           autoAlpha: 1,
-  //           x: 0,
-  //           scale: 1,
-  //           filter: "blur(0px)",
-  //           zIndex: 10,
-  //         });
-  //       } else if (index === 1) {
-  //         gsap.set(card, {
-  //           autoAlpha: 0.6,
-  //           x: "60%",
-  //           scale: 0.9,
-  //           filter: "blur(8px)",
-  //           zIndex: 5,
-  //         });
-  //       } else {
-  //         gsap.set(card, {
-  //           autoAlpha: 0,
-  //           x: "100%",
-  //           scale: 0.9,
-  //           filter: "blur(8px)",
-  //           zIndex: 1,
-  //         });
-  //       }
-  //     });
-      
-  //     // Only setup ScrollTrigger for non-mobile
-  //     if (!isMobile) {
-  //       scrollTriggerRef.current = ScrollTrigger.create({
-  //         id: "team-scroll",
-  //         trigger: sections,
-  //         start: "top top",
-  //         end: `+=${window.innerHeight * (teamMembers.length - 0.5)}`,
-  //         scrub: 1,
-  //         pin: false,
-  //         onUpdate: (self) => {
-  //           const newIndex = Math.min(
-  //             Math.floor(self.progress * teamMembers.length),
-  //             teamMembers.length - 1
-  //           );
-  //           if (newIndex !== activeIndexRef.current) {
-  //             navigateToMember(newIndex);
-  //           }
-  //         },
-  //       });
-  //     }
-
-  //     ScrollTrigger.refresh();
-  //   }, sectionRefs);
-
-  //   return () => {
-  //     ctx.revert();
-  //     if (scrollTriggerRef.current) {
-  //       scrollTriggerRef.current.kill();
-  //     }
-  //   };
-  // }, [teamMembers, isMobile]);
 
   useEffect(() => {
     if (isMobile || !cardsRef.current.length) return;
@@ -149,9 +80,11 @@ const Team = () => {
   
     return () => {
       cards.forEach((card) => {
-        card.removeEventListener("mouseenter", card._onEnter);
-        card.removeEventListener("mouseleave", card._onLeave);
-        card.removeEventListener("wheel", handleWheel);
+        if (card) {
+          card.removeEventListener("mouseenter", card._onEnter);
+          card.removeEventListener("mouseleave", card._onLeave);
+          card.removeEventListener("wheel", handleWheel);
+        }
       });
     };
   }, [isMobile, teamMembers]);
@@ -262,7 +195,7 @@ const Team = () => {
         >
           {isArabic ? "فريقنا" : "Our Team"}
         </h2>
-        <p className="text-sm md:text-xl text-primary-green max-w-3xl mx-auto text-center">
+        <p className="text-sm md:text-xl text-primary-green max-w-3xl mx-auto text-center font-nizar-regular">
           {isArabic ? "قيادة ترتقي بمستقبل التقنية ونخبة من الخبراء " : "Leadership shaping the future of technology, backed by expert talent."}
         </p>
 
@@ -276,7 +209,13 @@ const Team = () => {
             <div
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="absolute inset-0 transition-all duration-700 ease-out"
+              className={`absolute inset-0 transition-all duration-700 ease-out ${
+                index === 0
+                  ? "opacity-100 z-10 scale-100 translate-x-0"
+                  : index === 1
+                  ? "opacity-60 z-5 scale-90 translate-x-[60%] blur-sm"
+                  : "opacity-0 z-0 scale-90 translate-x-0"
+              }`}
               style={{ perspective: "1000px" }}
             >
               {member.imageUrl ? (
@@ -323,7 +262,7 @@ const Team = () => {
                       {member.role[isArabic ? "ar" : "en"]}
                     </h4>
                     <p
-                      className={`text-sm md:text-xl leading-relaxed ${
+                      className={`text-sm md:text-xl leading-relaxed font-nizar-regular ${
                         darkMode ? "text-dark-gray" : "text-gray-400"
                       }`}
                     >

@@ -44,7 +44,7 @@ export default function CareerSection() {
             <h2 className={`text-lg md:text-4xl font-bold text-white ${isArabic ? 'text-right' : 'text-center'}`}>
               {isArabic ? "انضم إلى فريق لباب" : "Join the Lubab Team"}
             </h2>
-            <p className={`text-white/80 text-sm mt-2 max-w-2xl mx-auto ${isArabic ? 'text-right' : 'text-center'}`}>
+            <p className={`text-white/80 text-sm mt-2 max-w-2xl mx-auto font-nizar-regular ${isArabic ? 'text-right' : 'text-center'}`}>
               {isArabic 
                 ? "كن جزءًا من رحلتنا في تشكيل مستقبل التحول الرقمي"
                 : "Be part of our journey in shaping the future of digital transformation"}
@@ -65,7 +65,7 @@ export default function CareerSection() {
             </div>
             
             {/* Description with Improved Typography */}
-            <p className="text-gray-500 my-2 md:my-8 leading-relaxed text-xs md:text-lg max-w-full">
+            <p className="text-gray-500 my-2 md:my-8 leading-relaxed text-xs md:text-lg max-w-full font-nizar-regular">
               {isArabic 
                 ? "نقدّم بيئة عمل ديناميكية تدعم التطور المهني والإبداع. لدى فريقنا مساحة للنمو ومشاركة الأفكار وتطبيقها. نحن نبحث عن المواهب المتميزة التي تشاركنا شغفنا بالابتكار والتميز. يتم التقديم عبر نموذج بيانات بسيط دون الحاجة لتحميل ملفات." 
                 : "We offer a dynamic work environment that fosters professional development and creativity. Our team has room to grow, share ideas, and bring them to life. We're looking for exceptional talent who share our passion for innovation and excellence. Applications are submitted through a simple form with no file uploads."}
@@ -74,7 +74,7 @@ export default function CareerSection() {
             {/* Apply Button with Animation and Icon */}
             <button // Pass slug or ID
             onClick={()=>navigate('/career')}
-                            className={`px-2 md:px-5 py-1 md:py-2 rounded-lg font-medium transition-all duration-200 text-base ${
+                            className={`px-2 md:px-5 py-1 md:py-2 rounded-lg font-medium transition-all duration-200 text-base font-nizar-regular ${
                               !darkMode
                               ? "bg-dark-mode shadow-[1px_1px_1px_#1a1a1a,_-1px_-1px_1px_#3a3a3a] hover:shadow-[inset_1px_1px_3px_#1a1a1a,_inset_-1px_-1px_3px_#3a3a3a]"
                               : "bg-gray-100 shadow-[3px_3px_6px_#d1d1d1,_-3px_-3px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d1d1,_inset_-3px_-3px_6px_#ffffff]"
@@ -107,7 +107,7 @@ export default function CareerSection() {
               <h4 className="text-sm md:text-xl font-semibold mb-1 md:mb-3 text-gray-800">
                 {isArabic ? "بيئة عمل ديناميكية" : "Dynamic Work Environment"}
               </h4>
-              <p className="text-gray-600 leading-relaxed text-xs md:text-sm">
+              <p className="text-gray-600 leading-relaxed text-xs md:text-sm font-nizar-regular">
                 {isArabic 
                   ? "انضم إلى بيئة عمل تشجع على الابتكار والإبداع وتمكّن الموظفين من تحقيق إمكاناتهم الكاملة" 
                   : "Join a workspace that encourages innovation, creativity, and empowers employees to reach their full potential"}
@@ -129,7 +129,7 @@ export default function CareerSection() {
               <h4 className="text-sm md:text-xl font-semibold mb-1 md:mb-3 text-gray-800">
                 {isArabic ? "فرص التطوير المهني" : "Professional Development"}
               </h4>
-              <p className="text-gray-600 leading-relaxed text-xs md:text-sm">
+              <p className="text-gray-600 leading-relaxed text-xs md:text-sm font-nizar-regular">
                 {isArabic 
                   ? "نوفر فرصًا متنوعة للتطوير والنمو المهني من خلال التدريب والتوجيه والتعلم المستمر" 
                   : "We provide diverse opportunities for growth and development through training, mentorship, and continuous learning"}
@@ -151,7 +151,7 @@ export default function CareerSection() {
               <h4 className="text-sm md:text-xl font-semibold mb-3 text-gray-800">
                 {isArabic ? "فريق متنوع ومبدع" : "Diverse & Creative Team"}
               </h4>
-              <p className="text-gray-600 leading-relaxed text-xs md:text-sm">
+              <p className="text-gray-600 leading-relaxed text-xs md:text-sm font-nizar-regular">
                 {isArabic 
                   ? "انضم إلى فريق من المواهب المتنوعة والمبدعة التي تعمل معًا لتحقيق رؤيتنا المشتركة" 
                   : "Join a team of diverse and creative talents working together to achieve our shared vision"}

@@ -86,7 +86,7 @@ const Navbar = () => {
     <nav 
       ref={navRef}
       dir={isArabic ? "rtl" : "ltr"}
-      className={`font-nizar fixed w-full z-50 px-6 py-4 transition-all duration-300 
+      className={`font-nizar-regular fixed w-full z-50 px-6 py-4 transition-all duration-300 
         ${hasScrolled 
           ? darkMode 
             ? 'bg-[#E5E7EB]/30' 

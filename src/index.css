@@ -3,10 +3,16 @@
   src: url("/src/assets/fonts/NizarCoconKurdish-Bold.ttf");
 }
 
+@font-face {
+  font-family: NizarRegular;
+  src: url("/src/assets/fonts/NizarCoconKurdishRegular.ttf");
+}
+
 @import "tailwindcss";
 
 @theme{
   --font-nizar: Nizar;
+  --font-nizar-regular: NizarRegular;
   --color-primary-green: #00BC78;
   --color-secondary-blue: #3F73B7;
 	--color-light-shade-g: #66E0A3;

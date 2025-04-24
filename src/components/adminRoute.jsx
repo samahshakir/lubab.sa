@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { handleCheck } from '../services/api';
+import LoadScreen from './LoadScreen';
 
 const AdminRoute = ({ children }) => {
     const [isAdmin, setIsAdmin] = useState(null);
@@ -32,7 +33,7 @@ const AdminRoute = ({ children }) => {
         checkAdmin();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div><LoadScreen/></div>;
 
     if (!isAdmin) {
         return <Navigate to="/unauthorized" replace />;

@@ -23,6 +23,7 @@ import AdminRoute from './components/adminRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import PrivacyPolicyA4 from './components/PrivacyPolicyA4';
 import FullBlogNews from './pages/FullBlogNews';
+import TermsOfUse from './components/TermsOfUse';
 
 
 function App() {
@@ -51,6 +52,8 @@ function App() {
             <Route path="/apply/:jobIdOrSlug" element={<ProtectedRoute><ApplicationForm /> </ProtectedRoute>} />
             <Route path="/applications/success" element={<JobApplicationSuccess/>} />
             <Route path="/privacy-policy" element={<PrivacyPolicyA4/>}/>
+            <Route path="/terms-of-use" element={<TermsOfUse/>}/>
+
           </Routes>
         </Router>
       </LanguageProvider>
