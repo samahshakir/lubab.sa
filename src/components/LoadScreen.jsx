@@ -10,7 +10,7 @@ const LoadScreen = () => {
 
   return (
     <div
-    className={`fixed inset-0 z-50 flex items-center justify-center flex-col gap-10 ${
+    className={`fixed inset-0 z-50 flex items-center justify-center flex-col gap-5 ${
       darkMode ? "bg-light-gray" : "bg-dark-mode"
     } transition-opacity duration-500`}
   >
@@ -23,7 +23,7 @@ const LoadScreen = () => {
           <img
                           src={logo}
                           alt="Lubab"
-                          className="h-20 w-auto mr-3"
+                          className="h-10 w-auto mr-3"
                         />
 
     <BlinkBlur size='small' color={["#00BC78", "#3F73B7", "#8AAEDC",]} />
