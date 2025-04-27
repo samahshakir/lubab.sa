@@ -60,9 +60,9 @@
   outline: none !important;
 }
 
-* {
+/* * {
   user-select: none;
-}
+} */
 
 .rtl {
   direction: rtl;

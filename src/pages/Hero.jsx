@@ -40,7 +40,7 @@ const Hero = () => {
 
       <main
         className={`container min-h-1.5 md:min-h-screen mx-auto px-6 ${
-          isArabic ? "pt-5 md:pt-40" : "pt-22"
+          isArabic ? "pt-5 md:pt-40" : "pt-12 md:pt-30"
         } pb-20 relative font-nizar`}
       >
         {/* <div className="absolute inset-0 opacity-5 pointer-events-none" 
@@ -146,7 +146,7 @@ const Hero = () => {
             <div
               className={`absolute ${
                 isArabic ? "z-25" : "z-0"
-              } w-[250%] h-full min-h-[800px] will-change-transform parallax-effect lg:block hidden`}
+              } w-[260%] h-full min-h-[800px] will-change-transform parallax-effect lg:block hidden pointer-events-none`}
             >
               <Spline
                 scene="https://draft.spline.design/KwyhaXaTIr4Q3LxF/scene.splinecode"

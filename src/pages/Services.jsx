@@ -31,17 +31,25 @@ const ServiceCard = ({ icon, title, description, status }) => {
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105"
+      className={`rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105 ${
+        darkMode ? "bg-white" : " bg-white/10 backdrop-blur-md"
+      }`}
     >
       <div className="flex flex-col h-full">
-        <div className="mb-4">
+        <div className="mb-4 text-2xl">
           <i className={icon}></i>
         </div>
-        <h3 className={`text-md md:text-2xl font-bold mb-4 ${darkMode ? "text-black" : "text-white"}`}>
+        <h3 className={`text-md md:text-2xl font-bold mb-4 ${darkMode ? "text-gray-800" : "text-white"}`}>
           {title}
         </h3>
-        <p className="text-gray-400 mb-6 flex-grow text-[12px] md:text-md font-nizar-regular">{description}</p>
-        <span className="text-sm inline-block text-gray-500 text-md font-semibold">
+        <p className={`mb-6 flex-grow text-[12px] md:text-md font-nizar-regular ${
+          darkMode ? "text-gray-600" : "text-gray-300"
+        }`}>
+          {description}
+        </p>
+        <span className={`text-sm inline-block text-md font-semibold ${
+          darkMode ? "text-gray-500" : "text-gray-400"
+        }`}>
           {status}
         </span>
       </div>
@@ -53,25 +61,36 @@ const Services = () => {
   const { darkMode } = useDarkMode();
   const { isArabic } = useLanguage();
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch services from Sanity
+  // Fetch services from Sanity with error handling
   useEffect(() => {
-    sanityClient
-      .fetch(
-        `*[_type == "service"] {
-          title,
-          description,
-          icon,
-          status
-        }`
-      )
-      .then((data) => setServices(data))
-      .catch(console.error);
+    const fetchServices = async () => {
+      try {
+        const data = await sanityClient.fetch(
+          `*[_type == "service"] {
+            title,
+            description,
+            icon,
+            status
+          }`
+        );
+        console.log("Fetched services:", data); // Debug log
+        setServices(data || []);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+        setServices([]); // Set empty array on error
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchServices();
   }, []);
 
   return (
     <div
-      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-[90%] py-15 overflow-hidden`}
+      className={`relative ${darkMode ? "bg-[#F8FAFC]" : "bg-dark-mode"} min-h-[90%] py-16 overflow-hidden`}
       id="services-section"
     >
       <div className="services-bg-gradient absolute inset-0 z-0 opacity-20"></div>
@@ -97,23 +116,37 @@ const Services = () => {
           </motion.p>
         </motion.div>
 
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-        >
-          {services.map((service, index) => (
-            <ServiceCard
-              key={index}
-              icon={service.icon}
-              title={isArabic ? service.title?.ar : service.title?.en}
-              description={isArabic ? service.description?.ar : service.description?.en}
-              status={service.status}
-            />
-          ))}
-        </motion.div>
+        {loading ? (
+          <div className="text-center py-10">
+            <p className={darkMode ? "text-gray-800" : "text-gray-200"}>Loading services...</p>
+          </div>
+        ) : services && services.length > 0 ? (
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
+            {services.map((service, index) => (
+              <ServiceCard
+                key={index}
+                icon={service.icon}
+                title={isArabic && service.title?.ar ? service.title.ar : 
+                       service.title?.en || service.title || "Service"}
+                description={isArabic && service.description?.ar ? service.description.ar : 
+                             service.description?.en || service.description || "Service description"}
+                status={service.status}
+              />
+            ))}
+          </motion.div>
+        ) : (
+          <div className="text-center py-10">
+            <p className={darkMode ? "text-gray-800" : "text-gray-200"}>
+              No services available at the moment.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

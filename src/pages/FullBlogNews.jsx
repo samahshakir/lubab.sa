@@ -130,7 +130,7 @@ function FullBlogNews() {
       className={`min-h-screen mx-auto px-6 pt-10 md:pt-5 pb-20 relative ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} font-nizar transition-colors duration-300 ${isArabic ? 'rtl' : 'ltr'}`}
     > 
            <div 
-                  className="absolute inset-0 bg-cover opacity-3 bg-center z-0"
+                  className="absolute inset-0 bg-cover opacity-3 bg-center z-0 pointer-events-none"
                   style={{
                     backgroundImage: `url(${backgroundImage})`,
                   }}
@@ -141,7 +141,7 @@ function FullBlogNews() {
     <ThemeLangToggle />
   </div>
 </header>
-      <div className="max-w-4xl mx-auto text-center mb-16">
+      <div className="max-w-4xl mx-auto text-center mb-16 mt-15 z-10">
         <h2 
           ref={titleRef}
           className={`text-md md:text-5xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-primary-green' : 'text-white'}`}

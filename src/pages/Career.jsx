@@ -218,20 +218,20 @@ const Careers = () => {
              {/* Why Join Section (Keep as is if needed) */}
              {whyJoin.length > 0 && (
             <div className="my-20 text-center">
-              <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
+              <h3 className={`text-lg md:text-2xl font-semibold mb-6 ${darkMode ? "text-gray-800" : "text-white"}`}>
                 {isArabic ? "لماذا تنضم إلى لُباب؟" : "Why Join Lubab?"}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-18 max-w-5xl mx-auto mt-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-18 max-w-5xl mx-auto mt-10">
                 {whyJoin.map((item, index) => (
                   <div
                     key={index}
                     className={`p-5 rounded-lg transition-all ${darkMode ? "bg-gray-100 shadow-[8px_8px_16px_#d1d1d1,_-8px_-8px_16px_#ffffff] hover:shadow-[12px_12px_20px_#d1d1d1,_-12px_-12px_20px_#ffffff]" : "bg-white/10 backdrop-blur-xl"} transform hover:scale-105 duration-300`}
                     style={{ opacity: 0, animation: `fadeIn 0.5s ease-out forwards ${0.5 + index * 0.1}s` }}
                   >
-                    <h4 className={`text-lg font-medium mb-2 ${darkMode ? "text-gray-800" : "text-white"}`}>
+                    <h4 className={`text-sm md:text-lg font-medium mb-2 ${darkMode ? "text-gray-800" : "text-white"}`}>
                       {isArabic ? item.titleAr : item.titleEn}
                     </h4>
-                    <p className={`${darkMode ? "text-gray-600" : "text-gray-300"}`}>
+                    <p className={`text-xs md:text-md ${darkMode ? "text-gray-600" : "text-gray-300"}`}>
                       {isArabic ? item.descriptionAr : item.descriptionEn}
                     </p>
                   </div>
@@ -241,7 +241,7 @@ const Careers = () => {
         )}
 
          {/* --- Display Open Job Positions --- */}
-         <h3 className={`text-3xl font-semibold mb-8 text-center ${darkMode ? "text-gray-800" : "text-white"}`}>
+         <h3 className={`text-lg md:text-3xl font-semibold mb-8 text-center ${darkMode ? "text-gray-800" : "text-white"}`}>
             {isArabic ? "الوظائف المتاحة" : "Open Positions"}
          </h3>
 
@@ -303,7 +303,7 @@ const Careers = () => {
                 ))}
             </div>
          ) : (
-             <p className={`text-center text-lg mt-8 mb-20 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+             <p className={`text-center text-sm md:text-lg mt-8 mb-20 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
                 {isArabic ? "لا توجد وظائف متاحة في الوقت الحالي. يرجى التحقق مرة أخرى لاحقًا." : "No open positions available at the moment. Please check back later."}
              </p>
          )}

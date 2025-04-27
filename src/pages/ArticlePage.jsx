@@ -22,8 +22,8 @@ const ArticlePage = () => {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const handleClick = () => {
-    navigate("/");
-
+    window.history.back(); // Go back to the previous page
+    
     setTimeout(() => {
       scroller.scrollTo("blog", {
         duration: 800,
@@ -32,7 +32,6 @@ const ArticlePage = () => {
       });
     }, 100); // Small delay to ensure navigation completes
   };
-  
   
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const ArticlePage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className={`min-h-screen ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 font-nizar ${isArabic ? 'rtl' : 'ltr'}`}
+      className={`min-h-screen ${darkMode ? 'bg-light-gray' : 'bg-dark-mode'} transition-colors duration-300 font-nizar-regular ${isArabic ? 'rtl' : 'ltr'}`}
     >
       <div className="container mx-auto px-6 py-16 max-w-4xl">
         <button
@@ -79,15 +78,15 @@ const ArticlePage = () => {
 
         <div className={`p-8 rounded-2xl shadow-xl ${darkMode ? 'bg-white' : 'bg-dark-gray'}`}>
           <div className="flex justify-between items-center mb-6">
-            <span className={`text-sm font-medium ${darkMode ? 'text-primary-green' : 'text-secondary-blue'}`}>
+            <span className={`text-xs md:text-sm font-medium ${darkMode ? 'text-primary-green' : 'text-secondary-blue'}`}>
               {new Date(article.publishedAt).toLocaleDateString()} • {isArabic ? article.readTimeAr : article.readTime}
             </span>
-            <span className={`text-sm font-medium ${darkMode ? 'text-primary-green' : 'text-secondary-blue'}`}>
+            <span className={`text-xs md:text-sm font-medium ${darkMode ? 'text-primary-green' : 'text-secondary-blue'}`}>
               {isArabic ? article.authorAr : article.author}
             </span>
           </div>
 
-          <h1 className={`text-3xl md:text-4xl font-bold mb-6 ${darkMode ? 'text-dark-gray' : 'text-white'}`}>
+          <h1 className={`text-lg md:text-4xl font-bold mb-6 font-nizar ${darkMode ? 'text-dark-gray' : 'text-white'}`}>
             {isArabic ? article.titleAr : article.title}
           </h1>
 
@@ -107,7 +106,7 @@ const ArticlePage = () => {
               components={{
                 block: {
                   normal: ({ children }) => (
-                    <p className={`text-lg leading-relaxed ${darkMode ? 'text-dark-gray' : 'text-gray-200'}`}>
+                    <p className={`text-xs md:text-lg text-justify leading-relaxed ${darkMode ? 'text-dark-gray' : 'text-gray-200'}`}>
                       {children}
                     </p>
                   )
@@ -116,6 +115,7 @@ const ArticlePage = () => {
               }}
             />
           </div>
+
 
           {article.tags && (
             <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -145,8 +145,8 @@ const ArticlePage = () => {
                 className={`p-4 rounded-xl cursor-pointer ${darkMode ? 'bg-white hover:bg-gray-100 text-dark-gray' : 'bg-dark-gray hover:bg-gray-800 text-white'} transition-colors duration-200`}
                 onClick={() => navigate(`/blog/article/${relatedArticle.slug.current}`)}
               >
-                <h4 className="font-bold mb-2">{isArabic ? relatedArticle.titleAr : relatedArticle.title}</h4>
-                <p className={`text-sm ${darkMode ? 'text-gray-600' : 'text-gray-300'} line-clamp-2`}>
+                <h4 className="font-bold mb-2 text-sm">{isArabic ? relatedArticle.titleAr : relatedArticle.title}</h4>
+                <p className={`text-sm ${darkMode ? 'text-gray-600' : 'text-gray-300'} text-xs line-clamp-2`}>
                   {isArabic ? relatedArticle.excerptAr : relatedArticle.excerpt}
                 </p>
               </div>

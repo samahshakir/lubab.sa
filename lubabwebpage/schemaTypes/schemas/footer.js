@@ -14,6 +14,15 @@ export default {
         ],
       },
       {
+        name: 'nationalAddress',
+        title: 'National Address',
+        type: 'object',
+        fields: [
+          { name: 'en', title: 'English', type: 'text' },
+          { name: 'ar', title: 'Arabic', type: 'text' },
+        ],
+      },
+      {
         name: 'navLinks',
         title: 'Navigation Links',
         type: 'array',

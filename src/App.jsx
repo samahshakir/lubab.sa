@@ -24,12 +24,14 @@ import ForgotPassword from './pages/ForgotPassword';
 import PrivacyPolicyA4 from './components/PrivacyPolicyA4';
 import FullBlogNews from './pages/FullBlogNews';
 import TermsOfUse from './components/TermsOfUse';
+import ErrorBoundary from './components/ErrorBoundary';
 
 
 function App() {
   return (
     <DarkModeProvider>
       <LanguageProvider>
+        <ErrorBoundary>
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -56,6 +58,7 @@ function App() {
 
           </Routes>
         </Router>
+        </ErrorBoundary>
       </LanguageProvider>
     </DarkModeProvider>
   );

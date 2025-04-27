@@ -195,7 +195,7 @@ const Team = () => {
         >
           {isArabic ? "فريقنا" : "Our Team"}
         </h2>
-        <p className="text-sm md:text-xl text-primary-green max-w-3xl mx-auto text-center font-nizar-regular">
+        <p className="text-sm md:text-xl text-gray-400 max-w-3xl mx-auto text-center font-nizar-regular">
           {isArabic ? "قيادة ترتقي بمستقبل التقنية ونخبة من الخبراء " : "Leadership shaping the future of technology, backed by expert talent."}
         </p>
 

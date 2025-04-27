@@ -5,7 +5,6 @@ import client from '../sanityClient';
 import { Plus } from 'lucide-react';
 import ThemeLangToggle from '../components/ThemLangToggle';
 import GoBackButton from '../components/GoBackButton';
-import { motion, AnimatePresence } from 'framer-motion';
 
 
 const FAQ = () => {
@@ -81,11 +80,11 @@ const FAQ = () => {
                 </button>
 
                 <div
-                className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${isOpen ? 'max-h-[500px]' : 'max-h-0'}`}
+                className={`overflow-hidden transition-[max-height] duration-300 ease-out ${isOpen ? 'max-h-[500px]' : 'max-h-0'}`}
               >
-                    <div dangerouslySetInnerHTML={{ __html: answer }} />
+                <div dangerouslySetInnerHTML={{ __html: answer }} />
+              </div>
 
-                </div>
               </li>
             );
           })}

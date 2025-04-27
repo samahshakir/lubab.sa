@@ -23,6 +23,7 @@ function Footer() {
     description,
     navLinks,
     services,
+    nationalAddress,
     socialLinks,
   } = footerData;
 
@@ -70,8 +71,12 @@ function Footer() {
               className={`${
                 darkMode ? 'text-[#374151]' : 'text-gray-400'
               } mb-6 text-xs md:text-md`}
-            >
-              National Address
+            > 
+              {!isArabic ? 'National Address': ':العنوان الوطني'}
+              <br />
+              {!isArabic ? 'Short Address: **AKPC 7953** ': 'العنوان المختصر: **AKPC 7953** '}
+              <br />
+              {isArabic ? nationalAddress.ar : nationalAddress.en}
             </p>
           </div>
 
@@ -194,16 +199,8 @@ function Footer() {
               },
               {
                 label: isArabic ? 'شروط الاستخدام' : 'Terms of Service',
-                href: isArabic
-                  ? '/policies/terms-of-use-ar.pdf'
-                  : '/policies/terms-of-use-en.pdf',
-              },
-              // {
-              //   label: isArabic
-              //     ? 'سياسة ملفات تعريف الارتباط'
-              //     : 'Cookies Policy',
-              //   href: '#',
-              // },
+                href: '/terms-of-use',
+              }
             ].map((item) => (
               <a
                 key={item.label}

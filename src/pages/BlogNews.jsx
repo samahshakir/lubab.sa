@@ -149,7 +149,7 @@ useEffect(() => {
         ref={titleRef}
         initial={{ opacity: 0, y: 50, scale: 0.9 }}
         animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50, scale: isVisible ? 1 : 0.9 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true, amount: 0.8 }}
         className={`text-md md:text-5xl font-bold mb-6 leading-tight tracking-tight ${darkMode ? 'text-primary-green' : 'text-white'}`}
@@ -161,7 +161,7 @@ useEffect(() => {
       )}
       </motion.h2>
       <p 
-        className={`text-sm md:text-xl ${darkMode ? 'text-gray-400' : 'text-gray-200'} mb-12 font-nizar-regular`}
+        className={`text-sm md:text-xl text-gray-400 mb-12 font-nizar-regular`}
       >
        {blogPosts && blogSection ? (
         formatTitle(isArabic ? blogSection.descriptionAr: blogSection.description)
@@ -189,7 +189,7 @@ useEffect(() => {
           style={{height: article.mainImage ? '' : 'fit-content'}}
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50, scale: isVisible ? 1 : 0.9 }}
-          transition={{ duration: 1, delay: index * 0.1, ease: 'easeOut' }}
+          transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.85 }}
         >
