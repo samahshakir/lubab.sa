@@ -4,7 +4,7 @@ import { useDarkMode } from "../context/DarkModeContext";
 import client from "../sanityClient";
 import { Link } from "react-scroll";
 import Spline from "@splinetool/react-spline";
-import HeroLogo from '../assets/AssetLogo.webp'
+import HeroLogo from '../assets/Assetlogo.webp'
 import LoadScreen from "../components/LoadScreen";
 
 
